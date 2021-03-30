@@ -14,13 +14,9 @@ namespace EggsSkills.EntityStates
             delay = baseDelay/base.attackSpeedStat;
             var aimRay = GetAimRay();
             StartAimMode(aimRay);
-            if(GetModelAnimator())
-            {
-
-            };
             if(base.isAuthority)
             {
-                ProjectileManager.instance.FireProjectile(EggsSkills.ModBase.teslaMinePrefab,aimRay.origin,RoR2.Util.QuaternionSafeLookRotation(aimRay.direction),gameObject,damageStat,0,RollCrit());
+                ProjectileManager.instance.FireProjectile(EggsSkills.SkillsLoader.teslaMinePrefab,aimRay.origin,RoR2.Util.QuaternionSafeLookRotation(aimRay.direction),gameObject,damageStat * 2f,0,RollCrit());
             };
         }
         public override void FixedUpdate()

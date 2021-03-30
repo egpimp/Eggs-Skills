@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace EggsSkills.EntityStates.MineStates.ArmingStates
+namespace EggsSkills.EntityStates.TeslaMine.MineStates.ArmingStates
 {
     public class TeslaArmingUnarmedState : BaseMineArmingState
     {

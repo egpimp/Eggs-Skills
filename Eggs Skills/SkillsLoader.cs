@@ -8,20 +8,19 @@ using EggsSkills.Properties;
 using EggsSkills.SkillDefs;
 using RoR2.Projectile;
 using System.Linq;
-using EggsSkills.EntityStates.MineStates.MainStates;
-using EggsSkills.EntityStates.MineStates.ArmingStates;
+using EggsSkills.EntityStates.TeslaMine.MineStates.MainStates;
+using EggsSkills.EntityStates.TeslaMine.MineStates.ArmingStates;
 using EnigmaticThunder.Modules;
 using System.Collections.Generic;
-using EggsSkills.Skills.TeslaMine.MineStates.ArmingStates;
-using EggsSkills.EntityStates.MineStates;
-using EggsSkills.EntityStates.TeslaMine.MineStates.MainStates;
+using UnityEngine.Events;
+using EnigmaticThunder.Util;
 
 namespace EggsSkills
 {
     [BepInDependency("com.EnigmaDev.EnigmaticThunder",BepInDependency.DependencyFlags.HardDependency)]
     [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "1.0.3")]
     
-    public class ModBase : BaseUnityPlugin
+    public class SkillsLoader : BaseUnityPlugin
     {
         public static Texture2D shotgunIcon = Assets.LoadTexture2D(EggsSkills.Properties.Resources.CommandoShotgun);
         public static Sprite shotgunIconS = Assets.TexToSprite(shotgunIcon);
@@ -200,7 +199,7 @@ namespace EggsSkills
             skillDefTeslamine.requiredStock = 1;
             skillDefTeslamine.stockToConsume = 1;
             skillDefTeslamine.icon = zapportIconS;
-            skillDefTeslamine.skillDescriptionToken = "<style=cIsDamage>Stunning.</style> Place a tesla mine, that upon detonation deals <style=cIsDamage>100% damage</style> and leaves a lingering zone for 5 seconds that deals <style=cIsDamage>100% damage</style> each second.  Can place up to 4.";
+            skillDefTeslamine.skillDescriptionToken = "<style=cIsDamage>Stunning.</style> Place a tesla mine, that upon detonation deals <style=cIsDamage>200% damage</style> and leaves a lingering zone for 4 seconds that deals <style=cIsDamage>200% damage</style> each second.";
             skillDefTeslamine.skillName = "TeslaMine";
             skillDefTeslamine.skillNameToken = "Tesla Mines";
             skillDefTeslamine.keywordTokens = new string[]
@@ -317,7 +316,7 @@ namespace EggsSkills
         }
         public void HandleProjectileShit()
         {
-            teslaMinePrefab = UnityEngine.Resources.Load<GameObject>("prefabs/projectiles/engimine");
+            teslaMinePrefab = UnityEngine.Resources.Load<GameObject>("prefabs/projectiles/engimine").InstantiateClone("TeslaMine");
             teslaMinePrefab.GetComponent<ProjectileSimple>().desiredForwardSpeed = 40f;
 
             var teslaArmingStateMachine = teslaMinePrefab.GetComponentsInChildren<EntityStateMachine>().First(machine => machine.customName == "Arming");
@@ -333,6 +332,7 @@ namespace EggsSkills
         public void RegisterTeslaMineStates()
         {
             Loadouts.RegisterEntityState(typeof(TeslaArmingUnarmedState));
+            Loadouts.RegisterEntityState(typeof(TeslaArmingWeakState));
             Loadouts.RegisterEntityState(typeof(TeslaArmingFullState));
 
             Loadouts.RegisterEntityState(typeof(TeslaArmState));
@@ -340,27 +340,6 @@ namespace EggsSkills
             Loadouts.RegisterEntityState(typeof(TeslaWaitForTargetState));
             Loadouts.RegisterEntityState(typeof(TeslaPreDetState));
             Loadouts.RegisterEntityState(typeof(TeslaDetonateState));
-        }
-        private void SetupBuffs()
-        {
-            buffDefSpeed = ScriptableObject.CreateInstance<BuffDef>();
-            buffDefSpeed.name = "ShieldBroken";
-            buffDefSpeed.buffColor = Color.yellow;
-            buffDefSpeed.canStack = false;
-            buffDefSpeed.isDebuff = false;
-            buffDefSpeed.iconSprite = speedIconS;
-            EnigmaticThunder.Modules.Buffs.RegisterBuff(buffDefSpeed);
-        }
-        private void CharacterBody_RecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
-        {
-            orig(self);
-            if (self)
-            {
-                if (self.HasBuff(buffDefSpeed))
-                {
-                    self.baseMoveSpeed = self.baseMoveSpeed * 1.2f;
-                }
-            }
         }
     }
 }

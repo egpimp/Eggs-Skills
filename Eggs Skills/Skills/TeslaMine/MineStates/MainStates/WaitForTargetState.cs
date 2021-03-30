@@ -1,11 +1,11 @@
-﻿using EggsSkills.EntityStates.TeslaMine.MineStates.MainStates;
-using EggsSkills.Skills.TeslaMine.MineStates.ArmingStates;
+﻿using EggsSkills.EntityStates.TeslaMine.MineStates.ArmingStates;
+using EggsSkills.EntityStates.TeslaMine.MineStates.MainStates;
 using EntityStates.Engi.Mine;
 using RoR2;
 using RoR2.Projectile;
 using UnityEngine.Networking;
 
-namespace EggsSkills.EntityStates.MineStates.MainStates
+namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
 {
     public class TeslaWaitForTargetState : BaseMineState
     {
@@ -21,7 +21,7 @@ namespace EggsSkills.EntityStates.MineStates.MainStates
             if(NetworkServer.active)
             {
                 targetFinder.enabled = true;
-                armingStateMachine.SetNextState(new TeslaArmingFullState()) ;
+                armingStateMachine.SetNextState(new TeslaArmingWeakState()) ;
             }
         }
         public override void OnExit()

@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine.Networking;
-using EggsSkills.EntityStates.MineStates.MainStates;
+using EggsSkills.EntityStates.TeslaMine.MineStates.MainStates;
 using RoR2;
 using RoR2.Projectile;
 
-namespace EggsSkills.EntityStates.MineStates
+namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
 {
     public class TeslaArmState : BaseMineState
     {

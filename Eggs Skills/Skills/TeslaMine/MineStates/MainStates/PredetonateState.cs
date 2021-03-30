@@ -1,11 +1,10 @@
-﻿using EggsSkills.EntityStates.MineStates;
-using EntityStates.Engi.Mine;
+﻿using EntityStates.Engi.Mine;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Text;
 using UnityEngine.Networking;
-using EggsSkills.EntityStates.MineStates.MainStates;
+using EggsSkills.EntityStates.TeslaMine.MineStates.MainStates;
 
 namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
 {

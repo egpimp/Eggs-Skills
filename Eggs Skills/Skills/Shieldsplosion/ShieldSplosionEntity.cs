@@ -47,7 +47,7 @@ namespace EggsSkills.EntityStates
                 scale = radius
             };
             EffectManager.SpawnEffect(bodyPrefab, effectData, true);
-            characterBody.AddTimedBuff(ModBase.buffDefSpeed,3f);
+            characterBody.AddTimedBuff(RoR2Content.Buffs.CloakSpeed,3f);
             characterBody.RecalculateStats();
             base.OnExit();
         }

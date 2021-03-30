@@ -6,8 +6,9 @@ using UnityEngine;
 using RoR2.Projectile;
 using EntityStates.Huntress;
 using EntityStates;
+using EntityStates.JellyfishMonster;
 
-namespace EggsSkills.EntityStates.MineStates.MainStates
+namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
 {
     public class TeslaDetonateState : BaseMineState
     {
@@ -18,19 +19,26 @@ namespace EggsSkills.EntityStates.MineStates.MainStates
         private GameObject areaIndicator;
         private float radius = 8f;
         private ProjectileDamage projectileDamage;
+        private float pulseCounter;
         public override void OnEnter()
         {
             base.OnEnter();
             projectileDamage = GetComponent<ProjectileDamage>();
             areaIndicator = UnityEngine.Object.Instantiate<GameObject>(ArrowRain.areaIndicatorPrefab);
-            areaIndicator.active = true;
+            areaIndicator.SetActive(true);
             areaIndicator.transform.localScale = new Vector3(radius, radius, radius);
             areaIndicator.transform.position = transform.position;
             pulseTimer = 0f;
+            pulseCounter = 0;
         }
         public override void FixedUpdate()
         {
             base.FixedUpdate();
+            if (pulseCounter >= 5)
+            {
+                EntityState.Destroy(areaIndicator);
+                Explode();
+            }
             if (this.pulseTimer > 0)
             {
                 this.pulseTimer -= Time.fixedDeltaTime;
@@ -39,11 +47,6 @@ namespace EggsSkills.EntityStates.MineStates.MainStates
             {
                 this.pulseTimer = 1f;
                 this.Pulse();
-            }
-            if (base.fixedAge >= 5f)
-            {
-                EntityState.Destroy(areaIndicator);
-                Destroy(gameObject);
             }
             areaIndicator.transform.localScale = new Vector3(radius,radius,radius) * (1 - (pulseTimer/1));
         }
@@ -73,7 +76,12 @@ namespace EggsSkills.EntityStates.MineStates.MainStates
                 scale = radius
             };
             EffectManager.SpawnEffect(bodyPrefab, effectData, true);
-            Util.PlaySound(FireTazer.enterSoundString,gameObject);
+            Util.PlaySound(JellyNova.novaSoundString,gameObject);
+            pulseCounter += 1;
+        }
+        private void Explode()
+        {
+            Destroy(gameObject);
         }
     }
 }
