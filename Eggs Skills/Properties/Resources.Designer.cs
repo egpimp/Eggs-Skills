@@ -119,5 +119,15 @@ namespace EggsSkills.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] TeslaMine {
+            get {
+                object obj = ResourceManager.GetObject("TeslaMine", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

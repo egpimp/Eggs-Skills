@@ -40,12 +40,11 @@ namespace EggsSkills
         public static Texture2D shieldsplosionIcon = Assets.LoadTexture2D(EggsSkills.Properties.Resources.Shieldsplosion);
         public static Sprite shieldsplosionIconS = Assets.TexToSprite(shieldsplosionIcon);
 
-        public static Texture2D speedIcon = UnityEngine.Resources.Load<Texture2D>("textures/bufficons/texMovespeedBuffIcon");
-        public static Sprite speedIconS = EggsSkills.Properties.Assets.TexToSprite(speedIcon);
+        public static Texture2D teslaMineIcon = Assets.LoadTexture2D(EggsSkills.Properties.Resources.TeslaMine);
+        public static Sprite teslaMineIconS = Assets.TexToSprite(teslaMineIcon);
 
         public static GameObject teslaMinePrefab;
-
-        public static BuffDef buffDefSpeed;
+        //public static GameObject microMissilePrefab;
 
         public void Awake()
         {
@@ -133,7 +132,7 @@ namespace EggsSkills
             skillDefSlashport.requiredStock = 1;
             skillDefSlashport.stockToConsume = 1;
             skillDefSlashport.icon = slashportIconS;
-            skillDefSlashport.skillDescriptionToken = "<style=cIsDamage>Stunning.</style> Target an enemy to <style=cIsUtility>Expose</style> and <style=cIsUtility>Teleport</style> to and strike them for <style=cIsDamage>700% damage, plus 20% of their missing health</style>.";
+            skillDefSlashport.skillDescriptionToken = "<style=cIsDamage>Stunning.</style> Target an enemy to <style=cIsUtility>Expose</style> and <style=cIsUtility>Teleport</style> to and strike them for <style=cIsDamage>600% damage, plus 20% of their missing health</style>.";
             skillDefSlashport.skillName = "Slashport";
             skillDefSlashport.skillNameToken = "Fatal Teleport";
             skillDefSlashport.keywordTokens = new string[]
@@ -198,8 +197,8 @@ namespace EggsSkills
             skillDefTeslamine.rechargeStock = 1;
             skillDefTeslamine.requiredStock = 1;
             skillDefTeslamine.stockToConsume = 1;
-            skillDefTeslamine.icon = zapportIconS;
-            skillDefTeslamine.skillDescriptionToken = "<style=cIsDamage>Stunning.</style> Place a tesla mine, that upon detonation deals <style=cIsDamage>200% damage</style> and leaves a lingering zone for 4 seconds that deals <style=cIsDamage>200% damage</style> each second.";
+            skillDefTeslamine.icon = teslaMineIconS;
+            skillDefTeslamine.skillDescriptionToken = "<style=cIsDamage>Stunning.</style> Place a tesla mine, that upon detonation deals <style=cIsDamage>200% damage</style> and leaves a lingering zone for 4 seconds that deals <style=cIsDamage>200% damage</style> each second.  Can place up to 4.";
             skillDefTeslamine.skillName = "TeslaMine";
             skillDefTeslamine.skillNameToken = "Tesla Mines";
             skillDefTeslamine.keywordTokens = new string[]
@@ -316,6 +315,8 @@ namespace EggsSkills
         }
         public void HandleProjectileShit()
         {
+            //microMissilePrefab = UnityEngine.Resources.Load<GameObject>("prefabs/projectiles/");
+
             teslaMinePrefab = UnityEngine.Resources.Load<GameObject>("prefabs/projectiles/engimine").InstantiateClone("TeslaMine");
             teslaMinePrefab.GetComponent<ProjectileSimple>().desiredForwardSpeed = 40f;
 
@@ -325,7 +326,7 @@ namespace EggsSkills
 
             var teslaMainStateMachine = teslaMinePrefab.GetComponentsInChildren<EntityStateMachine>().First(machine => machine.customName == "Main");
             teslaMainStateMachine.initialStateType = new SerializableEntityStateType(typeof(TeslaWaitForStick));
-            teslaMainStateMachine.mainStateType = new SerializableEntityStateType(typeof(TeslaArmingUnarmedState));
+            teslaMainStateMachine.mainStateType = new SerializableEntityStateType(typeof(TeslaPreDetState));           
 
             EnigmaticThunder.Modules.Projectiles.RegisterProjectile(teslaMinePrefab);
         }

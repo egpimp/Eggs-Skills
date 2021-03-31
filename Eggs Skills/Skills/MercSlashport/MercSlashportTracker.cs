@@ -34,14 +34,6 @@ namespace EggsSkills
         {
             return this.trackingTarget;
         }
-        private void OnEnable()
-        {
-            this.indicator.active = true;
-        }
-        private void OnDisable()
-        {
-            this.indicator.active = false;
-        }
         private void FixedUpdate()
         {
             this.trackerUpdateStopwatch += Time.fixedDeltaTime;
@@ -53,6 +45,14 @@ namespace EggsSkills
                     this.SearchForTarget(aimRay);
                     this.indicator.targetTransform = (this.trackingTarget ? this.trackingTarget.transform : null);
             }
+            if(this.characterBody.skillLocator.utility.cooldownRemaining <= 0)
+            {
+                this.indicator.active = true;
+            }
+            else
+            {
+                this.indicator.active = false;
+            };
         }
         private void SearchForTarget(Ray aimRay)
         {
