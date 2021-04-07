@@ -8,10 +8,9 @@ namespace EggsSkills.EntityStates
 {
     class AcridPurgeEntity : BaseState
     {
-        public float maxTrackingDistance = 500f;
+        public float maxTrackingDistance = 5000f;
         public new TeamComponent teamComponent;
         private readonly GameObject bodyPrefab = Resources.Load<GameObject>("prefabs/effects/impacteffects/CrocoDiseaseImpactEffect");
-        
         public override void OnEnter()
         {
             base.OnEnter();

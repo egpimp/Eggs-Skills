@@ -12,8 +12,8 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
 {
     public class TeslaDetonateState : BaseMineState
     {
-        protected override bool shouldStick => true;
-        protected override bool shouldRevertToWaitForStickOnSurfaceLost => false;
+        public override bool shouldStick => true;
+        public override bool shouldRevertToWaitForStickOnSurfaceLost => false;
         public float pulseTimer;
         private GameObject bodyPrefab = Resources.Load<GameObject>("prefabs/effects/JellyfishNova");
         private GameObject areaIndicator;

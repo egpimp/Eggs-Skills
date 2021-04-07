@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace EggsSkills.SkillDefs
 {
-    [CreateAssetMenu(menuName = "RoR2/SkillDef/MercSlashportDef")]
+    [CreateAssetMenu(menuName = "RoR2/SkillDef/ShieldsplosionDef")]
     class ShieldsplosionDef : SkillDef
     {
         public override SkillDef.BaseSkillInstanceData OnAssigned([NotNull] GenericSkill skillSlot)

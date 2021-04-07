@@ -14,7 +14,7 @@ namespace EggsSkills
         public InputBankTest inputBank;
         private float trackerUpdateStopwatch;
         public float trackerUpdateFrequency = 10f;
-        public float maxTrackingDistance = 500f;
+        public float maxTrackingDistance = 5000f;
         public float poisonCounter;
         public float totalPoisoned;
 

@@ -11,8 +11,8 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
 {
     public class TeslaWaitForStick : BaseMineState
     {
-        protected override bool shouldStick => true;
-        protected override bool shouldRevertToWaitForStickOnSurfaceLost => false;
+        public override bool shouldStick => true;
+        public override bool shouldRevertToWaitForStickOnSurfaceLost => false;
         private ProjectileSphereTargetFinder targetFinder;
         public override void OnEnter()
         {

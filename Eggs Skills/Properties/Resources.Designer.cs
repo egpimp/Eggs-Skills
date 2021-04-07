@@ -73,6 +73,16 @@ namespace EggsSkills.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] DebuffNade {
+            get {
+                object obj = ResourceManager.GetObject("DebuffNade", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] Expunge {
             get {
                 object obj = ResourceManager.GetObject("Expunge", resourceCulture);

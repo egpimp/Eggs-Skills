@@ -2,6 +2,7 @@
 using EntityStates;
 using UnityEngine;
 using EntityStates.Commando.CommandoWeapon;
+using EggsBuffs;
 
 namespace EggsSkills.EntityStates
 {
@@ -17,7 +18,6 @@ namespace EggsSkills.EntityStates
         private string muzzleString;
         private GameObject muzzleEffectPrefab = Resources.Load<GameObject>("prefabs/effects/muzzleflashes/Muzzleflash1");
         private int stock;
-        
         public override void OnEnter()
         {
             base.OnEnter();
@@ -47,7 +47,7 @@ namespace EggsSkills.EntityStates
                 {
                     critMod = 0;
                 }
-                new BulletAttack
+                BulletAttack bulletAttack = new BulletAttack
                 {
                     owner = base.gameObject,
                     weapon = base.gameObject,
@@ -67,9 +67,10 @@ namespace EggsSkills.EntityStates
                     HitEffectNormal = false,
                     stopperMask = LayerIndex.world.mask,
                     smartCollision = true,
-                    maxDistance = 200f
-                }.Fire();
-
+                    maxDistance = 200f,
+                    damageType = DamageType.Generic
+                };
+                bulletAttack.Fire();
             }
         }
         public override void FixedUpdate()

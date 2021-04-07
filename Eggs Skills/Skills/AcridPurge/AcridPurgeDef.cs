@@ -15,7 +15,7 @@ namespace EggsSkills.SkillDefs
             var charTracker = skillSlot.characterBody.gameObject.GetComponent<AcridPurgeTracker>();
             if (!charTracker)
             {
-                skillSlot.characterBody.gameObject.AddComponent<AcridPurgeTracker>();
+                charTracker = skillSlot.characterBody.gameObject.AddComponent<AcridPurgeTracker>();
             };
             return new AcridPurgeDef.InstanceData
             {
