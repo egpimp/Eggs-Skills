@@ -20,7 +20,7 @@ namespace EggsSkills
 {
     [BepInDependency("com.Egg.EggsBuffs", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.EnigmaDev.EnigmaticThunder", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "1.0.3")]
+    [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "1.0.5")]
     public class SkillsLoader : BaseUnityPlugin
     {
         GameObject artificerRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/MageBody");

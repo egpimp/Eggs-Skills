@@ -1,11 +1,8 @@
-﻿using EntityStates.Captain.Weapon;
-using EntityStates.Engi.Mine;
+﻿using EntityStates.Engi.Mine;
 using RoR2;
-using System.Linq.Expressions;
 using UnityEngine;
 using RoR2.Projectile;
 using EntityStates.Huntress;
-using EntityStates;
 using EntityStates.JellyfishMonster;
 
 namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
@@ -36,7 +33,6 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
             base.FixedUpdate();
             if (pulseCounter >= 5)
             {
-                EntityState.Destroy(areaIndicator);
                 Explode();
             }
             if (this.pulseTimer > 0)
@@ -81,6 +77,10 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
         }
         private void Explode()
         {
+            if (areaIndicator)
+            {
+                Destroy(areaIndicator);
+            }
             Destroy(gameObject);
         }
     }

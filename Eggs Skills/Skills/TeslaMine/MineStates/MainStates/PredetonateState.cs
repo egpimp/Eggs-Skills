@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 using EggsSkills.EntityStates.TeslaMine.MineStates.MainStates;
 using RoR2;
 using RoR2.Projectile;
+using UnityEngine;
 
 namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
 {
@@ -16,13 +17,15 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
         public override bool shouldRevertToWaitForStickOnSurfaceLost => false;
         public override void OnEnter()
         {
-            if(base.GetComponent<Deployable>())
+            GameObject owner = GetComponent<ProjectileController>().owner;
+            CharacterBody body = owner.GetComponent<CharacterBody>();
+            if(body)
             {
-                Destroy(base.GetComponent<Deployable>());
-            }
-            if(base.GetComponent<ProjectileDeployToOwner>())
-            {
-                Destroy(base.GetComponent<ProjectileDeployToOwner>());
+                CharacterMaster master = body.master;
+                if(master)
+                {
+                    master.RemoveDeployable(GetComponent<Deployable>());
+                }
             }
             base.OnEnter();
         }
