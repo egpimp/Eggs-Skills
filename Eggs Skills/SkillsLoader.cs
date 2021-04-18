@@ -12,6 +12,7 @@ using R2API;
 using System.Security;
 using System.Security.Permissions;
 using EggsSkills.EntityStates;
+using R2API.Utils;
 
 [module: UnverifiableCode]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -21,6 +22,12 @@ namespace EggsSkills
     [BepInDependency("com.Egg.EggsBuffs", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
     [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "1.0.6")]
+    [R2APISubmoduleDependency(new string[]
+{
+    nameof(ProjectileAPI),
+    nameof(LanguageAPI),
+    nameof(LoadoutAPI)
+})]
     public class SkillsLoader : BaseUnityPlugin
     {
         GameObject artificerRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/MageBody");
