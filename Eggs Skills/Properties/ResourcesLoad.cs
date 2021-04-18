@@ -2,7 +2,7 @@
 using RoR2;
 using RoR2.Projectile;
 using UnityEngine;
-using EnigmaticThunder.Modules;
+using R2API;
 using EggsSkills.EntityStates.TeslaMine.MineStates.ArmingStates;
 using EggsSkills.EntityStates.TeslaMine.MineStates.MainStates;
 using EggsBuffs;
@@ -79,35 +79,35 @@ namespace EggsSkills.Properties
             var debuffGrenadeDamage = debuffGrenadePrefab.GetComponent<ProjectileDamage>();
             debuffGrenadeDamage.damageType = DamageType.NonLethal;
 
-            Projectiles.RegisterProjectile(teslaMinePrefab);
-            Projectiles.RegisterProjectile(debuffGrenadePrefab);
+            ProjectileAPI.Add(teslaMinePrefab);
+            ProjectileAPI.Add(debuffGrenadePrefab);
         }
         public static void RegisterLanguageTokens()
         {
             //Artificer
-            Languages.Add("ARTIFICER_UTILITY_ZAPPORT_NAME", "Quantum Transposition");
-            Languages.Add("ARTIFICER_UTILITY_ZAPPORT_DESC", "<style=cIsDamage>Stunning.</style> Charge to <style=cIsUtility>Teleport</style> forward, dealing <style=cIsDamage>250%-1000% damage</style> to enemies near target location.");
+            LanguageAPI.Add("ARTIFICER_UTILITY_ZAPPORT_NAME", "Quantum Transposition");
+            LanguageAPI.Add("ARTIFICER_UTILITY_ZAPPORT_DESC", "<style=cIsDamage>Stunning.</style> Charge to <style=cIsUtility>Teleport</style> forward, dealing <style=cIsDamage>250%-1000% damage</style> to enemies near target location.");
             //Merc
-            Languages.Add("MERCENARY_UTILITY_SLASHPORT_NAME", "Fatal Assault");
-            Languages.Add("MERCENARY_UTILITY_SLASHPORT_DESC", "<style=cIsDamage>Stunning.</style> Target an enemy to <style=cIsUtility>Expose</style> and <style=cIsUtility>Teleport</style> to and strike them for <style=cIsDamage>600% damage, plus 20% of their missing health</style>.");
+            LanguageAPI.Add("MERCENARY_UTILITY_SLASHPORT_NAME", "Fatal Assault");
+            LanguageAPI.Add("MERCENARY_UTILITY_SLASHPORT_DESC", "<style=cIsDamage>Stunning.</style> Target an enemy to <style=cIsUtility>Expose</style> and <style=cIsUtility>Teleport</style> to and strike them for <style=cIsDamage>600% damage, plus 20% of their missing health</style>.");
             //Commando
-            Languages.Add("COMMANDO_PRIMARY_COMBATSHOTGUN_NAME", "Flechette Rounds");
-            Languages.Add("COMMANDO_PRIMARY_COMBATSHOTGUN_DESC", "Fire flechette rounds, dealing <style=cIsDamage>6x60% damage</style> in a wider but shorter range.  <style=cIsUtility>Spread</style> decreases on <style=cIsDamage>Critical Hits</style>.");
+            LanguageAPI.Add("COMMANDO_PRIMARY_COMBATSHOTGUN_NAME", "Flechette Rounds");
+            LanguageAPI.Add("COMMANDO_PRIMARY_COMBATSHOTGUN_DESC", "Fire flechette rounds, dealing <style=cIsDamage>6x60% damage</style> in a wider but shorter range.  <style=cIsUtility>Spread</style> decreases on <style=cIsDamage>Critical Hits</style>.");
             //Engi
-            Languages.Add("ENGI_SECONDARY_TESLAMINE_NAME", "T-3514 Shock Mines");
-            Languages.Add("ENGI_SECONDARY_TESLAMINE_DESC", "<style=cIsDamage>Stunning.</style> Place a shock mine, that upon detonation deals <style=cIsDamage>200% damage</style> and leaves a lingering zone for <style=cIsDamage>4</style> seconds that deals <style=cIsDamage>200% damage each second</style>.  Can place up to 4.");
+            LanguageAPI.Add("ENGI_SECONDARY_TESLAMINE_NAME", "T-3514 Shock Mines");
+            LanguageAPI.Add("ENGI_SECONDARY_TESLAMINE_DESC", "<style=cIsDamage>Stunning.</style> Place a shock mine, that upon detonation deals <style=cIsDamage>200% damage</style> and leaves a lingering zone for <style=cIsDamage>4</style> seconds that deals <style=cIsDamage>200% damage each second</style>.  Can place up to 4.");
             //Rex
-            Languages.Add("REX_SPECIAL_ROOT_NAME", "DIRECTIVE: Respire");
-            Languages.Add("REX_SPECIAL_ROOT_DESC", "<style=cIsDamage>Stunning.</style> <style=cIsUtility>Slow</style> yourself, but gain <style=cIsUtility>Armor</style> for up to 8 seconds.  While active, deal <style=cIsDamage>250% damage</style> per second to nearby enemies, gaining <style=cIsDamage>Barrier</style> per enemy hit and <style=cIsDamage>Pulling</style> them towards you.");
+            LanguageAPI.Add("REX_SPECIAL_ROOT_NAME", "DIRECTIVE: Respire");
+            LanguageAPI.Add("REX_SPECIAL_ROOT_DESC", "<style=cIsDamage>Stunning.</style> <style=cIsUtility>Slow</style> yourself, but gain <style=cIsUtility>Armor</style> for up to 8 seconds.  While active, deal <style=cIsDamage>250% damage</style> per second to nearby enemies, gaining <style=cIsDamage>Barrier</style> per enemy hit and <style=cIsDamage>Pulling</style> them towards you.");
             //Loader
-            Languages.Add("LOADER_SPECIAL_SHIELDSPLOSION_NAME", "Barrier Buster");
-            Languages.Add("LOADER_SPECIAL_SHIELDSPLOSION_DESC", "Consume all of your current <style=cIsHealing>Barrier (Minimum 10%)</style> to gain a burst of <style=cIsUtility>Movement Speed</style> and deal <style=cIsDamage>600-6000% damage</style> around you based on <style=cIsHealing>Barrier</style> consumed.");
+            LanguageAPI.Add("LOADER_SPECIAL_SHIELDSPLOSION_NAME", "Barrier Buster");
+            LanguageAPI.Add("LOADER_SPECIAL_SHIELDSPLOSION_DESC", "Consume all of your current <style=cIsHealing>Barrier (Minimum 10%)</style> to gain a burst of <style=cIsUtility>Movement Speed</style> and deal <style=cIsDamage>600-6000% damage</style> around you based on <style=cIsHealing>Barrier</style> consumed.");
             //ACRID
-            Languages.Add("ACRID_SPECIAL_PURGE_NAME", "Expunge");
-            Languages.Add("ACRID_SPECIAL_PURGE_DESC", "Inflict damage on all <style=cIsHealing>Poisoned</style> or <style=cIsDamage>Blighted</style> enemies in range, dealing either <style=cIsHealing>200% + 10% of their max health</style> or <style=cIsDamage>300% per stack</style> in an area around them, depending on passive selection.");
+            LanguageAPI.Add("ACRID_SPECIAL_PURGE_NAME", "Expunge");
+            LanguageAPI.Add("ACRID_SPECIAL_PURGE_DESC", "Inflict damage on all <style=cIsHealing>Poisoned</style> or <style=cIsDamage>Blighted</style> enemies in range, dealing either <style=cIsHealing>200% + 10% of their max health</style> or <style=cIsDamage>300% per stack</style> in an area around them, depending on passive selection.");
             //Captain
-            Languages.Add("CAPTAIN_SECONDARY_DEBUFFNADE_NAME", "MK-4 Tracking Grenade");
-            Languages.Add("CAPTAIN_SECONDARY_DEBUFFNADE_DESC", "Fire a grenade that deals <style=cIsDamage>250% Damage</style> and inflicts <style=cArtifact>Tracking</style> on enemies in a wide area for 5 seconds");
+            LanguageAPI.Add("CAPTAIN_SECONDARY_DEBUFFNADE_NAME", "MK-4 Tracking Grenade");
+            LanguageAPI.Add("CAPTAIN_SECONDARY_DEBUFFNADE_DESC", "Fire a grenade that deals <style=cIsDamage>250% Damage</style> and inflicts <style=cArtifact>Tracking</style> on enemies in a wide area for 5 seconds");
         }
     }
 }

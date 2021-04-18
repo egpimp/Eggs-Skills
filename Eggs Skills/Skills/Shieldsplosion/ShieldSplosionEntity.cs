@@ -3,7 +3,6 @@ using EntityStates;
 using UnityEngine;
 using EntityStates.JellyfishMonster;
 using EggsSkills;
-using EnigmaticThunder.Modules;
 
 namespace EggsSkills.EntityStates
 {

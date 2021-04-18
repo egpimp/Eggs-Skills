@@ -79,7 +79,7 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
         {
             if (areaIndicator)
             {
-                Destroy(areaIndicator);
+                Destroy(areaIndicator.gameObject);
             }
             Destroy(gameObject);
         }

@@ -8,7 +8,7 @@ using EggsSkills.Properties;
 using EggsSkills.SkillDefs;
 using EggsSkills.EntityStates.TeslaMine.MineStates.MainStates;
 using EggsSkills.EntityStates.TeslaMine.MineStates.ArmingStates;
-using EnigmaticThunder.Modules;
+using R2API;
 using System.Security;
 using System.Security.Permissions;
 using EggsSkills.EntityStates;
@@ -19,8 +19,8 @@ using EggsSkills.EntityStates;
 namespace EggsSkills
 {
     [BepInDependency("com.Egg.EggsBuffs", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInDependency("com.EnigmaDev.EnigmaticThunder", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "1.0.5")]
+    [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "1.0.6")]
     public class SkillsLoader : BaseUnityPlugin
     {
         GameObject artificerRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/MageBody");
@@ -80,7 +80,7 @@ namespace EggsSkills
                 "KEYWORD_STUNNING"
             };
 
-            Loadouts.RegisterSkillDef(skillDefZapport);
+            LoadoutAPI.AddSkillDef(skillDefZapport);
             Array.Resize(ref artificerSkillFamilyUtility.variants, artificerSkillFamilyUtility.variants.Length + 1);
             artificerSkillFamilyUtility.variants[artificerSkillFamilyUtility.variants.Length - 1] = new SkillFamily.Variant
             {
@@ -88,7 +88,7 @@ namespace EggsSkills
                 unlockableDef = ScriptableObject.CreateInstance<UnlockableDef>(),
                 viewableNode = new ViewablesCatalog.Node(skillDefZapport.skillNameToken, false, null)
             };
-            Loadouts.RegisterEntityState(typeof(ZapportFireEntity));
+            LoadoutAPI.AddSkill(typeof(ZapportFireEntity));
         }
 
         private void RegisterMercenarySkills()
@@ -123,7 +123,7 @@ namespace EggsSkills
                 "KEYWORD_STUNNING"
             };
 
-            Loadouts.RegisterSkillDef(skillDefSlashport);
+            LoadoutAPI.AddSkillDef(skillDefSlashport);
             Array.Resize(ref mercSkillFamilyUtility.variants, mercSkillFamilyUtility.variants.Length + 1);
             mercSkillFamilyUtility.variants[mercSkillFamilyUtility.variants.Length - 1] = new SkillFamily.Variant
             {
@@ -160,7 +160,7 @@ namespace EggsSkills
             skillDefCombatshotgun.skillName = "CombatShotgun";
             skillDefCombatshotgun.skillNameToken = "COMMANDO_PRIMARY_COMBATSHOTGUN_NAME";
 
-            Loadouts.RegisterSkillDef(skillDefCombatshotgun);
+            LoadoutAPI.AddSkillDef(skillDefCombatshotgun);
             Array.Resize(ref commandoSkillFamilyPrimary.variants, commandoSkillFamilyPrimary.variants.Length + 1);
             commandoSkillFamilyPrimary.variants[commandoSkillFamilyPrimary.variants.Length - 1] = new SkillFamily.Variant
             {
@@ -201,7 +201,7 @@ namespace EggsSkills
                 "KEYWORD_MARKING",
             };
 
-            Loadouts.RegisterSkillDef(skillDefDebuffnade);
+            LoadoutAPI.AddSkillDef(skillDefDebuffnade);
             Array.Resize(ref captainSkillFamilySecondary.variants, captainSkillFamilySecondary.variants.Length + 1);
             captainSkillFamilySecondary.variants[captainSkillFamilySecondary.variants.Length - 1] = new SkillFamily.Variant
             {
@@ -241,7 +241,7 @@ namespace EggsSkills
                 "KEYWORD_STUNNING"
             };
 
-            Loadouts.RegisterSkillDef(skillDefTeslamine);
+            LoadoutAPI.AddSkillDef(skillDefTeslamine);
             Array.Resize(ref engiSkillFamilySecondary.variants, engiSkillFamilySecondary.variants.Length + 1);
             engiSkillFamilySecondary.variants[engiSkillFamilySecondary.variants.Length - 1] = new SkillFamily.Variant
             {
@@ -283,7 +283,7 @@ namespace EggsSkills
                 "KEYWORD_STUNNING",
             };
 
-            Loadouts.RegisterSkillDef(skillDefRoot);
+            LoadoutAPI.AddSkillDef(skillDefRoot);
             Array.Resize(ref rexSkillFamilySpecial.variants, rexSkillFamilySpecial.variants.Length + 1);
             rexSkillFamilySpecial.variants[rexSkillFamilySpecial.variants.Length - 1] = new SkillFamily.Variant
             {
@@ -320,7 +320,7 @@ namespace EggsSkills
             skillDefShieldsplode.skillName = "ShieldSplosion";
             skillDefShieldsplode.skillNameToken = "LOADER_SPECIAL_SHIELDSPLOSION_NAME";
 
-            Loadouts.RegisterSkillDef(skillDefShieldsplode);
+            LoadoutAPI.AddSkillDef(skillDefShieldsplode);
             Array.Resize(ref loaderSkillFamilySpecial.variants, loaderSkillFamilySpecial.variants.Length + 1);
             loaderSkillFamilySpecial.variants[loaderSkillFamilySpecial.variants.Length - 1] = new SkillFamily.Variant
             {
@@ -357,7 +357,7 @@ namespace EggsSkills
             skillDefExpunge.skillName = "Purge";
             skillDefExpunge.skillNameToken = "ACRID_SPECIAL_PURGE_NAME";
 
-            Loadouts.RegisterSkillDef(skillDefExpunge);
+            LoadoutAPI.AddSkillDef(skillDefExpunge);
             Array.Resize(ref acridSkillFamilySpecial.variants, acridSkillFamilySpecial.variants.Length + 1);
             acridSkillFamilySpecial.variants[acridSkillFamilySpecial.variants.Length - 1] = new SkillFamily.Variant
             {
@@ -369,15 +369,15 @@ namespace EggsSkills
 
         private void RegisterTeslaMineStates()
         {
-            Loadouts.RegisterEntityState(typeof(TeslaArmingUnarmedState));
-            Loadouts.RegisterEntityState(typeof(TeslaArmingWeakState));
-            Loadouts.RegisterEntityState(typeof(TeslaArmingFullState));
+            LoadoutAPI.AddSkill(typeof(TeslaArmingUnarmedState));
+            LoadoutAPI.AddSkill(typeof(TeslaArmingWeakState));
+            LoadoutAPI.AddSkill(typeof(TeslaArmingFullState));
 
-            Loadouts.RegisterEntityState(typeof(TeslaArmState));
-            Loadouts.RegisterEntityState(typeof(TeslaWaitForStick));
-            Loadouts.RegisterEntityState(typeof(TeslaWaitForTargetState));
-            Loadouts.RegisterEntityState(typeof(TeslaPreDetState));
-            Loadouts.RegisterEntityState(typeof(TeslaDetonateState));
+            LoadoutAPI.AddSkill(typeof(TeslaArmState));
+            LoadoutAPI.AddSkill(typeof(TeslaWaitForStick));
+            LoadoutAPI.AddSkill(typeof(TeslaWaitForTargetState));
+            LoadoutAPI.AddSkill(typeof(TeslaPreDetState));
+            LoadoutAPI.AddSkill(typeof(TeslaDetonateState));
         }
     }
 }

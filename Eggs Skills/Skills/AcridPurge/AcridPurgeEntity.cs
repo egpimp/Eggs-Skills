@@ -1,5 +1,4 @@
-﻿using EnigmaticThunder.Modules;
-using EntityStates;
+﻿using EntityStates;
 using EntityStates.Croco;
 using RoR2;
 using UnityEngine;
