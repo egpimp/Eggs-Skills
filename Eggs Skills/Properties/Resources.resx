@@ -118,28 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="CommandoShotgun" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>C:/Users/Eav/source/repos/Eggs Skills/Eggs Skills/Resources/CommandoShotgun.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="DebuffNade" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>C:/Users/Eav/source/repos/Eggs Skills/Eggs Skills/Resources/debuffnade.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Expunge" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>C:/Users/Eav/source/repos/Eggs Skills/Eggs Skills/Resources/Expunge.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="FatalTeleport" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>C:/Users/Eav/source/repos/Eggs Skills/Eggs Skills/Resources/FatalTeleport.Png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="RexRoot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>C:/Users/Eav/source/repos/Eggs Skills/Eggs Skills/Resources/RexRoot.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Shieldsplosion" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>C:/Users/Eav/source/repos/Eggs Skills/Eggs Skills/Resources/Shieldsplosion.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="SurgeTeleport" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>C:/Users/Eav/source/repos/Eggs Skills/Eggs Skills/Resources/SurgeTeleport.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="TeslaMine" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>C:/Users/Eav/source/repos/Eggs Skills/Eggs Skills/Resources/TeslaMine.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="mainbundle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\mainbundle;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

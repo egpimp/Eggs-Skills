@@ -63,79 +63,9 @@ namespace EggsSkills.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] CommandoShotgun {
+        internal static byte[] mainbundle {
             get {
-                object obj = ResourceManager.GetObject("CommandoShotgun", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] DebuffNade {
-            get {
-                object obj = ResourceManager.GetObject("DebuffNade", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] Expunge {
-            get {
-                object obj = ResourceManager.GetObject("Expunge", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] FatalTeleport {
-            get {
-                object obj = ResourceManager.GetObject("FatalTeleport", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] RexRoot {
-            get {
-                object obj = ResourceManager.GetObject("RexRoot", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] Shieldsplosion {
-            get {
-                object obj = ResourceManager.GetObject("Shieldsplosion", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] SurgeTeleport {
-            get {
-                object obj = ResourceManager.GetObject("SurgeTeleport", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] TeslaMine {
-            get {
-                object obj = ResourceManager.GetObject("TeslaMine", resourceCulture);
+                object obj = ResourceManager.GetObject("mainbundle", resourceCulture);
                 return ((byte[])(obj));
             }
         }

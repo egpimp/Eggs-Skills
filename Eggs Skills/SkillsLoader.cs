@@ -13,6 +13,8 @@ using System.Security;
 using System.Security.Permissions;
 using EggsSkills.EntityStates;
 using R2API.Utils;
+using EggsSkills.Unlocks;
+using System.Collections.Generic;
 
 [module: UnverifiableCode]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -21,27 +23,35 @@ namespace EggsSkills
 {
     [BepInDependency("com.Egg.EggsBuffs", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "1.0.7")]
+    [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "2.0.0")]
     [R2APISubmoduleDependency(new string[]
 {
     nameof(ProjectileAPI),
     nameof(LanguageAPI),
-    nameof(LoadoutAPI)
+    nameof(LoadoutAPI),
+    nameof(PrefabAPI),
+    nameof(UnlockableAPI)
 })]
-    public class SkillsLoader : BaseUnityPlugin
+    internal class SkillsLoader : BaseUnityPlugin
     {
-        GameObject artificerRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/MageBody");
-        GameObject mercenaryRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/MercBody");
-        GameObject commandoRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/CommandoBody");
-        GameObject engineerRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/EngiBody");
-        GameObject rexRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/TreebotBody");
-        GameObject loaderRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/LoaderBody");
-        GameObject acridRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/CrocoBody");
-        GameObject captainRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/CaptainBody");
+        internal static GameObject artificerRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/MageBody");
+        internal static GameObject mercenaryRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/MercBody");
+        internal static GameObject commandoRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/CommandoBody");
+        internal static GameObject engineerRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/EngiBody");
+        internal static GameObject rexRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/TreebotBody");
+        internal static GameObject loaderRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/LoaderBody");
+        internal static GameObject acridRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/CrocoBody");
+        internal static GameObject captainRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/CaptainBody");
+        internal static GameObject banditRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/Bandit2Body");
+        internal static GameObject multRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/ToolbotBody");
+        internal static GameObject huntressRef = UnityEngine.Resources.Load<GameObject>("prefabs/characterbodies/HuntressBody");
+
+        internal static List<SkillDef> defList = new List<SkillDef>();
+        internal static List<Type> extraStates = new List<Type>();
         private void Awake()
         {
-            Assets.ProjectileLoader();
-            Assets.RegisterLanguageTokens();
+            Assets.LoadResources();
+            UnlocksRegistering.RegisterUnlockables();
             RegisterSkills();
         }
         private void RegisterSkills()
@@ -54,6 +64,18 @@ namespace EggsSkills
             RegisterLoaderSkills();
             RegisterCaptainSkills();
             RegisterRexSkills();
+            RegisterBanditSkills();
+            RegisterHuntressSkills();
+            RegisterMultSkills();
+            foreach(SkillDef def in defList)
+            {
+                LoadoutAPI.AddSkillDef(def);
+                Debug.Log("Skill: " + def.skillNameToken + " Registered");
+            }
+            foreach (Type skill in extraStates)
+            {
+                LoadoutAPI.AddSkill(skill);
+            }
         }
 
         private void RegisterArtificerSkills()
@@ -63,7 +85,7 @@ namespace EggsSkills
 
             //Zapport
             SkillDef skillDefZapport = ScriptableObject.CreateInstance<SkillDef>();
-            skillDefZapport.activationState = new SerializableEntityStateType(typeof(EntityStates.ZapportChargeEntity));
+            skillDefZapport.activationState = new SerializableEntityStateType(typeof(ZapportChargeEntity));
             skillDefZapport.activationStateMachineName = "Weapon";
             skillDefZapport.baseMaxStock = 1;
             skillDefZapport.baseRechargeInterval = 12f;
@@ -78,7 +100,7 @@ namespace EggsSkills
             skillDefZapport.rechargeStock = 1;
             skillDefZapport.requiredStock = 1;
             skillDefZapport.stockToConsume = 1;
-            skillDefZapport.icon = Assets.zapportIconS;
+            skillDefZapport.icon = Resources.Sprites.zapportIconS;
             skillDefZapport.skillDescriptionToken = "ARTIFICER_UTILITY_ZAPPORT_DESC";
             skillDefZapport.skillName = "Zapport";
             skillDefZapport.skillNameToken = "ARTIFICER_UTILITY_ZAPPORT_NAME";
@@ -87,15 +109,15 @@ namespace EggsSkills
                 "KEYWORD_STUNNING"
             };
 
-            LoadoutAPI.AddSkillDef(skillDefZapport);
+            defList.Add(skillDefZapport);
             Array.Resize(ref artificerSkillFamilyUtility.variants, artificerSkillFamilyUtility.variants.Length + 1);
             artificerSkillFamilyUtility.variants[artificerSkillFamilyUtility.variants.Length - 1] = new SkillFamily.Variant
             {
                 skillDef = skillDefZapport,
-                unlockableDef = ScriptableObject.CreateInstance<UnlockableDef>(),
+                unlockableDef = UnlocksRegistering.artificerZapportUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefZapport.skillNameToken, false, null)
             };
-            LoadoutAPI.AddSkill(typeof(ZapportFireEntity));
+            extraStates.Add(typeof(ZapportFireEntity));
         }
 
         private void RegisterMercenarySkills()
@@ -105,7 +127,7 @@ namespace EggsSkills
 
             //Slashport
             MercSlashportDef skillDefSlashport = ScriptableObject.CreateInstance<MercSlashportDef>();
-            skillDefSlashport.activationState = new SerializableEntityStateType(typeof(EntityStates.SlashportEntity));
+            skillDefSlashport.activationState = new SerializableEntityStateType(typeof(SlashportEntity));
             skillDefSlashport.activationStateMachineName = "Weapon";
             skillDefSlashport.baseMaxStock = 1;
             skillDefSlashport.baseRechargeInterval = 5f;
@@ -120,7 +142,7 @@ namespace EggsSkills
             skillDefSlashport.rechargeStock = 1;
             skillDefSlashport.requiredStock = 1;
             skillDefSlashport.stockToConsume = 1;
-            skillDefSlashport.icon = Assets.slashportIconS;
+            skillDefSlashport.icon = Resources.Sprites.slashportIconS;
             skillDefSlashport.skillDescriptionToken = "MERCENARY_UTILITY_SLASHPORT_DESC";
             skillDefSlashport.skillName = "Slashport";
             skillDefSlashport.skillNameToken = "MERCENARY_UTILITY_SLASHPORT_NAME";
@@ -130,12 +152,12 @@ namespace EggsSkills
                 "KEYWORD_STUNNING"
             };
 
-            LoadoutAPI.AddSkillDef(skillDefSlashport);
+            defList.Add(skillDefSlashport);
             Array.Resize(ref mercSkillFamilyUtility.variants, mercSkillFamilyUtility.variants.Length + 1);
             mercSkillFamilyUtility.variants[mercSkillFamilyUtility.variants.Length - 1] = new SkillFamily.Variant
             {
                 skillDef = skillDefSlashport,
-                unlockableDef = ScriptableObject.CreateInstance<UnlockableDef>(),
+                unlockableDef = UnlocksRegistering.mercSlashportUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefSlashport.skillNameToken, false, null)
             };
         }
@@ -147,7 +169,7 @@ namespace EggsSkills
 
             //Combat Shotgun
             SkillDef skillDefCombatshotgun = ScriptableObject.CreateInstance<SkillDef>();
-            skillDefCombatshotgun.activationState = new SerializableEntityStateType(typeof(EggsSkills.EntityStates.CombatShotgunEntity));
+            skillDefCombatshotgun.activationState = new SerializableEntityStateType(typeof(CombatShotgunEntity));
             skillDefCombatshotgun.activationStateMachineName = "Weapon";
             skillDefCombatshotgun.baseMaxStock = 8;
             skillDefCombatshotgun.baseRechargeInterval = 0.8f;
@@ -162,17 +184,17 @@ namespace EggsSkills
             skillDefCombatshotgun.rechargeStock = 8;
             skillDefCombatshotgun.requiredStock = 1;
             skillDefCombatshotgun.stockToConsume = 1;
-            skillDefCombatshotgun.icon = Assets.shotgunIconS;
+            skillDefCombatshotgun.icon = Resources.Sprites.shotgunIconS;
             skillDefCombatshotgun.skillDescriptionToken = "COMMANDO_PRIMARY_COMBATSHOTGUN_DESC";
             skillDefCombatshotgun.skillName = "CombatShotgun";
             skillDefCombatshotgun.skillNameToken = "COMMANDO_PRIMARY_COMBATSHOTGUN_NAME";
 
-            LoadoutAPI.AddSkillDef(skillDefCombatshotgun);
+            defList.Add(skillDefCombatshotgun);
             Array.Resize(ref commandoSkillFamilyPrimary.variants, commandoSkillFamilyPrimary.variants.Length + 1);
             commandoSkillFamilyPrimary.variants[commandoSkillFamilyPrimary.variants.Length - 1] = new SkillFamily.Variant
             {
                 skillDef = skillDefCombatshotgun,
-                unlockableDef = ScriptableObject.CreateInstance<UnlockableDef>(),
+                unlockableDef = UnlocksRegistering.commandoShotgunUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefCombatshotgun.skillNameToken, false, null)
             };
         }
@@ -184,7 +206,7 @@ namespace EggsSkills
 
             //DebuffGrenade
             SkillDef skillDefDebuffnade = ScriptableObject.CreateInstance<SkillDef>();
-            skillDefDebuffnade.activationState = new SerializableEntityStateType(typeof(EggsSkills.EntityStates.DebuffGrenadeEntity));
+            skillDefDebuffnade.activationState = new SerializableEntityStateType(typeof(DebuffGrenadeEntity));
             skillDefDebuffnade.activationStateMachineName = "Weapon";
             skillDefDebuffnade.baseMaxStock = 2;
             skillDefDebuffnade.baseRechargeInterval = 10f;
@@ -199,7 +221,7 @@ namespace EggsSkills
             skillDefDebuffnade.rechargeStock = 1;
             skillDefDebuffnade.requiredStock = 1;
             skillDefDebuffnade.stockToConsume = 1;
-            skillDefDebuffnade.icon = Assets.debuffNadeIconS;
+            skillDefDebuffnade.icon = Resources.Sprites.debuffNadeIconS;
             skillDefDebuffnade.skillDescriptionToken = "CAPTAIN_SECONDARY_DEBUFFNADE_DESC";
             skillDefDebuffnade.skillName = "Debuffnade";
             skillDefDebuffnade.skillNameToken = "CAPTAIN_SECONDARY_DEBUFFNADE_NAME";
@@ -208,12 +230,12 @@ namespace EggsSkills
                 "KEYWORD_MARKING",
             };
 
-            LoadoutAPI.AddSkillDef(skillDefDebuffnade);
+            defList.Add(skillDefDebuffnade);
             Array.Resize(ref captainSkillFamilySecondary.variants, captainSkillFamilySecondary.variants.Length + 1);
             captainSkillFamilySecondary.variants[captainSkillFamilySecondary.variants.Length - 1] = new SkillFamily.Variant
             {
                 skillDef = skillDefDebuffnade,
-                unlockableDef = ScriptableObject.CreateInstance<UnlockableDef>(),
+                unlockableDef = UnlocksRegistering.captainDebuffnadeUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefDebuffnade.skillNameToken, false, null)
             };
         }
@@ -224,7 +246,7 @@ namespace EggsSkills
             SkillFamily engiSkillFamilySecondary = engiSkillLocator.secondary.skillFamily;
 
             SkillDef skillDefTeslamine = ScriptableObject.CreateInstance<SkillDef>();
-            skillDefTeslamine.activationState = new SerializableEntityStateType(typeof(EggsSkills.EntityStates.TeslaMineFireState));
+            skillDefTeslamine.activationState = new SerializableEntityStateType(typeof(TeslaMineFireState));
             skillDefTeslamine.activationStateMachineName = "Weapon";
             skillDefTeslamine.baseMaxStock = 4;
             skillDefTeslamine.baseRechargeInterval = 10f;
@@ -239,7 +261,7 @@ namespace EggsSkills
             skillDefTeslamine.rechargeStock = 1;
             skillDefTeslamine.requiredStock = 1;
             skillDefTeslamine.stockToConsume = 1;
-            skillDefTeslamine.icon = Assets.teslaMineIconS;
+            skillDefTeslamine.icon = Resources.Sprites.teslaMineIconS;
             skillDefTeslamine.skillDescriptionToken = "ENGI_SECONDARY_TESLAMINE_DESC";
             skillDefTeslamine.skillName = "TeslaMine";
             skillDefTeslamine.skillNameToken = "ENGI_SECONDARY_TESLAMINE_NAME";
@@ -248,12 +270,12 @@ namespace EggsSkills
                 "KEYWORD_STUNNING"
             };
 
-            LoadoutAPI.AddSkillDef(skillDefTeslamine);
+            defList.Add(skillDefTeslamine);
             Array.Resize(ref engiSkillFamilySecondary.variants, engiSkillFamilySecondary.variants.Length + 1);
             engiSkillFamilySecondary.variants[engiSkillFamilySecondary.variants.Length - 1] = new SkillFamily.Variant
             {
                 skillDef = skillDefTeslamine,
-                unlockableDef = ScriptableObject.CreateInstance<UnlockableDef>(),
+                unlockableDef = UnlocksRegistering.engiTeslaUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefTeslamine.skillNameToken, false, null)
             };
             RegisterTeslaMineStates();
@@ -266,7 +288,7 @@ namespace EggsSkills
 
             //Directive Root
             GroundedSkillDef skillDefRoot = ScriptableObject.CreateInstance<GroundedSkillDef>();
-            skillDefRoot.activationState = new SerializableEntityStateType(typeof(EggsSkills.EntityStates.DirectiveRoot));
+            skillDefRoot.activationState = new SerializableEntityStateType(typeof(DirectiveRoot));
             skillDefRoot.activationStateMachineName = "Weapon";
             skillDefRoot.baseMaxStock = 1;
             skillDefRoot.baseRechargeInterval = 12f;
@@ -281,21 +303,22 @@ namespace EggsSkills
             skillDefRoot.rechargeStock = 1;
             skillDefRoot.requiredStock = 1;
             skillDefRoot.stockToConsume = 1;
-            skillDefRoot.icon = Assets.rexrootIconS;
+            skillDefRoot.icon = Resources.Sprites.rexrootIconS;
             skillDefRoot.skillDescriptionToken = "REX_SPECIAL_ROOT_DESC";
             skillDefRoot.skillName = "Root";
             skillDefRoot.skillNameToken = "REX_SPECIAL_ROOT_NAME";
             skillDefRoot.keywordTokens = new string[]
             {
                 "KEYWORD_STUNNING",
+                "KEYWORD_ADAPTIVE"
             };
 
-            LoadoutAPI.AddSkillDef(skillDefRoot);
+            defList.Add(skillDefRoot);
             Array.Resize(ref rexSkillFamilySpecial.variants, rexSkillFamilySpecial.variants.Length + 1);
             rexSkillFamilySpecial.variants[rexSkillFamilySpecial.variants.Length - 1] = new SkillFamily.Variant
             {
                 skillDef = skillDefRoot,
-                unlockableDef = ScriptableObject.CreateInstance<UnlockableDef>(),
+                unlockableDef = UnlocksRegistering.rexRootUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefRoot.skillNameToken, false, null)
             };
         }
@@ -307,7 +330,7 @@ namespace EggsSkills
 
             //Shieldsplosion
             ShieldsplosionDef skillDefShieldsplode = ScriptableObject.CreateInstance<ShieldsplosionDef>();
-            skillDefShieldsplode.activationState = new SerializableEntityStateType(typeof(EggsSkills.EntityStates.ShieldSplosionEntity));
+            skillDefShieldsplode.activationState = new SerializableEntityStateType(typeof(ShieldSplosionEntity));
             skillDefShieldsplode.activationStateMachineName = "Weapon";
             skillDefShieldsplode.baseMaxStock = 1;
             skillDefShieldsplode.baseRechargeInterval = 8f;
@@ -322,17 +345,17 @@ namespace EggsSkills
             skillDefShieldsplode.rechargeStock = 1;
             skillDefShieldsplode.requiredStock = 1;
             skillDefShieldsplode.stockToConsume = 1;
-            skillDefShieldsplode.icon = Assets.shieldsplosionIconS;
+            skillDefShieldsplode.icon = Resources.Sprites.shieldsplosionIconS;
             skillDefShieldsplode.skillDescriptionToken = "LOADER_SPECIAL_SHIELDSPLOSION_DESC";
             skillDefShieldsplode.skillName = "ShieldSplosion";
             skillDefShieldsplode.skillNameToken = "LOADER_SPECIAL_SHIELDSPLOSION_NAME";
 
-            LoadoutAPI.AddSkillDef(skillDefShieldsplode);
+            defList.Add(skillDefShieldsplode);
             Array.Resize(ref loaderSkillFamilySpecial.variants, loaderSkillFamilySpecial.variants.Length + 1);
             loaderSkillFamilySpecial.variants[loaderSkillFamilySpecial.variants.Length - 1] = new SkillFamily.Variant
             {
                 skillDef = skillDefShieldsplode,
-                unlockableDef = ScriptableObject.CreateInstance<UnlockableDef>(),
+                unlockableDef = UnlocksRegistering.loaderShieldsplosionUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefShieldsplode.skillNameToken, false, null)
             };
         }
@@ -344,7 +367,7 @@ namespace EggsSkills
 
             //AcridPurge
             AcridPurgeDef skillDefExpunge = ScriptableObject.CreateInstance<AcridPurgeDef>();
-            skillDefExpunge.activationState = new SerializableEntityStateType(typeof(EggsSkills.EntityStates.AcridPurgeEntity));
+            skillDefExpunge.activationState = new SerializableEntityStateType(typeof(AcridPurgeEntity));
             skillDefExpunge.activationStateMachineName = "Weapon";
             skillDefExpunge.baseMaxStock = 1;
             skillDefExpunge.baseRechargeInterval = 12f;
@@ -359,32 +382,143 @@ namespace EggsSkills
             skillDefExpunge.rechargeStock = 1;
             skillDefExpunge.requiredStock = 1;
             skillDefExpunge.stockToConsume = 1;
-            skillDefExpunge.icon = Assets.acridpurgeIconS;
+            skillDefExpunge.icon = Resources.Sprites.acridpurgeIconS;
             skillDefExpunge.skillDescriptionToken = "ACRID_SPECIAL_PURGE_DESC";
             skillDefExpunge.skillName = "Purge";
             skillDefExpunge.skillNameToken = "ACRID_SPECIAL_PURGE_NAME";
 
-            LoadoutAPI.AddSkillDef(skillDefExpunge);
+            defList.Add(skillDefExpunge);
             Array.Resize(ref acridSkillFamilySpecial.variants, acridSkillFamilySpecial.variants.Length + 1);
             acridSkillFamilySpecial.variants[acridSkillFamilySpecial.variants.Length - 1] = new SkillFamily.Variant
             {
                 skillDef = skillDefExpunge,
-                unlockableDef = ScriptableObject.CreateInstance<UnlockableDef>(),
+                unlockableDef = UnlocksRegistering.acridExpungeUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefExpunge.skillNameToken, false, null)
             };
         }
 
+        private void RegisterBanditSkills()
+        {
+            SkillLocator banditSkillLocator = banditRef.GetComponent<SkillLocator>();
+            SkillFamily banditSkillFamilyUtility = banditSkillLocator.utility.skillFamily;
+
+            //Thieves Cunning
+            InvisOnSprintSkillDef skillDefInvisSprint = ScriptableObject.CreateInstance<InvisOnSprintSkillDef>();
+            skillDefInvisSprint.baseMaxStock = 1;
+            skillDefInvisSprint.baseRechargeInterval = 6f;
+            skillDefInvisSprint.fullRestockOnAssign = false;
+            skillDefInvisSprint.rechargeStock = 1;
+            skillDefInvisSprint.requiredStock = 1;
+            skillDefInvisSprint.stockToConsume = 1;
+            skillDefInvisSprint.icon = Resources.Sprites.invisSprintIconS;
+            skillDefInvisSprint.skillDescriptionToken = "BANDIT_UTILITY_INVISSPRINT_DESC";
+            skillDefInvisSprint.skillName = "ThievesCunning";
+            skillDefInvisSprint.skillNameToken = "BANDIT_UTILITY_INVISSPRINT_NAME";
+
+            defList.Add(skillDefInvisSprint);
+            Array.Resize(ref banditSkillFamilyUtility.variants, banditSkillFamilyUtility.variants.Length + 1);
+            banditSkillFamilyUtility.variants[banditSkillFamilyUtility.variants.Length - 1] = new SkillFamily.Variant
+            {
+                skillDef = skillDefInvisSprint,
+                unlockableDef = UnlocksRegistering.banditInvisSprintUnlockDef,
+                viewableNode = new ViewablesCatalog.Node(skillDefInvisSprint.skillNameToken, false, null)
+            };
+        }
+
+        private void RegisterHuntressSkills()
+        {
+            SkillLocator huntressSkillLocator = huntressRef.GetComponent<SkillLocator>();
+            SkillFamily huntressSkillFamilySecondary = huntressSkillLocator.secondary.skillFamily;
+
+            //Cluster bomb arrow
+            HuntressTrackingSkillDef skillDefClusterArrow = ScriptableObject.CreateInstance<HuntressTrackingSkillDef>();
+            skillDefClusterArrow.activationState = new SerializableEntityStateType(typeof(ClusterBombArrow));
+            skillDefClusterArrow.activationStateMachineName = "Weapon";
+            skillDefClusterArrow.baseMaxStock = 1;
+            skillDefClusterArrow.baseRechargeInterval = 8f;
+            skillDefClusterArrow.beginSkillCooldownOnSkillEnd = false;
+            skillDefClusterArrow.fullRestockOnAssign = false;
+            skillDefClusterArrow.interruptPriority = InterruptPriority.Skill;
+            skillDefClusterArrow.isCombatSkill = true;
+            skillDefClusterArrow.mustKeyPress = false;
+            skillDefClusterArrow.canceledFromSprinting = false;
+            skillDefClusterArrow.cancelSprintingOnActivation = false;
+            skillDefClusterArrow.forceSprintDuringState = false;
+            skillDefClusterArrow.rechargeStock = 1;
+            skillDefClusterArrow.requiredStock = 1;
+            skillDefClusterArrow.stockToConsume = 1;
+            skillDefClusterArrow.icon = Resources.Sprites.clusterArrowIconS;
+            skillDefClusterArrow.skillDescriptionToken = "HUNTRESS_SECONDARY_CLUSTERARROW_DESC";
+            skillDefClusterArrow.skillName = "ClusterArrow";
+            skillDefClusterArrow.skillNameToken = "HUNTRESS_SECONDARY_CLUSTERARROW_NAME";
+            skillDefClusterArrow.keywordTokens = new string[]
+            {
+                "KEYWORD_AGILE"
+            };
+
+            defList.Add(skillDefClusterArrow);
+            Array.Resize(ref huntressSkillFamilySecondary.variants, huntressSkillFamilySecondary.variants.Length + 1);
+            huntressSkillFamilySecondary.variants[huntressSkillFamilySecondary.variants.Length - 1] = new SkillFamily.Variant
+            {
+                skillDef = skillDefClusterArrow,
+                unlockableDef = UnlocksRegistering.huntressClusterarrowUnlockDef,
+                viewableNode = new ViewablesCatalog.Node(skillDefClusterArrow.skillNameToken, false, null)
+            };
+        }
+
+        private void RegisterMultSkills()
+        {
+            SkillLocator multSkillLocator = multRef.GetComponent<SkillLocator>();
+            SkillFamily multSkillFamilySecondary = multSkillLocator.secondary.skillFamily;
+
+            //NanobotSwarm
+            NanoSkilldef skillDefNanoSwarm = ScriptableObject.CreateInstance<NanoSkilldef>();
+            skillDefNanoSwarm.activationState = new SerializableEntityStateType(typeof(NanobotEntity));
+            skillDefNanoSwarm.activationStateMachineName = "Weapon";
+            skillDefNanoSwarm.baseMaxStock = 1;
+            skillDefNanoSwarm.baseRechargeInterval = 12f;
+            skillDefNanoSwarm.beginSkillCooldownOnSkillEnd = false;
+            skillDefNanoSwarm.fullRestockOnAssign = false;
+            skillDefNanoSwarm.interruptPriority = InterruptPriority.Skill;
+            skillDefNanoSwarm.isCombatSkill = true;
+            skillDefNanoSwarm.mustKeyPress = true;
+            skillDefNanoSwarm.canceledFromSprinting = false;
+            skillDefNanoSwarm.cancelSprintingOnActivation = true;
+            skillDefNanoSwarm.forceSprintDuringState = false;
+            skillDefNanoSwarm.rechargeStock = 1;
+            skillDefNanoSwarm.requiredStock = 1;
+            skillDefNanoSwarm.stockToConsume = 1;
+            skillDefNanoSwarm.icon = Resources.Sprites.nanoBotsIconS;
+            skillDefNanoSwarm.skillDescriptionToken = "MULT_SECONDARY_NANOBOT_DESC";
+            skillDefNanoSwarm.skillName = "NanobotSwarm";
+            skillDefNanoSwarm.skillNameToken = "MULT_SECONDARY_NANOBOT_NAME";
+            skillDefNanoSwarm.keywordTokens = new string[]
+            {
+                "KEYWORD_MARKING"
+            };
+
+            defList.Add(skillDefNanoSwarm);
+            Array.Resize(ref multSkillFamilySecondary.variants, multSkillFamilySecondary.variants.Length + 1);
+            multSkillFamilySecondary.variants[multSkillFamilySecondary.variants.Length - 1] = new SkillFamily.Variant
+            {
+                skillDef = skillDefNanoSwarm,
+                unlockableDef = UnlocksRegistering.multNanobeaconUnlockDef,
+                viewableNode = new ViewablesCatalog.Node(skillDefNanoSwarm.skillNameToken, false, null)
+            };
+        }
+
+
         private void RegisterTeslaMineStates()
         {
-            LoadoutAPI.AddSkill(typeof(TeslaArmingUnarmedState));
-            LoadoutAPI.AddSkill(typeof(TeslaArmingWeakState));
-            LoadoutAPI.AddSkill(typeof(TeslaArmingFullState));
+            extraStates.Add(typeof(TeslaArmingUnarmedState));
+            extraStates.Add(typeof(TeslaArmingWeakState));
+            extraStates.Add(typeof(TeslaArmingFullState));
 
-            LoadoutAPI.AddSkill(typeof(TeslaArmState));
-            LoadoutAPI.AddSkill(typeof(TeslaWaitForStick));
-            LoadoutAPI.AddSkill(typeof(TeslaWaitForTargetState));
-            LoadoutAPI.AddSkill(typeof(TeslaPreDetState));
-            LoadoutAPI.AddSkill(typeof(TeslaDetonateState));
+            extraStates.Add(typeof(TeslaArmState));
+            extraStates.Add(typeof(TeslaWaitForStick));
+            extraStates.Add(typeof(TeslaWaitForTargetState));
+            extraStates.Add(typeof(TeslaPreDetState));
+            extraStates.Add(typeof(TeslaDetonateState));
         }
     }
 }
