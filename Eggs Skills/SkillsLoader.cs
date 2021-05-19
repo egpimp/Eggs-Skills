@@ -23,7 +23,7 @@ namespace EggsSkills
 {
     [BepInDependency("com.Egg.EggsBuffs", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "2.0.0")]
+    [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "2.0.1")]
     [R2APISubmoduleDependency(new string[]
 {
     nameof(ProjectileAPI),
@@ -50,6 +50,7 @@ namespace EggsSkills
         internal static List<Type> extraStates = new List<Type>();
         private void Awake()
         {
+            Debug.Log("Thanks SOM for the icon work <3");
             Assets.LoadResources();
             UnlocksRegistering.RegisterUnlockables();
             RegisterSkills();
@@ -70,7 +71,7 @@ namespace EggsSkills
             foreach(SkillDef def in defList)
             {
                 LoadoutAPI.AddSkillDef(def);
-                Debug.Log("Skill: " + def.skillNameToken + " Registered");
+                Debug.Log("Skill: " + def.skillName + " Registered");
             }
             foreach (Type skill in extraStates)
             {
