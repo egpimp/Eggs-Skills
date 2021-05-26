@@ -9,35 +9,41 @@ namespace EggsSkills.EntityStates
 {
     class DirectiveRoot : BaseSkillState
     {
-        public bool isFirstPress;
-        public float pullTimer;
-        public bool isCrit;
+        private bool isCrit;
+        private bool isFirstPress;
+
+        private float barrierCoefficient = 0.02f;
+        private float basePullTimer = 0.5f; 
+        private float damageCoefficient = 1.25f;
+        private float pullTimer;
+        private float speedFraction = 0.6f;
+
         private GameObject bodyPrefab = UnityEngine.Resources.Load<GameObject>("prefabs/effects/impacteffects/TreebotPounderExplosion");
         public override void OnEnter()
         {
             if (base.isAuthority)
             {
                 base.OnEnter();
-                base.characterMotor.walkSpeedPenaltyCoefficient = 0.6f;
+                base.characterMotor.walkSpeedPenaltyCoefficient = this.speedFraction;
                 base.characterBody.AddBuff(BuffsLoading.buffDefAdaptive);
                 this.isFirstPress = true;
-                this.pullTimer = 0.5f;
+                this.pullTimer = this.basePullTimer / base.attackSpeedStat;
             }
         }
         public override void OnExit()
         {
             base.characterBody.RemoveBuff(BuffsLoading.buffDefAdaptive);
-            base.characterMotor.walkSpeedPenaltyCoefficient = 1;
+            base.characterMotor.walkSpeedPenaltyCoefficient = 1f;
             base.OnExit();
         }
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (base.isAuthority && !base.IsKeyDownAuthority() && isFirstPress)
+            if (base.isAuthority && !base.IsKeyDownAuthority() && this.isFirstPress)
             {
                 this.isFirstPress = false;
             }
-            if (base.isAuthority && base.IsKeyDownAuthority() && !isFirstPress)
+            if (base.isAuthority && base.IsKeyDownAuthority() && !this.isFirstPress)
             {
                 this.outer.SetNextStateToMain();
                 return;
@@ -58,7 +64,7 @@ namespace EggsSkills.EntityStates
             }
             else
             {
-                this.pullTimer = 0.5f;
+                this.pullTimer = this.basePullTimer / base.attackSpeedStat;
                 this.Pull();
             }
         }
@@ -68,50 +74,51 @@ namespace EggsSkills.EntityStates
         }
         public void Pull()
         {
-            isCrit = base.RollCrit();
-            foreach (HurtBox hurtBox in new SphereSearch
+            if (base.isAuthority)
             {
-                origin = base.characterBody.corePosition,
-                radius = 30,
-                mask = LayerIndex.entityPrecise.mask
-            }.RefreshCandidates().FilterCandidatesByHurtBoxTeam(TeamMask.GetEnemyTeams(base.teamComponent.teamIndex)).OrderCandidatesByDistance().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes())
-            {
-                //force calc
-                CharacterBody body = hurtBox.healthComponent.body;
-                Vector3 a = hurtBox.transform.position - base.characterBody.corePosition;
-                float magnitude = a.magnitude;
-                Vector3 direction = a.normalized;
-                float mass = body.GetComponent<Rigidbody>().mass;
-                float massEval;
-                if (!body.isFlying)
+                this.isCrit = base.RollCrit();
+                foreach (HurtBox hurtBox in new SphereSearch
                 {
-                    massEval = mass * -20f - 400f;
+                    origin = base.characterBody.corePosition,
+                    radius = 30,
+                    mask = LayerIndex.entityPrecise.mask
+                }.RefreshCandidates().FilterCandidatesByHurtBoxTeam(TeamMask.GetEnemyTeams(base.teamComponent.teamIndex)).OrderCandidatesByDistance().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes())
+                {
+                    //force calc
+                    CharacterBody body = hurtBox.healthComponent.body;
+                    Vector3 a = hurtBox.transform.position - base.characterBody.corePosition;
+                    float magnitude = a.magnitude;
+                    Vector3 direction = a.normalized;
+                    float mass = body.GetComponent<Rigidbody>().mass;
+                    float massEval;
+                    if (!body.isFlying)
+                    {
+                        massEval = mass * -20f - 400f;
+                    }
+                    else
+                    {
+                        massEval = (mass * -20f - 400f) / 2;
+                    }
+                    float[] maxMass = new float[] { massEval, -6000 };
+                    Vector3 appliedForce = maxMass.Max() * direction * ((magnitude + 15) / 60);
+                    //damage
+                    DamageInfo damageInfo = new DamageInfo
+                    {
+                        attacker = base.gameObject,
+                        inflictor = base.gameObject,
+                        crit = this.isCrit,
+                        damage = base.damageStat * this.damageCoefficient,
+                        damageColorIndex = DamageColorIndex.Default,
+                        damageType = DamageType.Stun1s,
+                        force = appliedForce,
+                        procCoefficient = 0.4f,
+                        procChainMask = default,
+                        position = hurtBox.transform.position
+                    };
+                    hurtBox.healthComponent.TakeDamage(damageInfo);
+                    GlobalEventManager.instance.OnHitEnemy(damageInfo, body.gameObject);
+                    base.healthComponent.AddBarrier(base.healthComponent.fullCombinedHealth * this.barrierCoefficient);
                 }
-                else
-                {
-                    massEval = (mass * -20f - 400f) / 2;
-                }
-                var maxMass = new float[] { massEval, -6000 };
-                Vector3 appliedForce = maxMass.Max() * direction * ((magnitude + 15) / 60);
-                //damage
-                DamageInfo damageInfo = new DamageInfo
-                {
-                    attacker = base.gameObject,
-                    inflictor = base.gameObject,
-                    crit = isCrit,
-                    damage = base.damageStat * 1.25f,
-                    damageColorIndex = DamageColorIndex.Default,
-                    damageType = DamageType.Stun1s,
-                    force = appliedForce,
-                    procCoefficient = 0.4f,
-                    procChainMask = default(ProcChainMask),
-                    position = hurtBox.transform.position
-                };
-                hurtBox.healthComponent.TakeDamage(damageInfo);
-                GlobalEventManager.instance.OnHitEnemy(damageInfo,body.gameObject);
-                base.healthComponent.AddBarrier(base.healthComponent.fullCombinedHealth * .02f);
-                
-            }
                 base.PlayAnimation("Gesture", "LightImpact");
                 EffectData bodyEffectData = new EffectData
                 {
@@ -121,7 +128,7 @@ namespace EggsSkills.EntityStates
                 };
                 EffectManager.SpawnEffect(bodyPrefab, bodyEffectData, true);
                 Util.PlaySound(FireMortar.fireSoundString, base.gameObject);
-
+            }
         }
     }
 }

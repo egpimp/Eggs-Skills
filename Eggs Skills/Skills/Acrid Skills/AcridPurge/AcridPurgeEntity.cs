@@ -7,22 +7,26 @@ namespace EggsSkills.EntityStates
 {
     class AcridPurgeEntity : BaseState
     {
-        public float maxTrackingDistance = 5000f;
-        public new TeamComponent teamComponent;
-        private readonly GameObject bodyPrefab = UnityEngine.Resources.Load<GameObject>("prefabs/effects/impacteffects/CrocoDiseaseImpactEffect");
+        private float blightDamageCoefficient = 3f;
+        private float detonationRadius = 16f;
+        private float healthFraction = 0.1f;
+        private float maxTrackingDistance = 5000f;
+        private float poisonDamageCoefficient = 2.5f;
+        private float procCoefficient = 1f;
+
+        private GameObject bodyPrefab = UnityEngine.Resources.Load<GameObject>("prefabs/effects/impacteffects/CrocoDiseaseImpactEffect");
         public override void OnEnter()
         {
             base.OnEnter();
             if(base.isAuthority)
             {
-                this.teamComponent = base.teamComponent;
                 base.PlayAnimation("Gesture, Mouth", "FireSpit", "FireSpit.playbackRate", 1f);
                 foreach (HurtBox hurtBox in new SphereSearch
                 {
                     origin = base.characterBody.footPosition,
                     radius = this.maxTrackingDistance,
                     mask = LayerIndex.entityPrecise.mask
-                }.RefreshCandidates().FilterCandidatesByHurtBoxTeam(TeamMask.GetEnemyTeams(this.teamComponent.teamIndex)).OrderCandidatesByDistance().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes())
+                }.RefreshCandidates().FilterCandidatesByHurtBoxTeam(TeamMask.GetEnemyTeams(base.teamComponent.teamIndex)).OrderCandidatesByDistance().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes())
                 {
                     CharacterBody body = hurtBox.healthComponent.body;
                     HealthComponent component = hurtBox.healthComponent;
@@ -31,20 +35,19 @@ namespace EggsSkills.EntityStates
                         new BlastAttack
                         {
                             position = body.corePosition,
-                            baseDamage = component.fullHealth * 0.1f + base.damageStat * 2f,
-                            baseForce = 0,
-                            radius = 16f,
+                            baseDamage = component.fullHealth * this.healthFraction + base.damageStat * this.poisonDamageCoefficient,
+                            baseForce = 0f,
+                            radius = this.detonationRadius,
                             attacker = base.gameObject,
                             inflictor = base.gameObject,
                             teamIndex = base.teamComponent.teamIndex,
                             crit = base.RollCrit(),
                             procChainMask = default,
-                            procCoefficient = 1,
-                            bonusForce = new Vector3(0, 0, 0),
+                            procCoefficient = this.procCoefficient,
                             falloffModel = BlastAttack.FalloffModel.None,
-                            damageColorIndex = DamageColorIndex.Default,
+                            damageColorIndex = default,
                             damageType = DamageType.Generic,
-                            attackerFiltering = AttackerFiltering.Default
+                            attackerFiltering = default
                         }.Fire();
                         EffectManager.SimpleSoundEffect(BaseLeap.landingSound.index, body.footPosition, true);
                         EffectData bodyEffectData = new EffectData
@@ -60,27 +63,26 @@ namespace EggsSkills.EntityStates
                         new BlastAttack
                         {
                             position = body.corePosition,
-                            baseDamage = base.damageStat * (3f * body.GetBuffCount(RoR2Content.Buffs.Blight)),
-                            baseForce = 0,
-                            radius = 16f,
+                            baseDamage = base.damageStat * (this.blightDamageCoefficient * body.GetBuffCount(RoR2Content.Buffs.Blight)),
+                            baseForce = 0f,
+                            radius = this.detonationRadius,
                             attacker = base.gameObject,
                             inflictor = base.gameObject,
                             teamIndex = base.teamComponent.teamIndex,
                             crit = base.RollCrit(),
                             procChainMask = default,
                             procCoefficient = 1,
-                            bonusForce = new Vector3(0, 0, 0),
                             falloffModel = BlastAttack.FalloffModel.None,
-                            damageColorIndex = DamageColorIndex.Default,
+                            damageColorIndex = default,
                             damageType = DamageType.Generic,
-                            attackerFiltering = AttackerFiltering.Default
+                            attackerFiltering = default
                         }.Fire();
                         EffectManager.SimpleSoundEffect(BaseLeap.landingSound.index, body.footPosition, true);
                         EffectData bodyEffectData = new EffectData
                         {
                             origin = body.corePosition,
                             color = Color.yellow,
-                            scale = 16
+                            scale = this.detonationRadius
                         };
                         EffectManager.SpawnEffect(bodyPrefab, bodyEffectData, true);
                     }
@@ -90,9 +92,10 @@ namespace EggsSkills.EntityStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if(base.fixedAge >= 0.1f)
+            if(base.fixedAge >= 0.1f && base.isAuthority)
             {
-                this.outer.SetNextStateToMain();                
+                this.outer.SetNextStateToMain();
+                return;
             };
         }
     }

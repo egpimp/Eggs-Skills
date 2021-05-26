@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using EggsSkills.Orbs;
+﻿using EggsSkills.Orbs;
 using EntityStates;
 using EntityStates.Huntress.HuntressWeapon;
 using RoR2;
@@ -12,61 +9,65 @@ namespace EggsSkills.EntityStates
 {
     class ClusterBombArrow : BaseState
     {
-        private HuntressTracker huntressTracker;
-        private GenericDamageOrb genericDamageOrb;
-        private ChildLocator childLocator;
         private Animator animator;
-        private HurtBox target;
+
+        private ChildLocator childLocator;
+
+        private FireSeekingArrow assetRef = new FireSeekingArrow();
+
         private float baseDuration = 1f;
         private float duration;
+
+        private GenericDamageOrb genericDamageOrb;
+
+        private HuntressTracker huntressTracker;
+        private HurtBox target;
+
         private Transform muzzle;
-        private FireSeekingArrow assetRef = new FireSeekingArrow();
         public override void OnEnter()
         {
             base.OnEnter();
-            huntressTracker = GetComponent<HuntressTracker>();
-            genericDamageOrb = new HuntressBombArrowOrb();
-            target = huntressTracker.GetTrackingTarget();
-            duration = baseDuration / attackSpeedStat;
+            this.huntressTracker = GetComponent<HuntressTracker>();
+            this.genericDamageOrb = new HuntressBombArrowOrb();
+            this.target = huntressTracker.GetTrackingTarget();
+            this.duration = baseDuration / attackSpeedStat;
             Transform modelTransform = GetModelTransform();
             if(modelTransform)
             {
-                childLocator = modelTransform.GetComponent<ChildLocator>();
-                muzzle = childLocator.FindChild(assetRef.muzzleString);
-                animator = modelTransform.GetComponent<Animator>();
+                this.childLocator = modelTransform.GetComponent<ChildLocator>();
+                this.muzzle = childLocator.FindChild(assetRef.muzzleString);
+                this.animator = modelTransform.GetComponent<Animator>();
             }
             Util.PlayAttackSpeedSound(assetRef.attackSoundString, gameObject, attackSpeedStat);
-            if(characterBody)
+            if(base.characterBody)
             {
-                characterBody.SetAimTimer(duration + 1f);
+                base.characterBody.SetAimTimer(duration + 1f);
             }
             base.PlayCrossfade("Gesture, Override", "FireSeekingShot", "FireSeekingShot.playbackRate", this.duration, this.duration * 0.2f / this.attackSpeedStat);
             base.PlayCrossfade("Gesture, Additive", "FireSeekingShot", "FireSeekingShot.playbackRate", this.duration, this.duration * 0.2f / this.attackSpeedStat);
         }
         private void Fire()
         {
-            if (base.isAuthority)
+            this.genericDamageOrb.damageValue = base.characterBody.damage;
+            this.genericDamageOrb.isCrit = RollCrit();
+            this.genericDamageOrb.teamIndex = TeamComponent.GetObjectTeam(gameObject);
+            this.genericDamageOrb.attacker = base.gameObject;
+            if (this.target)
             {
-                genericDamageOrb.damageValue = characterBody.damage;
-                genericDamageOrb.isCrit = RollCrit();
-                genericDamageOrb.teamIndex = TeamComponent.GetObjectTeam(gameObject);
-                genericDamageOrb.attacker = gameObject;
-                if (target)
-                {
-                    EffectManager.SimpleMuzzleFlash(assetRef.muzzleflashEffectPrefab, gameObject, assetRef.muzzleString, false);
-                    genericDamageOrb.origin = muzzle.position;
-                    genericDamageOrb.target = target;
-                    OrbManager.instance.AddOrb(genericDamageOrb);
-                }
+                EffectManager.SimpleMuzzleFlash(this.assetRef.muzzleflashEffectPrefab, base.gameObject, this.assetRef.muzzleString, false);
+                this.genericDamageOrb.origin = this.muzzle.position;
+                this.genericDamageOrb.target = this.target;
+                OrbManager.instance.AddOrb(this.genericDamageOrb);
             }
-            outer.SetNextStateToMain();
         }
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (this.animator.GetFloat("FireSeekingShot.fire") > 0f)
+            if (this.animator.GetFloat("FireSeekingShot.fire") > 0f && base.isAuthority)
             {
                 Fire();
+                this.outer.SetNextStateToMain();
+                return;
             }
         }
         public override InterruptPriority GetMinimumInterruptPriority()

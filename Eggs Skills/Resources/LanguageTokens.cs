@@ -96,8 +96,8 @@ namespace EggsSkills.Resources
             LanguageAPI.Add("REX_SPECIAL_ROOT_NAME", "DIRECTIVE: Respire");
             LanguageAPI.Add("REX_SPECIAL_ROOT_DESC", "<style=cIsDamage>Stunning.</style> <style=cIsUtility>Slow</style> yourself, but gain <style=cIsUtility>adaptive</style> for up to 8 seconds.  While active, deal <style=cIsDamage>250% damage</style> per second to nearby enemies, gaining <style=cIsHealing>barrier</style> per enemy hit and <style=cIsDamage>pulling them towards you</style>.");
 
-            LanguageAPI.Add("REX_BREATHINGUNLOCKABLE_ACHIEVEMENT_NAME", "Rex: Breathing room");
-            LanguageAPI.Add("REX_BREATHINGUNLOCKABLE_ACHIEVEMENT_DESC", "As Rex, kill 100 enemies in close range in a single run");
+            LanguageAPI.Add("REX_BREATHINGUNLOCKABLE_ACHIEVEMENT_NAME", "REX: Breathing room");
+            LanguageAPI.Add("REX_BREATHINGUNLOCKABLE_ACHIEVEMENT_DESC", "As REX, kill 100 enemies in close range in a single run");
             LanguageAPI.Add("REX_BREATHINGUNLOCKABLE_UNLOCKABLE_NAME", "Rex: Breathing room");
             LanguageAPI.Add("REX_BREATHINGUNLOCKABLE_REWARD_ID", "Kill100Close");
             LanguageAPI.Add("REX_BREATHINGUNLOCKABLE_ACHIEVEMENT_ID", "Kill100Close");

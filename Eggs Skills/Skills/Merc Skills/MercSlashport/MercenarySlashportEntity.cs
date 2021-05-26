@@ -8,16 +8,26 @@ namespace EggsSkills.EntityStates
 {
     class SlashportEntity : BaseState
     {
-        private new InputBankTest inputBank;
+        private float collisionDistance;
+        private float damageCoefficient = 7f;
+        private float[] findMax;
+        private float healthFraction = 0.2f;
+        private float procCoefficient = 1f;
+
+        private GameObject swingEffectPrefab = UnityEngine.Resources.Load<GameObject>("Prefabs/effects/MercSwordSlashWhirlwind");
+
         private HurtBox targetBox;
-        private readonly string slashChildName = "GroundLight3Slash";
-        private readonly GameObject swingEffectPrefab = UnityEngine.Resources.Load<GameObject>("Prefabs/effects/MercSwordSlashWhirlwind");
-        private Vector3 telePos;
+
+        private InputBankTest inputBank;
+
+        private MercSlashportTracker mercTracker;
+
+        private string slashChildName = "GroundLight3Slash";
+
         private Vector3 lookDir;
         private Vector3 teleDir;
-        private float collisionDistance;
-        private float[] findMax;
-        private MercSlashportTracker mercTracker;
+        private Vector3 telePos;
+
         public override void OnEnter()
         {            
             base.OnEnter();
@@ -45,61 +55,62 @@ namespace EggsSkills.EntityStates
                     EffectManager.SpawnEffect(EvisDash.blinkPrefab, effectData, false);
                     Util.PlaySound(EvisDash.beginSoundString, base.gameObject);
                     base.characterMotor.walkSpeedPenaltyCoefficient = 0f;
-                    base.characterMotor.velocity = new Vector3(0, 10, 0);
+                    base.SmallHop(base.characterMotor, 10f);
                     this.collisionDistance = base.characterBody.radius + this.targetBox.collider.contactOffset;
                     this.teleDir = (base.characterBody.corePosition - this.targetBox.transform.position).normalized;
                     this.teleDir -= new Vector3(0, this.teleDir.y, 0);
                     this.telePos = this.targetBox.transform.position + (this.teleDir * this.collisionDistance);
                     base.characterMotor.Motor.SetPosition(this.telePos);
-                    this.lookDir = (telePos - this.targetBox.transform.position).normalized;
-                    base.characterDirection.forward = lookDir * -1;
+                    this.lookDir = (this.telePos - this.targetBox.transform.position).normalized;
+                    base.characterDirection.forward = this.lookDir * -1;
                     new BlastAttack
                     {
                         position = this.targetBox.transform.position,
-                        baseDamage = 0,
-                        baseForce = 0,
+                        baseDamage = 0f,
+                        baseForce = 0f,
                         radius = 0.5f,
                         attacker = base.gameObject,
                         inflictor = base.gameObject,
                         teamIndex = base.teamComponent.teamIndex,
                         crit = false,
                         procChainMask = default,
-                        procCoefficient = 0,
-                        bonusForce = new Vector3(0, 0, 0),
+                        procCoefficient = 0f,
                         falloffModel = BlastAttack.FalloffModel.None,
-                        damageColorIndex = DamageColorIndex.Default,
+                        damageColorIndex = default,
                         damageType = DamageType.ApplyMercExpose,
-                        attackerFiltering = AttackerFiltering.Default
+                        attackerFiltering = default
                     }.Fire();
                 }
             }
         }
         public override void OnExit()
         {
-            if (this.targetBox)
+            if (base.isAuthority)
             {
-                new BlastAttack
+                if (this.targetBox)
                 {
-                    position = this.targetBox.transform.position,
-                    baseDamage = base.damageStat * 7f + 0.20f * targetBox.healthComponent.missingCombinedHealth,
-                    baseForce = 0,
-                    radius = 0.5f,
-                    attacker = base.gameObject,
-                    inflictor = base.gameObject,
-                    teamIndex = base.teamComponent.teamIndex,
-                    crit = base.RollCrit(),
-                    procChainMask = default,
-                    procCoefficient = 1,
-                    bonusForce = new Vector3(0, 0, 0),
-                    falloffModel = BlastAttack.FalloffModel.None,
-                    damageColorIndex = DamageColorIndex.Default,
-                    damageType = DamageType.Stun1s,
-                    attackerFiltering = AttackerFiltering.Default
-                }.Fire();
-                EffectManager.SimpleMuzzleFlash(this.swingEffectPrefab, base.gameObject, this.slashChildName, false);
-                base.PlayAnimation("FullBody, Override", "GroundLight3", "GroundLight.playbackRate", 1f);
-                Util.PlaySound(GroundLight.finisherAttackSoundString, base.gameObject);
-                Util.PlaySound(EvisDash.endSoundString, base.gameObject);
+                    new BlastAttack
+                    {
+                        position = this.targetBox.transform.position,
+                        baseDamage = base.damageStat * this.damageCoefficient + this.healthFraction * this.targetBox.healthComponent.missingCombinedHealth,
+                        baseForce = 0,
+                        radius = 0.5f,
+                        attacker = base.gameObject,
+                        inflictor = base.gameObject,
+                        teamIndex = base.teamComponent.teamIndex,
+                        crit = base.RollCrit(),
+                        procChainMask = default,
+                        procCoefficient = this.procCoefficient,
+                        falloffModel = BlastAttack.FalloffModel.None,
+                        damageColorIndex = default,
+                        damageType = DamageType.Stun1s,
+                        attackerFiltering = default
+                    }.Fire();
+                    EffectManager.SimpleMuzzleFlash(this.swingEffectPrefab, base.gameObject, this.slashChildName, false);
+                    base.PlayAnimation("FullBody, Override", "GroundLight3", "GroundLight.playbackRate", 1f);
+                    Util.PlaySound(GroundLight.finisherAttackSoundString, base.gameObject);
+                    Util.PlaySound(EvisDash.endSoundString, base.gameObject);
+                }
             }
             base.characterMotor.walkSpeedPenaltyCoefficient = 1;
             base.OnExit();
@@ -107,7 +118,7 @@ namespace EggsSkills.EntityStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (base.fixedAge >= findMax.Max())
+            if (base.fixedAge >= findMax.Max() && base.isAuthority)
             {
                 this.outer.SetNextStateToMain();
                 return;

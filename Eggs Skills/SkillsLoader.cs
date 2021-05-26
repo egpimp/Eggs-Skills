@@ -169,11 +169,9 @@ namespace EggsSkills
             SkillFamily commandoSkillFamilyPrimary = commandoSkillLocator.primary.skillFamily;
 
             //Combat Shotgun
-            SkillDef skillDefCombatshotgun = ScriptableObject.CreateInstance<SkillDef>();
+            SteppedSkillDef skillDefCombatshotgun = ScriptableObject.CreateInstance<SteppedSkillDef>();
             skillDefCombatshotgun.activationState = new SerializableEntityStateType(typeof(CombatShotgunEntity));
             skillDefCombatshotgun.activationStateMachineName = "Weapon";
-            skillDefCombatshotgun.baseMaxStock = 8;
-            skillDefCombatshotgun.baseRechargeInterval = 0.8f;
             skillDefCombatshotgun.beginSkillCooldownOnSkillEnd = true;
             skillDefCombatshotgun.fullRestockOnAssign = true;
             skillDefCombatshotgun.interruptPriority = InterruptPriority.Any;
@@ -182,9 +180,7 @@ namespace EggsSkills
             skillDefCombatshotgun.canceledFromSprinting = false;
             skillDefCombatshotgun.cancelSprintingOnActivation = true;
             skillDefCombatshotgun.forceSprintDuringState = false;
-            skillDefCombatshotgun.rechargeStock = 8;
-            skillDefCombatshotgun.requiredStock = 1;
-            skillDefCombatshotgun.stockToConsume = 1;
+            skillDefCombatshotgun.stockToConsume = 0;
             skillDefCombatshotgun.icon = Resources.Sprites.shotgunIconS;
             skillDefCombatshotgun.skillDescriptionToken = "COMMANDO_PRIMARY_COMBATSHOTGUN_DESC";
             skillDefCombatshotgun.skillName = "CombatShotgun";

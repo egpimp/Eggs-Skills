@@ -10,22 +10,29 @@ namespace EggsSkills.EntityStates
 {
     class ZapportFireEntity : BaseSkillState
     {
-        internal float radius;
+        private float baseForce = 100f;
         internal float damageMult;
-        internal Vector3 moveVec;
-        private string rMuzzleString = "MuzzleRight";
-        private string lMuzzleString = "MuzzleLeft";
+        internal float radius;
+
         private GameObject explosionPrefab = UnityEngine.Resources.Load<GameObject>("Prefabs/effects/MageLightningBombExplosion");
         private GameObject muzzlePrefab = UnityEngine.Resources.Load<GameObject>("Prefabs/effects/muzzleflashes/MuzzleflashMageLightningLarge");
+
+        private string rMuzzleString = "MuzzleRight";
+        private string lMuzzleString = "MuzzleLeft";
+
+        internal Vector3 moveVec;
         public override void OnEnter()
         {
             base.OnEnter();
-            characterMotor.velocity = Vector3.zero;
+            base.characterMotor.velocity = Vector3.zero;
             base.PlayAnimation("Gesture, Additive", "FireWall");
             Util.PlaySound(FireMegaNova.novaSoundString, base.gameObject);
             EffectManager.SimpleMuzzleFlash(muzzlePrefab, base.gameObject, lMuzzleString, false);
             EffectManager.SimpleMuzzleFlash(muzzlePrefab, base.gameObject, rMuzzleString, false);
-            characterMotor.rootMotion += moveVec;
+            if (base.isAuthority)
+            {
+                base.characterMotor.rootMotion += moveVec;
+            }
         }
         public override InterruptPriority GetMinimumInterruptPriority()
         {
@@ -35,37 +42,41 @@ namespace EggsSkills.EntityStates
         public override void OnExit()
         {
             base.OnExit();
-            EffectData endEffectData = new EffectData
+            if (base.isAuthority)
             {
-                scale = radius * 2f,
-                origin = characterBody.corePosition
-            };
-            EffectManager.SpawnEffect(explosionPrefab, endEffectData, true);
-            new BlastAttack
-            {
-                position = characterBody.corePosition,
-                baseDamage = base.damageStat * damageMult,
-                baseForce = 40 * damageMult,
-                radius = radius,
-                attacker = base.gameObject,
-                inflictor = base.gameObject,
-                teamIndex = base.teamComponent.teamIndex,
-                crit = RollCrit(),
-                procChainMask = default(ProcChainMask),
-                procCoefficient = 1,
-                bonusForce = new Vector3(0, 0, 0),
-                falloffModel = BlastAttack.FalloffModel.None,
-                damageColorIndex = DamageColorIndex.Default,
-                damageType = DamageType.Stun1s,
-                attackerFiltering = AttackerFiltering.Default
-            }.Fire();
+                EffectData endEffectData = new EffectData
+                {
+                    scale = this.radius * 2f,
+                    origin = this.characterBody.corePosition
+                };
+                EffectManager.SpawnEffect(this.explosionPrefab, endEffectData, true);
+                new BlastAttack
+                {
+                    position = this.characterBody.corePosition,
+                    baseDamage = base.damageStat * this.damageMult,
+                    baseForce = this.baseForce * this.damageMult,
+                    radius = radius,
+                    attacker = base.gameObject,
+                    inflictor = base.gameObject,
+                    teamIndex = base.teamComponent.teamIndex,
+                    crit = RollCrit(),
+                    procChainMask = default(ProcChainMask),
+                    procCoefficient = 1,
+                    bonusForce = new Vector3(0, 0, 0),
+                    falloffModel = BlastAttack.FalloffModel.None,
+                    damageColorIndex = DamageColorIndex.Default,
+                    damageType = DamageType.Stun1s,
+                    attackerFiltering = AttackerFiltering.Default
+                }.Fire();
+            }
         }
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (base.fixedAge >= 0.1f)
+            if (base.fixedAge >= 0.1f && base.isAuthority)
             {
                 this.outer.SetNextStateToMain();
+                return;
             }
         }
     }

@@ -2,6 +2,7 @@
 using RoR2.Projectile;
 using EntityStates;
 using EntityStates.Huntress;
+using UnityEngine.Networking;
 
 namespace EggsSkills
 {
@@ -9,22 +10,26 @@ namespace EggsSkills
     {
         private bool monoTrigger;
         private bool monoTrigger2;
+
+        private float baseCountDown = 2f;
         private float countDown;
+        private float radiusMax = 20f;
+
         private GameObject areaIndicator;
         private GameObject owner;
-        private ProjectileStickOnImpact stick;
+
         private ProjectileController controller;
-        private float radiusMax = 20;
+        private ProjectileStickOnImpact stick;
         private void Start()
         {
-            monoTrigger = true;
-            monoTrigger2 = true;
-            countDown = 2f;
-            areaIndicator = Object.Instantiate(ArrowRain.areaIndicatorPrefab);
-            owner = GetComponent<ProjectileController>().owner;
-            stick = GetComponent<ProjectileStickOnImpact>();
-            controller = GetComponent<ProjectileController>();
-            areaIndicator.transform.localScale = Vector3.zero;
+            this.monoTrigger = true;
+            this.monoTrigger2 = true;
+            this.countDown = this.baseCountDown;
+            this.areaIndicator = Object.Instantiate(ArrowRain.areaIndicatorPrefab);
+            this.owner = GetComponent<ProjectileController>().owner;
+            this.stick = GetComponent<ProjectileStickOnImpact>();
+            this.controller = GetComponent<ProjectileController>();
+            this.areaIndicator.transform.localScale = Vector3.zero;
         }
         private void FixedUpdate()
         {
@@ -32,25 +37,33 @@ namespace EggsSkills
             {
                 if (monoTrigger)
                 {
-                    areaIndicator.SetActive(true);
-                    monoTrigger = false;
+                    if (NetworkServer.active)
+                    {
+                        this.areaIndicator.SetActive(true);
+                        this.monoTrigger = false;
+                    }
                 }
             }
-            if(monoTrigger2 && !monoTrigger)
+            if(this.monoTrigger2 && !this.monoTrigger)
             {
-                if (countDown > 0)
+                if (this.countDown > 0)
                 {
-                    countDown -= Time.fixedDeltaTime;
-                    areaIndicator.SetActive(true);
-                    areaIndicator.transform.localScale = new Vector3(radiusMax, radiusMax, radiusMax) * (1 - (countDown / 2f));
-                    areaIndicator.transform.position = controller.transform.position;
+                    if (NetworkServer.active)
+                    {
+                        this.countDown -= Time.fixedDeltaTime;
+                        this.areaIndicator.transform.localScale = Vector3.one * this.radiusMax * (1 - (this.countDown / this.baseCountDown));
+                        this.areaIndicator.transform.position = this.controller.transform.position;
+                    }
                 }
                 else
                 {
-                    owner.GetComponent<SwarmComponent>().GetTargets(controller.transform.position);
-                    monoTrigger2 = false;
-                    areaIndicator.SetActive(false);
-                    EntityState.Destroy(areaIndicator.gameObject);
+                    if (NetworkServer.active)
+                    {
+                        this.owner.GetComponent<SwarmComponent>().GetTargets(this.controller.transform.position);
+                        this.monoTrigger2 = false;
+                        this.areaIndicator.SetActive(false);
+                        Destroy(this.areaIndicator);
+                    }
                 }
             }
         }

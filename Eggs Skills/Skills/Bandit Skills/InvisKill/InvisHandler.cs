@@ -9,75 +9,89 @@ namespace EggsSkills
     class InvisHandler : MonoBehaviour
     {
         private bool isInvis;
+
         private CharacterBody characterBody;
-        private float timeTilInvis;
-        private GenericSkill utilitySlot;
+
+        private float baseTimeTilInvis = 0.4f;
+        private float buffDuration = 3f;
         private float holdTimer;
+        private float timeTilInvis;
+
+        private GenericSkill utilitySlot;
         private void Start()
         {
-            timeTilInvis = 0.4f;
-            characterBody = GetComponent<CharacterBody>();
-            utilitySlot = characterBody.skillLocator.utility;
-            isInvis = false;
+            this.timeTilInvis = this.baseTimeTilInvis;
+            this.characterBody = base.GetComponent<CharacterBody>();
+            this.utilitySlot = this.characterBody.skillLocator.utility;
+            this.isInvis = false;
         }
-        public void MakeInvis()
+        internal void MakeInvis()
         {
-            characterBody.AddBuff(RoR2Content.Buffs.Cloak);
-            characterBody.AddBuff(RoR2Content.Buffs.CloakSpeed);
-            isInvis = true;
-            timeTilInvis = 0.4f;
-            holdTimer = utilitySlot.rechargeStopwatch;
-            PlayEffects();
+            this.characterBody.AddBuff(RoR2Content.Buffs.Cloak);
+            this.characterBody.AddBuff(RoR2Content.Buffs.CloakSpeed);
+            this.isInvis = true;
+            this.timeTilInvis = this.baseTimeTilInvis;
+            this.holdTimer = this.utilitySlot.rechargeStopwatch;
+            this.PlayEffects();
         }
-        public void RemoveInvis()
+        internal void RemoveInvis()
         {
-            characterBody.RemoveBuff(RoR2Content.Buffs.Cloak);
-            characterBody.RemoveBuff(RoR2Content.Buffs.CloakSpeed);
-            characterBody.AddTimedBuff(BuffsLoading.buffDefCunning, 3f);
-            utilitySlot.DeductStock(1);
-            isInvis = false;
-            PlayEffects();
+            this.characterBody.RemoveBuff(RoR2Content.Buffs.Cloak);
+            this.characterBody.RemoveBuff(RoR2Content.Buffs.CloakSpeed);
+            this.characterBody.AddTimedBuff(BuffsLoading.buffDefCunning, this.buffDuration);
+            this.utilitySlot.DeductStock(1);
+            this.isInvis = false;
+            this.PlayEffects();
         }
         private void FixedUpdate()
         {
-            if(characterBody.isSprinting)
+            if(this.characterBody.isSprinting)
             {
-                if (!isInvis)
+                if (!this.isInvis)
                 {
-                    if (timeTilInvis > 0)
+                    if (this.timeTilInvis > 0)
                     {
-                        timeTilInvis -= Time.fixedDeltaTime;
+                        this.timeTilInvis -= Time.fixedDeltaTime;
                     }
                     else
                     {
-                        if (characterBody.skillLocator.utility.stock > 0)
+                        if (this.characterBody.skillLocator.utility.stock > 0)
                         {
-                            MakeInvis();
+                            this.MakeInvis();
                         }
                     }
                 }
             }
             else
             {
-                if (isInvis)
+                if (this.isInvis)
                 {
-                    RemoveInvis();
+                    this.RemoveInvis();
                 }
-                timeTilInvis = 0.4f;
+                this.timeTilInvis = this.baseTimeTilInvis;
             }
-            if(isInvis)
+            if(this.isInvis)
             {
-                utilitySlot.rechargeStopwatch = holdTimer;
+                this.utilitySlot.rechargeStopwatch = this.holdTimer;
             }
         }
-        public bool IsInvis()
+        internal bool IsInvis()
         {
-            return isInvis;
+            return this.isInvis;
         }
         private void PlayEffects()
         {
-            Util.PlaySound(StealthMode.enterStealthSound, gameObject);
-            EffectManager.SimpleMuzzleFlash(StealthMode.smokeBombEffectPrefab, gameObject, StealthMode.smokeBombMuzzleString, false);
+            EffectManager.SimpleMuzzleFlash(StealthMode.smokeBombEffectPrefab, base.gameObject, StealthMode.smokeBombMuzzleString, false);
+            string soundString;
+            if (this.isInvis)
+            {
+                soundString = StealthMode.enterStealthSound;
+            }
+            else
+            {
+                soundString = StealthMode.exitStealthSound;
+            }
+            Util.PlaySound(soundString, base.gameObject);
         }
     }
 }

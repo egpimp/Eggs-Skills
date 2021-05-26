@@ -2,29 +2,30 @@
 using EntityStates;
 using UnityEngine;
 using RoR2.Projectile;
-using EggsSkills.Properties;
+using EggsSkills.Resources;
 using EntityStates.Engi.EngiWeapon;
 
 namespace EggsSkills.EntityStates
 {
     class TeslaMineFireState : BaseState
     {
-        public float baseDelay = 0.4f;
-        public float delay;
+        private float damageCoefficient = 2f;
+        private float baseDelay = 0.4f;
+        private float delay;
         public override void OnEnter()
         {
             base.OnEnter();
-            delay = baseDelay/base.attackSpeedStat;
-            var aimRay = GetAimRay();
+            this.delay = this.baseDelay / base.attackSpeedStat;
+            Ray aimRay = GetAimRay();
             StartAimMode(aimRay);
-            Util.PlaySound(FireMines.throwMineSoundString,gameObject);
+            Util.PlaySound(FireMines.throwMineSoundString, base.gameObject);
             if(GetModelAnimator())
             {
-                base.PlayCrossfade("Esture, Additive","FireMineRight","FireMine.playbackRate",delay,0.05f);
+                base.PlayCrossfade("Esture, Additive","FireMineRight","FireMine.playbackRate", this.delay , 0.05f);
             }
             if(base.isAuthority)
             {
-                ProjectileManager.instance.FireProjectile(EggsSkills.Resources.Projectiles.teslaMinePrefab,aimRay.origin,Util.QuaternionSafeLookRotation(aimRay.direction),gameObject,damageStat * 2f,0,RollCrit());
+                ProjectileManager.instance.FireProjectile(Projectiles.teslaMinePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction) , base.gameObject, base.damageStat * this.damageCoefficient, 0f, base.RollCrit());
             };
         }
         public override void FixedUpdate()

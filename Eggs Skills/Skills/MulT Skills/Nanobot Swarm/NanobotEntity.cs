@@ -37,7 +37,7 @@ namespace EggsSkills.EntityStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if(base.fixedAge >= duration)
+            if(base.fixedAge >= duration && base.isAuthority)
             {
                 outer.SetNextStateToMain();
             }
