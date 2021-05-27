@@ -12,11 +12,14 @@ namespace EggsSkills.EntityStates
         private bool isCrit;
         private bool isFirstPress;
 
-        private float barrierCoefficient = 0.02f;
-        private float basePullTimer = 0.5f; 
-        private float damageCoefficient = 1.25f;
+        private float barrierCoefficient = 0.03f;
+        private float basePullTimer = 1f;
+        private float baseRadius = 30f;
+        private float damageCoefficient = 2.5f;
+        private float maxAttackSpeedMod = 4f;
+        private float pullTimerModifier;
         private float pullTimer;
-        private float speedFraction = 0.6f;
+        private float speedFraction = 0.7f;
 
         private GameObject bodyPrefab = UnityEngine.Resources.Load<GameObject>("prefabs/effects/impacteffects/TreebotPounderExplosion");
         public override void OnEnter()
@@ -24,10 +27,12 @@ namespace EggsSkills.EntityStates
             if (base.isAuthority)
             {
                 base.OnEnter();
+                float[] getMin = new float[] {this.maxAttackSpeedMod, base.attackSpeedStat};
+                this.pullTimerModifier = getMin.Min();
                 base.characterMotor.walkSpeedPenaltyCoefficient = this.speedFraction;
                 base.characterBody.AddBuff(BuffsLoading.buffDefAdaptive);
                 this.isFirstPress = true;
-                this.pullTimer = this.basePullTimer / base.attackSpeedStat;
+                this.pullTimer = this.basePullTimer / this.pullTimerModifier;
             }
         }
         public override void OnExit()
@@ -64,12 +69,12 @@ namespace EggsSkills.EntityStates
             }
             else
             {
-                this.pullTimer = this.basePullTimer / base.attackSpeedStat;
+                this.pullTimer = this.basePullTimer / this.pullTimerModifier;
                 this.Pull();
             }
         }
         public override InterruptPriority GetMinimumInterruptPriority()
-        {
+        { 
             return InterruptPriority.Skill;
         }
         public void Pull()
@@ -80,7 +85,7 @@ namespace EggsSkills.EntityStates
                 foreach (HurtBox hurtBox in new SphereSearch
                 {
                     origin = base.characterBody.corePosition,
-                    radius = 30,
+                    radius = this.baseRadius,
                     mask = LayerIndex.entityPrecise.mask
                 }.RefreshCandidates().FilterCandidatesByHurtBoxTeam(TeamMask.GetEnemyTeams(base.teamComponent.teamIndex)).OrderCandidatesByDistance().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes())
                 {
