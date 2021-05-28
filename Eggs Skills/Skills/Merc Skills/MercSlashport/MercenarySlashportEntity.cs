@@ -31,7 +31,6 @@ namespace EggsSkills.EntityStates
         public override void OnEnter()
         {            
             base.OnEnter();
-            if (base.isAuthority)
             {
                 this.findMax = new float[] { 0.4f / base.attackSpeedStat, 0.1f };
                 this.mercTracker = base.GetComponent<MercSlashportTracker>();
@@ -63,31 +62,34 @@ namespace EggsSkills.EntityStates
                     base.characterMotor.Motor.SetPosition(this.telePos);
                     this.lookDir = (this.telePos - this.targetBox.transform.position).normalized;
                     base.characterDirection.forward = this.lookDir * -1;
-                    new BlastAttack
+                    if (base.isAuthority)
                     {
-                        position = this.targetBox.transform.position,
-                        baseDamage = 0f,
-                        baseForce = 0f,
-                        radius = 0.5f,
-                        attacker = base.gameObject,
-                        inflictor = base.gameObject,
-                        teamIndex = base.teamComponent.teamIndex,
-                        crit = false,
-                        procChainMask = default,
-                        procCoefficient = 0f,
-                        falloffModel = BlastAttack.FalloffModel.None,
-                        damageColorIndex = default,
-                        damageType = DamageType.ApplyMercExpose,
-                        attackerFiltering = default
-                    }.Fire();
+                        new BlastAttack
+                        {
+                            position = this.targetBox.transform.position,
+                            baseDamage = 0f,
+                            baseForce = 0f,
+                            radius = 0.5f,
+                            attacker = base.gameObject,
+                            inflictor = base.gameObject,
+                            teamIndex = base.teamComponent.teamIndex,
+                            crit = false,
+                            procChainMask = default,
+                            procCoefficient = 0f,
+                            falloffModel = BlastAttack.FalloffModel.None,
+                            damageColorIndex = default,
+                            damageType = DamageType.ApplyMercExpose,
+                            attackerFiltering = default
+                        }.Fire();
+                    }
                 }
             }
         }
         public override void OnExit()
         {
-            if (base.isAuthority)
+            if (this.targetBox)
             {
-                if (this.targetBox)
+                if (base.isAuthority)
                 {
                     new BlastAttack
                     {
@@ -106,11 +108,11 @@ namespace EggsSkills.EntityStates
                         damageType = DamageType.Stun1s,
                         attackerFiltering = default
                     }.Fire();
-                    EffectManager.SimpleMuzzleFlash(this.swingEffectPrefab, base.gameObject, this.slashChildName, false);
-                    base.PlayAnimation("FullBody, Override", "GroundLight3", "GroundLight.playbackRate", 1f);
-                    Util.PlaySound(GroundLight.finisherAttackSoundString, base.gameObject);
-                    Util.PlaySound(EvisDash.endSoundString, base.gameObject);
                 }
+                EffectManager.SimpleMuzzleFlash(this.swingEffectPrefab, base.gameObject, this.slashChildName, false);
+                base.PlayAnimation("FullBody, Override", "GroundLight3", "GroundLight.playbackRate", 1f);
+                Util.PlaySound(GroundLight.finisherAttackSoundString, base.gameObject);
+                Util.PlaySound(EvisDash.endSoundString, base.gameObject);
             }
             base.characterMotor.walkSpeedPenaltyCoefficient = 1;
             base.OnExit();

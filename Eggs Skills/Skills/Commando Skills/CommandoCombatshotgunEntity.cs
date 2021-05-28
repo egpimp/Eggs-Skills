@@ -88,10 +88,10 @@ namespace EggsSkills.EntityStates
                     damageType = DamageType.Generic
                 };
                 bulletAttack.Fire();
-                EffectManager.SimpleMuzzleFlash(muzzleEffectPrefab, base.gameObject, muzzleName, false);
-                Util.PlaySound(FireShotgun.attackSoundString, base.gameObject);
-                base.AddRecoil(-this.baseRecoil, this.baseRecoil, -2 * this.baseRecoil * (1 - (step % 2)), 2 * this.baseRecoil * (step % 2));
             }
+            EffectManager.SimpleMuzzleFlash(muzzleEffectPrefab, base.gameObject, muzzleName, false);
+            Util.PlaySound(FireShotgun.attackSoundString, base.gameObject);
+            base.AddRecoil(-this.baseRecoil, this.baseRecoil, -2 * this.baseRecoil * (1 - (step % 2)), 2 * this.baseRecoil * (step % 2));
         }
         public override void FixedUpdate()
         {

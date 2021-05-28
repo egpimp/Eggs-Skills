@@ -79,34 +79,34 @@ namespace EggsSkills.EntityStates
         }
         public void Pull()
         {
-            if (base.isAuthority)
+            this.isCrit = base.RollCrit();
+            foreach (HurtBox hurtBox in new SphereSearch
             {
-                this.isCrit = base.RollCrit();
-                foreach (HurtBox hurtBox in new SphereSearch
+                origin = base.characterBody.corePosition,
+                radius = this.baseRadius,
+                mask = LayerIndex.entityPrecise.mask
+            }.RefreshCandidates().FilterCandidatesByHurtBoxTeam(TeamMask.GetEnemyTeams(base.teamComponent.teamIndex)).OrderCandidatesByDistance().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes())
+            {
+                //force calc
+                CharacterBody body = hurtBox.healthComponent.body;
+                Vector3 a = hurtBox.transform.position - base.characterBody.corePosition;
+                float magnitude = a.magnitude;
+                Vector3 direction = a.normalized;
+                float mass = body.GetComponent<Rigidbody>().mass;
+                float massEval;
+                if (!body.isFlying)
                 {
-                    origin = base.characterBody.corePosition,
-                    radius = this.baseRadius,
-                    mask = LayerIndex.entityPrecise.mask
-                }.RefreshCandidates().FilterCandidatesByHurtBoxTeam(TeamMask.GetEnemyTeams(base.teamComponent.teamIndex)).OrderCandidatesByDistance().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes())
+                    massEval = mass * -20f - 400f;
+                }
+                else
                 {
-                    //force calc
-                    CharacterBody body = hurtBox.healthComponent.body;
-                    Vector3 a = hurtBox.transform.position - base.characterBody.corePosition;
-                    float magnitude = a.magnitude;
-                    Vector3 direction = a.normalized;
-                    float mass = body.GetComponent<Rigidbody>().mass;
-                    float massEval;
-                    if (!body.isFlying)
-                    {
-                        massEval = mass * -20f - 400f;
-                    }
-                    else
-                    {
-                        massEval = (mass * -20f - 400f) / 2;
-                    }
-                    float[] maxMass = new float[] { massEval, -6000 };
-                    Vector3 appliedForce = maxMass.Max() * direction * ((magnitude + 15) / 60);
-                    //damage
+                    massEval = (mass * -20f - 400f) / 2;
+                }
+                float[] maxMass = new float[] { massEval, -6000 };
+                Vector3 appliedForce = maxMass.Max() * direction * ((magnitude + 15) / 60);
+                //damage
+                if (base.isAuthority)
+                {
                     DamageInfo damageInfo = new DamageInfo
                     {
                         attacker = base.gameObject,
@@ -124,16 +124,16 @@ namespace EggsSkills.EntityStates
                     GlobalEventManager.instance.OnHitEnemy(damageInfo, body.gameObject);
                     base.healthComponent.AddBarrier(base.healthComponent.fullCombinedHealth * this.barrierCoefficient);
                 }
-                base.PlayAnimation("Gesture", "LightImpact");
-                EffectData bodyEffectData = new EffectData
-                {
-                    origin = base.characterBody.footPosition,
-                    color = Color.green,
-                    scale = 30
-                };
-                EffectManager.SpawnEffect(bodyPrefab, bodyEffectData, true);
-                Util.PlaySound(FireMortar.fireSoundString, base.gameObject);
             }
+            base.PlayAnimation("Gesture", "LightImpact");
+            EffectData bodyEffectData = new EffectData
+            {
+                origin = base.characterBody.footPosition,
+                color = Color.green,
+                scale = 30
+            };
+            EffectManager.SpawnEffect(bodyPrefab, bodyEffectData, true);
+            Util.PlaySound(FireMortar.fireSoundString, base.gameObject);
         }
     }
 }

@@ -18,7 +18,6 @@ namespace EggsSkills.EntityStates
         public override void OnEnter()
         {
             base.OnEnter();
-            if(base.isAuthority)
             {
                 base.PlayAnimation("Gesture, Mouth", "FireSpit", "FireSpit.playbackRate", 1f);
                 foreach (HurtBox hurtBox in new SphereSearch
@@ -32,23 +31,26 @@ namespace EggsSkills.EntityStates
                     HealthComponent component = hurtBox.healthComponent;
                     if(body.HasBuff(RoR2Content.Buffs.Poisoned))
                     {
-                        new BlastAttack
+                        if (base.isAuthority)
                         {
-                            position = body.corePosition,
-                            baseDamage = component.fullHealth * this.healthFraction + base.damageStat * this.poisonDamageCoefficient,
-                            baseForce = 0f,
-                            radius = this.detonationRadius,
-                            attacker = base.gameObject,
-                            inflictor = base.gameObject,
-                            teamIndex = base.teamComponent.teamIndex,
-                            crit = base.RollCrit(),
-                            procChainMask = default,
-                            procCoefficient = this.procCoefficient,
-                            falloffModel = BlastAttack.FalloffModel.None,
-                            damageColorIndex = default,
-                            damageType = DamageType.Generic,
-                            attackerFiltering = default
-                        }.Fire();
+                            new BlastAttack
+                            {
+                                position = body.corePosition,
+                                baseDamage = component.fullHealth * this.healthFraction + base.damageStat * this.poisonDamageCoefficient,
+                                baseForce = 0f,
+                                radius = this.detonationRadius,
+                                attacker = base.gameObject,
+                                inflictor = base.gameObject,
+                                teamIndex = base.teamComponent.teamIndex,
+                                crit = base.RollCrit(),
+                                procChainMask = default,
+                                procCoefficient = this.procCoefficient,
+                                falloffModel = BlastAttack.FalloffModel.None,
+                                damageColorIndex = default,
+                                damageType = DamageType.Generic,
+                                attackerFiltering = default
+                            }.Fire();
+                        }
                         EffectManager.SimpleSoundEffect(BaseLeap.landingSound.index, body.footPosition, true);
                         EffectData bodyEffectData = new EffectData
                         {
@@ -60,23 +62,26 @@ namespace EggsSkills.EntityStates
                     }
                     else if(body.HasBuff(RoR2Content.Buffs.Blight))
                     {
-                        new BlastAttack
+                        if (base.isAuthority)
                         {
-                            position = body.corePosition,
-                            baseDamage = base.damageStat * (this.blightDamageCoefficient * body.GetBuffCount(RoR2Content.Buffs.Blight)),
-                            baseForce = 0f,
-                            radius = this.detonationRadius,
-                            attacker = base.gameObject,
-                            inflictor = base.gameObject,
-                            teamIndex = base.teamComponent.teamIndex,
-                            crit = base.RollCrit(),
-                            procChainMask = default,
-                            procCoefficient = 1,
-                            falloffModel = BlastAttack.FalloffModel.None,
-                            damageColorIndex = default,
-                            damageType = DamageType.Generic,
-                            attackerFiltering = default
-                        }.Fire();
+                            new BlastAttack
+                            {
+                                position = body.corePosition,
+                                baseDamage = base.damageStat * (this.blightDamageCoefficient * body.GetBuffCount(RoR2Content.Buffs.Blight)),
+                                baseForce = 0f,
+                                radius = this.detonationRadius,
+                                attacker = base.gameObject,
+                                inflictor = base.gameObject,
+                                teamIndex = base.teamComponent.teamIndex,
+                                crit = base.RollCrit(),
+                                procChainMask = default,
+                                procCoefficient = 1,
+                                falloffModel = BlastAttack.FalloffModel.None,
+                                damageColorIndex = default,
+                                damageType = DamageType.Generic,
+                                attackerFiltering = default
+                            }.Fire();
+                        }
                         EffectManager.SimpleSoundEffect(BaseLeap.landingSound.index, body.footPosition, true);
                         EffectData bodyEffectData = new EffectData
                         {

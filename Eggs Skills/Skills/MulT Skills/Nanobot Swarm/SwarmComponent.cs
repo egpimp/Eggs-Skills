@@ -4,6 +4,7 @@ using RoR2.Orbs;
 using EggsSkills.Orbs;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.Networking;
 
 namespace EggsSkills
 {
@@ -29,7 +30,10 @@ namespace EggsSkills
             nanobotOrb.origin = ownerBody.corePosition;
             nanobotOrb.target = hurtBox.hurtBoxGroup.mainHurtBox;
             nanobotOrb.procCoefficient = 0.4f;
-            OrbManager.instance.AddOrb(nanobotOrb);
+            if (NetworkServer.active)
+            {
+                OrbManager.instance.AddOrb(nanobotOrb);
+            }
         }
         internal void GetTargets(Vector3 impactPos)
         {

@@ -37,33 +37,25 @@ namespace EggsSkills
             {
                 if (monoTrigger)
                 {
-                    if (NetworkServer.active)
-                    {
-                        this.areaIndicator.SetActive(true);
-                        this.monoTrigger = false;
-                    }
+                    this.areaIndicator.SetActive(true);
+                    this.monoTrigger = false;
                 }
             }
             if(this.monoTrigger2 && !this.monoTrigger)
             {
                 if (this.countDown > 0)
                 {
-                    if (NetworkServer.active)
-                    {
-                        this.countDown -= Time.fixedDeltaTime;
-                        this.areaIndicator.transform.localScale = Vector3.one * this.radiusMax * (1 - (this.countDown / this.baseCountDown));
-                        this.areaIndicator.transform.position = this.controller.transform.position;
-                    }
+                    this.countDown -= Time.fixedDeltaTime;
+                    this.areaIndicator.transform.localScale = Vector3.one * this.radiusMax * (1 - (this.countDown / this.baseCountDown));
+                    this.areaIndicator.transform.position = this.controller.transform.position;
                 }
                 else
                 {
-                    if (NetworkServer.active)
-                    {
-                        this.owner.GetComponent<SwarmComponent>().GetTargets(this.controller.transform.position);
-                        this.monoTrigger2 = false;
-                        this.areaIndicator.SetActive(false);
-                        Destroy(this.areaIndicator);
-                    }
+                
+                    this.owner.GetComponent<SwarmComponent>()?.GetTargets(this.controller.transform.position);
+                    this.monoTrigger2 = false;
+                    this.areaIndicator.SetActive(false);
+                    Destroy(this.areaIndicator);
                 }
             }
         }

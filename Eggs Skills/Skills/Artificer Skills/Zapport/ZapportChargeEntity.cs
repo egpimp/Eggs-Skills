@@ -34,15 +34,12 @@ namespace EggsSkills.EntityStates
         public override void OnEnter()
         {
             base.OnEnter();
-            if (base.isAuthority)
-            {
-                float[] findMinSpeed = new float[] { base.attackSpeedStat, 4 };
-                this.maxCharge = 2f/findMinSpeed.Min();
-                base.PlayAnimation("Gesture, Additive", "PrepWall", "PrepWall.playbackRate", 1);
-                this.areaIndicator = Object.Instantiate<GameObject>(ArrowRain.areaIndicatorPrefab);
-                this.areaIndicator.SetActive(true);
-                Util.PlaySound(ChargeTrackingBomb.chargingSoundString, base.gameObject);
-            }
+            float[] findMinSpeed = new float[] { base.attackSpeedStat, 4 };
+            this.maxCharge = 2f/findMinSpeed.Min();
+            base.PlayAnimation("Gesture, Additive", "PrepWall", "PrepWall.playbackRate", 1);
+            this.areaIndicator = Object.Instantiate<GameObject>(ArrowRain.areaIndicatorPrefab);
+            this.areaIndicator.SetActive(true);
+            Util.PlaySound(ChargeTrackingBomb.chargingSoundString, base.gameObject);
         }
         public void IndicatorUpdator()
         {
@@ -68,9 +65,9 @@ namespace EggsSkills.EntityStates
 
         public override void OnExit()
         {
+            base.characterMotor.walkSpeedPenaltyCoefficient = 1f;
             if (base.isAuthority)
             {
-                base.characterMotor.walkSpeedPenaltyCoefficient = 1f;
                 this.areaIndicator.SetActive(false);
                 Destroy(areaIndicator);
             }
@@ -79,7 +76,6 @@ namespace EggsSkills.EntityStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if(base.isAuthority)
             {
                 if (base.fixedAge < maxCharge && base.IsKeyDownAuthority())
                 {
@@ -107,15 +103,15 @@ namespace EggsSkills.EntityStates
                     base.characterMotor.walkSpeedPenaltyCoefficient = 1 - (this.chargePercent / 3);
                     IndicatorUpdator();
                 }
-            }
-            else
-            {
-                ZapportFireEntity nextState = new ZapportFireEntity();
-                nextState.damageMult = damageMult;
-                nextState.radius = radius;
-                nextState.moveVec = maxMoveVec;
-                this.outer.SetNextState(nextState);
-                return;
+                else if (base.isAuthority)
+                {
+                    ZapportFireEntity nextState = new ZapportFireEntity();
+                    nextState.damageMult = damageMult;
+                    nextState.radius = radius;
+                    nextState.moveVec = maxMoveVec;
+                    this.outer.SetNextState(nextState);
+                    return;
+                }
             }
         }
         public override InterruptPriority GetMinimumInterruptPriority()

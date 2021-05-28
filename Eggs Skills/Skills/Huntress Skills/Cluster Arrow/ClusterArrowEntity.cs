@@ -57,7 +57,10 @@ namespace EggsSkills.EntityStates
                 EffectManager.SimpleMuzzleFlash(this.assetRef.muzzleflashEffectPrefab, base.gameObject, this.assetRef.muzzleString, false);
                 this.genericDamageOrb.origin = this.muzzle.position;
                 this.genericDamageOrb.target = this.target;
-                OrbManager.instance.AddOrb(this.genericDamageOrb);
+                if (base.isAuthority)
+                {
+                    OrbManager.instance.AddOrb(this.genericDamageOrb);
+                }
             }
         }
         public override void FixedUpdate()

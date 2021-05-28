@@ -26,7 +26,7 @@ namespace EggsSkills.EntityStates
             float damageMod = (this.component.barrier / this.component.fullCombinedHealth) * this.damageCoefficient;
             float force = this.baseForce * (damageMod / 2);
             float radius = this.baseRadius * Utilities.ConvertToRange(2f, 20f, 1f, 2f, damageMod);
-            
+
             if (base.isAuthority)
             {
                 this.component.AddBarrier(-component.barrier);
@@ -47,16 +47,16 @@ namespace EggsSkills.EntityStates
                     damageType = DamageType.Generic,
                     attackerFiltering = default
                 }.Fire();
-                Util.PlaySound(JellyNova.novaSoundString, base.gameObject);
-                EffectData effectData = new EffectData
-                {
-                    origin = base.characterBody.corePosition,
-                    color = Color.yellow,
-                    scale = radius
-                };
-                EffectManager.SpawnEffect(this.bodyPrefab, effectData, true);
-                this.characterBody.AddTimedBuff(RoR2Content.Buffs.CloakSpeed, 3f);
             }
+            Util.PlaySound(JellyNova.novaSoundString, base.gameObject);
+            EffectData effectData = new EffectData
+            {
+                origin = base.characterBody.corePosition,
+                color = Color.yellow,
+                scale = radius
+            };
+            EffectManager.SpawnEffect(this.bodyPrefab, effectData, true);
+            this.characterBody.AddTimedBuff(RoR2Content.Buffs.CloakSpeed, 3f);
             base.OnExit();
         }
         public override void FixedUpdate()

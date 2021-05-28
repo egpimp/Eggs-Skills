@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using EntityStates;
+﻿using EntityStates;
 using UnityEngine;
 using RoR2;
 using EntityStates.VagrantMonster;
@@ -29,10 +26,7 @@ namespace EggsSkills.EntityStates
             Util.PlaySound(FireMegaNova.novaSoundString, base.gameObject);
             EffectManager.SimpleMuzzleFlash(muzzlePrefab, base.gameObject, lMuzzleString, false);
             EffectManager.SimpleMuzzleFlash(muzzlePrefab, base.gameObject, rMuzzleString, false);
-            if (base.isAuthority)
-            {
-                base.characterMotor.rootMotion += moveVec;
-            }
+            base.characterMotor.rootMotion += moveVec;
         }
         public override InterruptPriority GetMinimumInterruptPriority()
         {
@@ -42,14 +36,14 @@ namespace EggsSkills.EntityStates
         public override void OnExit()
         {
             base.OnExit();
+            EffectData endEffectData = new EffectData
+            {
+                scale = this.radius * 2f,
+                origin = this.characterBody.corePosition
+            };
+            EffectManager.SpawnEffect(this.explosionPrefab, endEffectData, true);
             if (base.isAuthority)
             {
-                EffectData endEffectData = new EffectData
-                {
-                    scale = this.radius * 2f,
-                    origin = this.characterBody.corePosition
-                };
-                EffectManager.SpawnEffect(this.explosionPrefab, endEffectData, true);
                 new BlastAttack
                 {
                     position = this.characterBody.corePosition,
@@ -62,7 +56,6 @@ namespace EggsSkills.EntityStates
                     crit = RollCrit(),
                     procChainMask = default(ProcChainMask),
                     procCoefficient = 1,
-                    bonusForce = new Vector3(0, 0, 0),
                     falloffModel = BlastAttack.FalloffModel.None,
                     damageColorIndex = DamageColorIndex.Default,
                     damageType = DamageType.Stun1s,
