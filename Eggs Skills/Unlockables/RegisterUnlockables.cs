@@ -1,4 +1,5 @@
-﻿using RoR2;
+﻿using EggsSkills.Config;
+using RoR2;
 using EggsSkills.Achievements;
 
 namespace EggsSkills.Unlocks
@@ -19,17 +20,50 @@ namespace EggsSkills.Unlocks
 
         internal static void RegisterUnlockables()
         {
-            EngiUnlockables();
-            ArtificerUnlockables();
-            LoaderUnlockables();
-            CommandoUnlockables();
-            HuntressUnlockables();
-            BanditUnlockables();
-            MulTUnlockables();
-            MercUnlockables();
-            RexUnlockables();
-            AcridUnlockables();
-            CaptainUnlockables();
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableEngiSkills.Value : true)
+            {
+                EngiUnlockables();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableMageSkills.Value : true)
+            {
+                ArtificerUnlockables();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableLoaderSkills.Value : true)
+            {
+                LoaderUnlockables();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableCommandoSkills.Value : true)
+            {
+                CommandoUnlockables();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableHuntressSkills.Value : true)
+            {
+                HuntressUnlockables();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableBanditSkills.Value : true)
+            {
+                BanditUnlockables();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableToolbotSkills.Value : true)
+            {
+                MulTUnlockables();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableMercSkills.Value : true)
+            {
+                MercUnlockables();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableTreebotSkills.Value : true)
+            {
+                RexUnlockables();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableCrocoSkills.Value : true)
+            {
+                AcridUnlockables();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableCaptainSkills.Value : true)
+            {
+                CaptainUnlockables();
+            }
         }
 
         internal static void EngiUnlockables()

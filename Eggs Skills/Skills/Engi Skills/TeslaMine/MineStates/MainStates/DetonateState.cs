@@ -46,52 +46,52 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
             else
             {
                 this.pulseTimer = 1f;
-                this.Pulse();
+                if (NetworkServer.active)
+                {
+                    this.Pulse();
+                }
             }
             this.areaIndicator.transform.localScale = Vector3.one * this.radius * (1 - (pulseTimer/1));
         }
         public void Pulse()
         {
-            if (NetworkServer.active)
+            new BlastAttack()
             {
-                new BlastAttack()
-                {
-                    attacker = projectileController.owner,
-                    inflictor = gameObject,
-                    procChainMask = default,
-                    procCoefficient = 1f,
-                    teamIndex = projectileController.teamFilter.teamIndex,
-                    baseDamage = projectileDamage.damage,
-                    baseForce = 0f,
-                    falloffModel = BlastAttack.FalloffModel.None,
-                    crit = projectileDamage.crit,
-                    radius = radius,
-                    position = transform.position,
-                    damageColorIndex = default,
-                    attackerFiltering = AttackerFiltering.Default,
-                    damageType = DamageType.Stun1s
-                }.Fire();
-                EffectData effectData = new EffectData
-                {
-                    origin = transform.position,
-                    color = Color.blue,
-                    scale = radius
-                };
-                EffectManager.SpawnEffect(bodyPrefab, effectData, true);
-                Util.PlaySound(JellyNova.novaSoundString, gameObject);
-                this.pulseCounter += 1;
-            }
+                attacker = projectileController.owner,
+                inflictor = gameObject,
+                procChainMask = default,
+                procCoefficient = 1f,
+                teamIndex = projectileController.teamFilter.teamIndex,
+                baseDamage = projectileDamage.damage,
+                baseForce = 0f,
+                falloffModel = BlastAttack.FalloffModel.None,
+                crit = projectileDamage.crit,
+                radius = radius,
+                position = transform.position,
+                damageColorIndex = default,
+                attackerFiltering = AttackerFiltering.Default,
+                damageType = DamageType.Stun1s
+            }.Fire();
+            EffectData effectData = new EffectData
+            {
+                origin = transform.position,
+                color = Color.blue,
+                scale = radius
+            };
+            EffectManager.SpawnEffect(bodyPrefab, effectData, true);
+            Util.PlaySound(JellyNova.novaSoundString, gameObject);
+            this.pulseCounter += 1;
         }
         private void Explode()
         {
             if (NetworkServer.active)
             {
-                if (this.areaIndicator)
-                {
-                    this.areaIndicator.SetActive(false);
-                    Destroy(this.areaIndicator);
-                }
                 Destroy(this.gameObject);
+            }
+            if (this.areaIndicator)
+            {
+                this.areaIndicator.SetActive(false);
+                Destroy(this.areaIndicator);
             }
         }
     }

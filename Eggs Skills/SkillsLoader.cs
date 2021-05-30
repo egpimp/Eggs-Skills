@@ -15,6 +15,7 @@ using EggsSkills.EntityStates;
 using R2API.Utils;
 using EggsSkills.Unlocks;
 using System.Collections.Generic;
+using EggsSkills.Config;
 
 [module: UnverifiableCode]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -23,7 +24,7 @@ namespace EggsSkills
 {
     [BepInDependency("com.Egg.EggsBuffs", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "2.0.4")]
+    [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "2.0.5")]
     [R2APISubmoduleDependency(new string[]
 {
     nameof(ProjectileAPI),
@@ -51,31 +52,76 @@ namespace EggsSkills
         private void Awake()
         {
             Debug.Log("Thanks SOM for the icon work <3");
+            Configuration.LoadConfig();
+            if (Configuration.ConfigEditingAgreement.Value)
+            {
+                Debug.Log("EggsSkills' config file has been edited");
+            }
             Assets.LoadResources();
             UnlocksRegistering.RegisterUnlockables();
             RegisterSkills();
         }
         private void RegisterSkills()
         {
-            RegisterArtificerSkills();
-            RegisterMercenarySkills();
-            RegisterCommandoSkills();
-            RegisterEngiSkills();
-            RegisterAcridSkills();
-            RegisterLoaderSkills();
-            RegisterCaptainSkills();
-            RegisterRexSkills();
-            RegisterBanditSkills();
-            RegisterHuntressSkills();
-            RegisterMultSkills();
-            foreach(SkillDef def in defList)
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableMageSkills.Value : true)
             {
-                LoadoutAPI.AddSkillDef(def);
-                Debug.Log("Skill: " + def.skillName + " Registered");
+                RegisterArtificerSkills();
             }
-            foreach (Type skill in extraStates)
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableMercSkills.Value : true)
             {
-                LoadoutAPI.AddSkill(skill);
+                RegisterMercenarySkills();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableCommandoSkills.Value : true)
+            {
+                RegisterCommandoSkills();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableEngiSkills.Value : true)
+            {
+                RegisterEngiSkills();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableCrocoSkills.Value : true)
+            {
+                RegisterAcridSkills();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableLoaderSkills.Value : true)
+            {
+                RegisterLoaderSkills();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableCaptainSkills.Value : true)
+            {
+                RegisterCaptainSkills();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableTreebotSkills.Value : true)
+            {
+                RegisterRexSkills();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableToolbotSkills.Value : true)
+            {
+                RegisterBanditSkills();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableHuntressSkills.Value : true)
+            {
+                RegisterHuntressSkills();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableToolbotSkills.Value : true)
+            {
+                RegisterMultSkills();
+            }
+            if (defList.Count > 0)
+            {
+                foreach (SkillDef def in defList)
+                {
+                    LoadoutAPI.AddSkillDef(def);
+                    Debug.Log("Skill: " + def.skillName + " Registered");
+                }
+                foreach (Type skill in extraStates)
+                {
+                    LoadoutAPI.AddSkill(skill);
+                }
+            }
+            else
+            {
+                Debug.Log("Did you really install my mod just to disable all the skills :(");
             }
         }
 
@@ -474,7 +520,7 @@ namespace EggsSkills
             skillDefNanoSwarm.activationStateMachineName = "Weapon";
             skillDefNanoSwarm.baseMaxStock = 1;
             skillDefNanoSwarm.baseRechargeInterval = 12f;
-            skillDefNanoSwarm.beginSkillCooldownOnSkillEnd = false;
+            skillDefNanoSwarm.beginSkillCooldownOnSkillEnd = true;
             skillDefNanoSwarm.fullRestockOnAssign = false;
             skillDefNanoSwarm.interruptPriority = InterruptPriority.Skill;
             skillDefNanoSwarm.isCombatSkill = true;

@@ -54,8 +54,11 @@ namespace EggsSkills
                 
                     this.owner.GetComponent<SwarmComponent>()?.GetTargets(this.controller.transform.position);
                     this.monoTrigger2 = false;
-                    this.areaIndicator.SetActive(false);
-                    Destroy(this.areaIndicator);
+                    if (this.areaIndicator)
+                    {
+                        this.areaIndicator.SetActive(false);
+                        Destroy(this.areaIndicator);
+                    }
                 }
             }
         }

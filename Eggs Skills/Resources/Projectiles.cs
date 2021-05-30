@@ -8,6 +8,7 @@ using R2API;
 using EggsBuffs;
 using System.Linq;
 using System.Collections.Generic;
+using EggsSkills.Config;
 
 namespace EggsSkills.Resources
 {
@@ -21,17 +22,36 @@ namespace EggsSkills.Resources
 
         internal static void RegisterProjectiles()
         {
-            RegisterTeslaMine();
-            RegisterDebuffNade();
-            RegisterArrowBomblet();
-            RegisterNanoBeacon();
-
-            foreach (GameObject proj in projList)
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableEngiSkills.Value : true)
             {
-                if (proj != null)
+                RegisterTeslaMine();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableCaptainSkills.Value : true)
+            {
+                RegisterDebuffNade();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableHuntressSkills.Value : true)
+            {
+                RegisterArrowBomblet();
+            }
+            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableToolbotSkills.Value : true)
+            {
+                RegisterNanoBeacon();
+            }
+            if (projList.Count > 0)
+            {
+                foreach (GameObject proj in projList)
                 {
-                    ProjectileAPI.Add(proj);
+                    if (proj != null)
+                    {
+                        ProjectileAPI.Add(proj);
+                        PrefabAPI.RegisterNetworkPrefab(proj);
+                    }
                 }
+            }
+            else
+            {
+                Debug.Log("No projectiles needed to be registered");
             }
         }
         internal static void RegisterTeslaMine()

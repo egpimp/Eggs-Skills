@@ -45,7 +45,6 @@ namespace EggsSkills.EntityStates
         {
             Ray aimRay = GetAimRay();
             Vector3 aimDirection = aimRay.direction;
-            Vector3 oldOrigin = aimRay.origin;
             aimRay.origin = characterBody.footPosition;
             this.maxDistance = (1 + (4 * this.chargePercent)) * this.baseDistance * (base.moveSpeedStat / 7);
             base.inputBank.GetAimRaycast(maxDistance, out raycastHit);
@@ -59,14 +58,13 @@ namespace EggsSkills.EntityStates
             this.maxMoveVec = this.maxDistance * aimDirection;
             this.areaIndicator.transform.localScale = Vector3.one * this.radius;
             this.areaIndicator.transform.localPosition = aimRay.origin + this.maxMoveVec;
-            aimRay.origin = oldOrigin;
         }
 
 
         public override void OnExit()
         {
             base.characterMotor.walkSpeedPenaltyCoefficient = 1f;
-            if (base.isAuthority)
+            if (this.areaIndicator)
             {
                 this.areaIndicator.SetActive(false);
                 Destroy(areaIndicator);
