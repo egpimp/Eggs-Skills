@@ -53,7 +53,7 @@ namespace EggsSkills.Config
         internal static void LoadConfig()
         {
             //Important configs
-            configFile = new ConfigFile(Paths.ConfigPath, true);
+            configFile = new ConfigFile(Paths.ConfigPath + "/EggsSkills.cfg", true);
             UnlockAll = configFile.Bind("Achievements", "UnlockAll", false, "Set to true to unlock all EggsSkills' achievements automatically.  Does not require ConfigEditingAgreement to be true to function.");
             ConfigEditingAgreement = configFile.Bind("!Read this!", "ConfigEditingAgreement", false, "By setting this to true, you as the EggsSkills user agrees to not complain about bugs that may stem from mismatched configs.  Config values will automatically be applied as default unless this is set to true");
             EnableMageSkills = configFile.Bind("EnabledSkills", "EnableArtificerSkills", true, "Set to false to prevent EggsSkills' Artificer skills from listing");

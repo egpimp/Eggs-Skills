@@ -2,7 +2,7 @@
 using RoR2;
 using UnityEngine;
 using EggsSkills.Resources;
-using UnityEngine.SocialPlatforms;
+using EggsSkills.Config;
 
 namespace EggsSkills.Achievements
 {
@@ -37,6 +37,10 @@ namespace EggsSkills.Achievements
         {
             base.OnInstall();
             RoR2Application.onUpdate += AcridPurgeAchievementTracker;
+            if (Configuration.UnlockAll.Value)
+            {
+                base.Grant();
+            }
         }
 
         public override void OnUninstall()

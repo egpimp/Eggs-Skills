@@ -2,6 +2,7 @@
 using RoR2;
 using UnityEngine;
 using EggsSkills.Resources;
+using EggsSkills.Config;
 
 namespace EggsSkills.Achievements
 {
@@ -37,6 +38,10 @@ namespace EggsSkills.Achievements
             base.OnInstall();
             TeleporterInteraction.onTeleporterBeginChargingGlobal += GiveComponent;
             TeleporterInteraction.onTeleporterChargedGlobal += CheckComponent;
+            if (Configuration.UnlockAll.Value)
+            {
+                base.Grant();
+            }
         }
 
         public override void OnUninstall()

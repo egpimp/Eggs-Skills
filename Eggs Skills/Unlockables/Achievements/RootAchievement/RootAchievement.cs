@@ -2,6 +2,7 @@
 using RoR2;
 using UnityEngine;
 using EggsSkills.Resources;
+using EggsSkills.Config;
 
 namespace EggsSkills.Achievements
 {
@@ -37,6 +38,10 @@ namespace EggsSkills.Achievements
             base.OnInstall();
             RoR2Application.onUpdate += RootComponentCheck;
             On.RoR2.GlobalEventManager.OnCharacterDeath += AddDeath;
+            if (Configuration.UnlockAll.Value)
+            {
+                base.Grant();
+            }
         }
 
         public override void OnUninstall()

@@ -4,6 +4,7 @@ using UnityEngine;
 using EggsSkills.Resources;
 using EntityStates.Captain.Weapon;
 using RoR2.Stats;
+using EggsSkills.Config;
 
 namespace EggsSkills.Achievements
 {
@@ -37,10 +38,13 @@ namespace EggsSkills.Achievements
         public override void OnInstall()
         {
             base.OnInstall();
-            
             Stage.onStageStartGlobal += ResetCaptainComponent;
             TeleporterInteraction.onTeleporterChargedGlobal += CheckCaptainComponent;
             On.EntityStates.Captain.Weapon.CallSupplyDropBase.OnEnter += InvalidateAchievement;
+            if (Configuration.UnlockAll.Value)
+            {
+                base.Grant();
+            }
         }
 
         public override void OnUninstall()

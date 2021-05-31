@@ -2,8 +2,7 @@
 using RoR2;
 using UnityEngine;
 using EggsSkills.Resources;
-using UnityEngine.Networking;
-using UnityEngine.SocialPlatforms;
+using EggsSkills.Config;
 
 namespace EggsSkills.Achievements
 {
@@ -39,6 +38,10 @@ namespace EggsSkills.Achievements
             base.OnInstall();
             RoR2Application.onUpdate += SlashComponentCheck;
             On.RoR2.HealthComponent.TakeDamage += DamageChecker;
+            if (Configuration.UnlockAll.Value)
+            {
+                base.Grant();
+            }
         }
 
         public override void OnUninstall()

@@ -2,6 +2,7 @@
 using EggsSkills.Resources;
 using System;
 using UnityEngine;
+using EggsSkills.Config;
 
 namespace EggsSkills.Achievements
 {
@@ -35,6 +36,10 @@ namespace EggsSkills.Achievements
         {
             base.OnInstall();
             RoR2Application.onUpdate += ClearCheck;
+            if (Configuration.UnlockAll.Value)
+            {
+                base.Grant();
+            }
         }
 
         public override void OnUninstall()

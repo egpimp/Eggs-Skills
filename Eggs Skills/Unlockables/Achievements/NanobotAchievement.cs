@@ -3,6 +3,7 @@ using RoR2;
 using UnityEngine;
 using EggsSkills.Resources;
 using System.Collections.Generic;
+using EggsSkills.Config;
 
 namespace EggsSkills.Achievements
 {
@@ -37,6 +38,10 @@ namespace EggsSkills.Achievements
         {
             base.OnInstall();
             MinionOwnership.onMinionOwnerChangedGlobal += CheckMinions;
+            if (Configuration.UnlockAll.Value)
+            {
+                base.Grant();
+            }
         }
 
         public override void OnUninstall()

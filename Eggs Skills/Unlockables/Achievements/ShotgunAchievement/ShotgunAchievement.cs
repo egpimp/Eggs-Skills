@@ -2,7 +2,7 @@
 using RoR2;
 using UnityEngine;
 using EggsSkills.Resources;
-using UnityEngine.Networking;
+using EggsSkills.Config;
 
 namespace EggsSkills.Achievements
 {
@@ -38,7 +38,10 @@ namespace EggsSkills.Achievements
             base.OnInstall();
             On.RoR2.GlobalEventManager.OnCharacterDeath += BulletAchievementComponentHandler;
             RoR2Application.onUpdate += AddBulletAchievementComponent;
-
+            if (Configuration.UnlockAll.Value)
+            {
+                base.Grant();
+            }
         }
         public override void OnUninstall()
         {
