@@ -63,47 +63,47 @@ namespace EggsSkills
         }
         private void RegisterSkills()
         {
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableMageSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableMageSkills))
             {
                 RegisterArtificerSkills();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableMercSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableMercSkills))
             {
                 RegisterMercenarySkills();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableCommandoSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableCommandoSkills))
             {
                 RegisterCommandoSkills();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableEngiSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableEngiSkills))
             {
                 RegisterEngiSkills();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableCrocoSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableCrocoSkills))
             {
                 RegisterAcridSkills();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableLoaderSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableLoaderSkills))
             {
                 RegisterLoaderSkills();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableCaptainSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableCaptainSkills))
             {
                 RegisterCaptainSkills();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableTreebotSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableTreebotSkills))
             {
                 RegisterRexSkills();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableToolbotSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableToolbotSkills))
             {
                 RegisterBanditSkills();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableHuntressSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableHuntressSkills))
             {
                 RegisterHuntressSkills();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableToolbotSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableToolbotSkills))
             {
                 RegisterMultSkills();
             }

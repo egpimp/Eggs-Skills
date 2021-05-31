@@ -3,6 +3,7 @@ using EntityStates;
 using UnityEngine;
 using EntityStates.Commando.CommandoWeapon;
 using RoR2.Skills;
+using EggsSkills.Config;
 
 namespace EggsSkills.EntityStates
 {
@@ -24,7 +25,7 @@ namespace EggsSkills.EntityStates
         private int critMod;
         private int step;
 
-        private uint bulletCount = 6u;
+        private uint bulletCount = Configuration.GetConfigValue<uint>(Configuration.CommandoShotgunPellets);
 
         void SteppedSkillDef.IStepSetter.SetStep(int i)
         {
@@ -36,16 +37,8 @@ namespace EggsSkills.EntityStates
             bool isCrit;
             this.duration = this.baseDuration / base.attackSpeedStat;
             string muzzleString;
-            if (base.RollCrit())
-            {
-                critMod = 1;
-                isCrit = true;
-            }
-            else
-            {
-                critMod = 0;
-                isCrit = false;
-            }
+            isCrit = base.RollCrit();
+            critMod = isCrit ? 1 : 0;
             if (step % 2 == 1)
             {
                 muzzleString = "MuzzleRight";

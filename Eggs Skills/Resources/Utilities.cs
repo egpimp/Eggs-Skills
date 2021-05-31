@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using EggsSkills.Config;
 
 namespace EggsSkills.Utility
 {

@@ -3,13 +3,16 @@ using EntityStates;
 using UnityEngine;
 using EntityStates.JellyfishMonster;
 using EggsSkills.Utility;
+using EggsSkills.Config;
 
 namespace EggsSkills.EntityStates
 {
     class ShieldSplosionEntity : BaseSkillState
     {
+        private bool shouldRemoveBarrier = Configuration.GetConfigValue<bool>(Configuration.LoaderShieldsplodeRemovebarrieronuse);
+
         private float baseForce = 50f;
-        private float baseRadius = 10f;
+        private float baseRadius = Configuration.GetConfigValue<float>(Configuration.LoaderShieldsplodeBaseradius);
         private float damageCoefficient = 20f;
         private float procCoefficient = 1f;
 

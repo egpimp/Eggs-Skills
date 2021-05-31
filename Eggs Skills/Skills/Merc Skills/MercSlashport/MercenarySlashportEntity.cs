@@ -3,6 +3,7 @@ using RoR2;
 using UnityEngine;
 using System.Linq;
 using EntityStates.Merc;
+using EggsSkills.Config;
 
 namespace EggsSkills.EntityStates
 {
@@ -11,7 +12,7 @@ namespace EggsSkills.EntityStates
         private float collisionDistance;
         private float damageCoefficient = 7f;
         private float[] findMax;
-        private float healthFraction = 0.2f;
+        private float healthFraction = Configuration.GetConfigValue<float>(Configuration.MercSlashHealthfraction);
         private float procCoefficient = 1f;
 
         private GameObject swingEffectPrefab = UnityEngine.Resources.Load<GameObject>("Prefabs/effects/MercSwordSlashWhirlwind");

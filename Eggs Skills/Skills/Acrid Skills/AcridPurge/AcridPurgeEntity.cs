@@ -1,4 +1,5 @@
-﻿using EntityStates;
+﻿using EggsSkills.Config;
+using EntityStates;
 using EntityStates.Croco;
 using RoR2;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace EggsSkills.EntityStates
     class AcridPurgeEntity : BaseState
     {
         private float blightDamageCoefficient = 3f;
-        private float detonationRadius = 16f;
+        private float detonationRadius = Configuration.GetConfigValue<float>(Configuration.CrocoPurgeBaseradius);
         private float healthFraction = 0.1f;
         private float maxTrackingDistance = 5000f;
         private float poisonDamageCoefficient = 2.5f;
@@ -56,7 +57,7 @@ namespace EggsSkills.EntityStates
                         {
                             origin = body.corePosition,
                             color = Color.green,
-                            scale = 16
+                            scale = this.detonationRadius
                         };
                         EffectManager.SpawnEffect(bodyPrefab, bodyEffectData, true);
                     }

@@ -22,19 +22,19 @@ namespace EggsSkills.Resources
 
         internal static void RegisterProjectiles()
         {
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableEngiSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableEngiSkills))
             {
                 RegisterTeslaMine();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableCaptainSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableCaptainSkills))
             {
                 RegisterDebuffNade();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableHuntressSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableHuntressSkills))
             {
                 RegisterArrowBomblet();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableToolbotSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableToolbotSkills))
             {
                 RegisterNanoBeacon();
             }
@@ -81,7 +81,7 @@ namespace EggsSkills.Resources
 
                 ProjectileImpactExplosion debuffGrenadeExplosion = debuffGrenadePrefab.GetComponent<ProjectileImpactExplosion>();
                 debuffGrenadeExplosion.destroyOnWorld = true;
-                debuffGrenadeExplosion.blastRadius = 20;
+                debuffGrenadeExplosion.blastRadius = Configuration.GetConfigValue<float>(Configuration.CaptainDebuffnadeRadius);
                 debuffGrenadeExplosion.falloffModel = BlastAttack.FalloffModel.Linear;
                 debuffGrenadeExplosion.blastProcCoefficient = BuffsLoading.ProcToDamageTypeEncoder(BuffsLoading.trackingOnHitIndex, 1f);
                 debuffGrenadeExplosion.impactEffect = UnityEngine.Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFXScavCannonImpactExplosion");

@@ -5,6 +5,7 @@ using EggsSkills.Orbs;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Networking;
+using EggsSkills.Config;
 
 namespace EggsSkills
 {
@@ -13,13 +14,17 @@ namespace EggsSkills
     class SwarmComponent : MonoBehaviour
     {
         private CharacterBody ownerBody;
-        private List<HurtBox> hurtBoxesList;
+
         private float queueTimer;
+
+        private int nanoBotCount = Configuration.GetConfigValue<int>(Configuration.ToolbotNanobotCountperenemy);
+
+        private List<HurtBox> hurtBoxesList;
         private void Start()
         {
-            ownerBody = GetComponent<CharacterBody>();
-            hurtBoxesList = new List<HurtBox>();
-            queueTimer = 0.1f;
+            this.ownerBody = GetComponent<CharacterBody>();
+            this.hurtBoxesList = new List<HurtBox>();
+            this.queueTimer = 0.05f;
         }
         private void CallSwarm(HurtBox hurtBox)
         {
@@ -44,41 +49,41 @@ namespace EggsSkills
                 mask = LayerIndex.entityPrecise.mask
             }.RefreshCandidates().FilterCandidatesByHurtBoxTeam(TeamMask.GetEnemyTeams(base.GetComponent<TeamComponent>().teamIndex)).OrderCandidatesByDistance().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes())
             {
-                AddToTargets(hurtBox);
+                this.AddToTargets(hurtBox);
             }
         }
         private void AddToTargets(HurtBox hurtBox)
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < this.nanoBotCount; i++)
             {
-                hurtBoxesList.Add(hurtBox);
+                this.hurtBoxesList.Add(hurtBox);
                 List<HurtBox> tempList = new List<HurtBox>();
-                while (hurtBoxesList.Count > 0)
+                while (this.hurtBoxesList.Count > 0)
                 {
                     int randPos = Random.Range(1,hurtBoxesList.Count) - 1;
                     tempList.Add(hurtBoxesList.ElementAt(randPos));
-                    hurtBoxesList.RemoveAt(randPos);
+                    this.hurtBoxesList.RemoveAt(randPos);
                 }
-                hurtBoxesList = tempList;
+                this.hurtBoxesList = tempList;
             }
         }
         private void FixedUpdate()
         {
-            if (hurtBoxesList.Count > 0)
+            if (this.hurtBoxesList.Count > 0)
             {
-                if(queueTimer > 0)
+                if(this.queueTimer > 0)
                 {
-                    queueTimer -= Time.fixedDeltaTime;
+                    this.queueTimer -= Time.fixedDeltaTime;
                 }
                 else
                 {
-                    while(!hurtBoxesList.ElementAt(0))
+                    while(!this.hurtBoxesList.ElementAt(0))
                     {
-                        hurtBoxesList.RemoveAt(0);
+                        this.hurtBoxesList.RemoveAt(0);
                     }
-                    CallSwarm(hurtBoxesList.ElementAt(0));
-                    hurtBoxesList.RemoveAt(0);
-                    queueTimer = 0.05f;
+                    this.CallSwarm(this.hurtBoxesList.ElementAt(0));
+                    this.hurtBoxesList.RemoveAt(0);
+                    this.queueTimer = 0.05f;
                 }
             }
         }

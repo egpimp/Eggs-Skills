@@ -5,6 +5,7 @@ using RoR2.Projectile;
 using EntityStates.Huntress;
 using EntityStates.JellyfishMonster;
 using UnityEngine.Networking;
+using EggsSkills.Config;
 
 namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
 {
@@ -19,6 +20,8 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
 
         private GameObject areaIndicator;
         private GameObject bodyPrefab = UnityEngine.Resources.Load<GameObject>("prefabs/effects/JellyfishNova");
+
+        private int maxPulseCount = Configuration.GetConfigValue<int>(Configuration.EngiTeslaminePulses);
 
         private ProjectileDamage projectileDamage;
         public override void OnEnter()
@@ -35,7 +38,7 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (this.pulseCounter >= 5)
+            if (this.pulseCounter >= this.maxPulseCount)
             {
                 this.Explode();
             }
@@ -57,26 +60,26 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
         {
             new BlastAttack()
             {
-                attacker = projectileController.owner,
-                inflictor = gameObject,
+                attacker = base.projectileController.owner,
+                inflictor = base.gameObject,
                 procChainMask = default,
                 procCoefficient = 1f,
-                teamIndex = projectileController.teamFilter.teamIndex,
-                baseDamage = projectileDamage.damage,
+                teamIndex = base.projectileController.teamFilter.teamIndex,
+                baseDamage = this.projectileDamage.damage,
                 baseForce = 0f,
                 falloffModel = BlastAttack.FalloffModel.None,
-                crit = projectileDamage.crit,
-                radius = radius,
-                position = transform.position,
+                crit = this.projectileDamage.crit,
+                radius = this.radius,
+                position = base.transform.position,
                 damageColorIndex = default,
                 attackerFiltering = AttackerFiltering.Default,
                 damageType = DamageType.Stun1s
             }.Fire();
             EffectData effectData = new EffectData
             {
-                origin = transform.position,
+                origin = base.transform.position,
                 color = Color.blue,
-                scale = radius
+                scale = this.radius
             };
             EffectManager.SpawnEffect(bodyPrefab, effectData, true);
             Util.PlaySound(JellyNova.novaSoundString, gameObject);

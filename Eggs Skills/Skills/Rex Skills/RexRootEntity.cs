@@ -4,17 +4,19 @@ using UnityEngine;
 using System.Linq;
 using EntityStates.Treebot.Weapon;
 using EggsBuffs;
+using EggsSkills.Config;
 
 namespace EggsSkills.EntityStates
 {
     class DirectiveRoot : BaseSkillState
     {
+        private bool cappedAttackspeed = Configuration.GetConfigValue<bool>(Configuration.TreebotPullSpeedcap);
         private bool isCrit;
         private bool isFirstPress;
 
         private float barrierCoefficient = 0.03f;
         private float basePullTimer = 1f;
-        private float baseRadius = 30f;
+        private float baseRadius = Configuration.GetConfigValue<float>(Configuration.TreebotPullRange);
         private float damageCoefficient = 2.5f;
         private float maxAttackSpeedMod = 4f;
         private float pullTimerModifier;
@@ -28,7 +30,7 @@ namespace EggsSkills.EntityStates
             {
                 base.OnEnter();
                 float[] getMin = new float[] {this.maxAttackSpeedMod, base.attackSpeedStat};
-                this.pullTimerModifier = getMin.Min();
+                this.pullTimerModifier = this.cappedAttackspeed ? getMin.Min() : base.attackSpeedStat;
                 base.characterMotor.walkSpeedPenaltyCoefficient = this.speedFraction;
                 base.characterBody.AddBuff(BuffsLoading.buffDefAdaptive);
                 this.isFirstPress = true;
@@ -103,7 +105,7 @@ namespace EggsSkills.EntityStates
                     massEval = (mass * -20f - 400f) / 2;
                 }
                 float[] maxMass = new float[] { massEval, -6000 };
-                Vector3 appliedForce = maxMass.Max() * direction * ((magnitude + 15) / 60);
+                Vector3 appliedForce = maxMass.Max() * direction * ((magnitude + 15) / (this.baseRadius * 2));
                 //damage
                 if (base.isAuthority)
                 {

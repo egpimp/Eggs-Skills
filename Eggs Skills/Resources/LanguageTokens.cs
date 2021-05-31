@@ -1,4 +1,6 @@
 ﻿using R2API;
+using EggsSkills.Config;
+using System;
 
 namespace EggsSkills.Resources
 {
@@ -34,7 +36,7 @@ namespace EggsSkills.Resources
         {
             //Explosive Arrow
             LanguageAPI.Add("HUNTRESS_SECONDARY_CLUSTERARROW_NAME", "Explosive Arrow");
-            LanguageAPI.Add("HUNTRESS_SECONDARY_CLUSTERARROW_DESC", "<style=cIsUtility>Agile.</style> Fire an arrow that <style=cIsDamage>explodes</style> on impact, dealing <style=cIsDamage>500% Damage</style> and releasing <style=cIsDamage>8 bomblets</style> that deal <style=cIsDamage>80% Damage each</style>.  Critical strikes instead release <style=cIsDamage>12</style>");
+            LanguageAPI.Add("HUNTRESS_SECONDARY_CLUSTERARROW_DESC", "<style=cIsUtility>Agile.</style> Fire an arrow that <style=cIsDamage>explodes</style> on impact, dealing <style=cIsDamage>500% Damage</style> and releasing <style=cIsDamage>" + Configuration.GetConfigValue<int>(Configuration.HuntressArrowBomblets) + " bomblets</style> that deal <style=cIsDamage>80% Damage each</style>.  Critical strikes instead release <style=cIsDamage>" + (Math.Floor(Configuration.GetConfigValue<int>(Configuration.HuntressArrowBomblets) * 1.5f)) + "</style>");
 
             LanguageAPI.Add("HUNTRESS_TRADITIONALUNLOCKABLE_ACHIEVEMENT_NAME", "Huntress: Traditional");
             LanguageAPI.Add("HUNTRESS_TRADITIONALUNLOCKABLE_ACHIEVEMENT_DESC", "As Huntress, complete a teleporter event without using your secondary or special skills");
@@ -106,7 +108,7 @@ namespace EggsSkills.Resources
         {
             //Tesla Mine
             LanguageAPI.Add("ENGI_SECONDARY_TESLAMINE_NAME", "T-3514 Shock Mines");
-            LanguageAPI.Add("ENGI_SECONDARY_TESLAMINE_DESC", "<style=cIsDamage>Stunning.</style> Place a shock mine, that upon detonation deals <style=cIsDamage>200% damage</style> and leaves a lingering zone for <style=cIsDamage>4 seconds</style> that deals <style=cIsDamage>200% damage each second</style>.  Can place up to <style=cIsDamage>4</style>.");
+            LanguageAPI.Add("ENGI_SECONDARY_TESLAMINE_DESC", "<style=cIsDamage>Stunning.</style> Place a shock mine, that upon detonation deals <style=cIsDamage>200% damage</style> and leaves a lingering zone for <style=cIsDamage>" + (Configuration.GetConfigValue<int>(Configuration.EngiTeslaminePulses) - 1) + "seconds</style> that deals <style=cIsDamage>200% damage each second</style>.  Can place up to <style=cIsDamage>4</style>.");
 
             LanguageAPI.Add("ENGI_ELECTRICUNLOCKABLE_ACHIEVEMENT_NAME", "Engineer: Electric Boogaloo");
             LanguageAPI.Add("ENGI_ELECTRICUNLOCKABLE_ACHIEVEMENT_DESC", "As Engineer, have 4 different electric items at once.");
@@ -118,7 +120,7 @@ namespace EggsSkills.Resources
         {
             //Shotgun
             LanguageAPI.Add("COMMANDO_PRIMARY_COMBATSHOTGUN_NAME", "Flechette Rounds");
-            LanguageAPI.Add("COMMANDO_PRIMARY_COMBATSHOTGUN_DESC", "Fire flechette rounds, dealing <style=cIsDamage>6x60% damage</style> in a wider but shorter range.  <style=cIsUtility>Spread</style> decreases on <style=cIsDamage>critical strikes</style>.");
+            LanguageAPI.Add("COMMANDO_PRIMARY_COMBATSHOTGUN_DESC", "Fire flechette rounds, dealing <style=cIsDamage>" + Configuration.GetConfigValue<uint>(Configuration.CommandoShotgunPellets) + "x60% damage</style> in a wider but shorter range.  <style=cIsUtility>Spread</style> decreases on <style=cIsDamage>critical strikes</style>.");
 
             LanguageAPI.Add("COMMANDO_BULLETUNLOCKABLE_ACHIEVEMENT_NAME", "Commando: 65% More Bullet");
             LanguageAPI.Add("COMMANDO_BULLETUNLOCKABLE_ACHIEVEMENT_DESC", "As Commando, kill 20 enemies in a row without releasing primary fire");
@@ -130,7 +132,7 @@ namespace EggsSkills.Resources
         {
             //Slashport
             LanguageAPI.Add("MERCENARY_UTILITY_SLASHPORT_NAME", "Fatal Assault");
-            LanguageAPI.Add("MERCENARY_UTILITY_SLASHPORT_DESC", "<style=cIsDamage>Stunning.</style> Target an enemy to <style=cIsUtility>expose</style>, <style=cIsUtility>teleport to</style> and strike them for <style=cIsDamage>600% damage, plus 20% of their missing health</style>.");
+            LanguageAPI.Add("MERCENARY_UTILITY_SLASHPORT_DESC", "<style=cIsDamage>Stunning.</style> Target an enemy to <style=cIsUtility>expose</style>, <style=cIsUtility>teleport to</style> and strike them for <style=cIsDamage>600% damage, plus " + (Configuration.GetConfigValue<float>(Configuration.MercSlashHealthfraction) * 100) + "% of their missing health</style>.");
 
             LanguageAPI.Add("MERC_CULLUNLOCKABLE_ACHIEVEMENT_NAME", "Mercenary: Culled");
             LanguageAPI.Add("MERC_CULLUNLOCKABLE_ACHIEVEMENT_DESC", "As Mercenary, Strike 10 unique exposed enemies with no more than 5 seconds between each strike");
@@ -142,7 +144,7 @@ namespace EggsSkills.Resources
         {
             //Nanobots
             LanguageAPI.Add("MULT_SECONDARY_NANOBOT_NAME", "Nanobot Swarm");
-            LanguageAPI.Add("MULT_SECONDARY_NANOBOT_DESC", "Fire a <style=cIsUtility>beacon</style> that deals <style=cIsDamage>100% damage</style> and inflicts <style=cArtifact>tracking</style> on impact.  After a delay, release <style=cIsDamage>nanobot swarms</style> for each nearby enemy that deal <style=cIsDamage>3x80% damage</style> and <style=cIsHealing>heal for 1.5% max hp each</style>");
+            LanguageAPI.Add("MULT_SECONDARY_NANOBOT_DESC", "Fire a <style=cIsUtility>beacon</style> that deals <style=cIsDamage>100% damage</style> and inflicts <style=cArtifact>tracking</style> on impact.  After a delay, release <style=cIsDamage>nanobot swarms</style> for each nearby enemy that deal <style=cIsDamage>" + Configuration.GetConfigValue<int>(Configuration.ToolbotNanobotCountperenemy) + "x80% damage</style> and <style=cIsHealing>heal for 1.5% max hp each</style>");
 
             LanguageAPI.Add("MULT_MOTHERSHIPUNLOCKABLE_ACHIEVEMENT_NAME", "MUL-T: Mothership");
             LanguageAPI.Add("MULT_MOTHERSHIPUNLOCKABLE_ACHIEVEMENT_DESC", "As MUL-T, have 8 drone followers at once");

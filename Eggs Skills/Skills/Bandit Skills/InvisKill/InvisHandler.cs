@@ -2,6 +2,7 @@
 using RoR2;
 using EggsBuffs;
 using EntityStates.Bandit2;
+using EggsSkills.Config;
 
 namespace EggsSkills
 {
@@ -13,7 +14,7 @@ namespace EggsSkills
         private CharacterBody characterBody;
 
         private float baseTimeTilInvis = 0.4f;
-        private float buffDuration = 3f;
+        private float buffDuration = Configuration.GetConfigValue<float>(Configuration.BanditInvissprintBuffduration);
         private float holdTimer;
         private float timeTilInvis;
 

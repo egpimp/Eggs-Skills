@@ -2,24 +2,21 @@
 using UnityEngine;
 using RoR2;
 using RoR2.Projectile;
+using EggsSkills.Config;
+using System;
+
 namespace EggsSkills.Orbs
 {
     public class HuntressBombArrowOrb : GenericDamageOrb
     {
         private float radius = 12f;
+
         private GameObject effectPrefab = UnityEngine.Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFXScavCannonImpactExplosion");
-        private float critMod;
+
+        private int bombletCount = Configuration.GetConfigValue<int>(Configuration.HuntressArrowBomblets);
         public override void Begin()
         {
-            speed = 80f;
-            if(isCrit)
-            {
-                critMod = 1f;
-            }
-            else
-            {
-                critMod = 0f;
-            }
+            base.speed = 80f;
             base.Begin();
         }
         public override void OnArrival()
@@ -33,12 +30,12 @@ namespace EggsSkills.Orbs
         }
         private void FireBomblets()
         {
-            for (int i = 0; i < 8 + (4 * critMod); i += 1)
+            for (int i = 0; i < (base.isCrit ? this.bombletCount : Math.Floor(this.bombletCount * 1.5f)); i += 1)
             {             
-                Quaternion angle = Quaternion.LookRotation((Vector3.up + new Vector3(UnityEngine.Random.Range(-5f,5f)/10f,UnityEngine.Random.Range(-5f,5f)/10f,UnityEngine.Random.Range(-5f,5f)/10f)) * (1 + critMod / 4));
+                Quaternion angle = Quaternion.LookRotation((Vector3.up + new Vector3(UnityEngine.Random.Range(-5f,5f)/10f,UnityEngine.Random.Range(-5f,5f)/10f,UnityEngine.Random.Range(-5f,5f)/10f)) * (base.isCrit ? 1f : 1.25f));
                 var transform = target.transform;
                 var pos = transform.position;
-                ProjectileManager.instance.FireProjectile(EggsSkills.Resources.Projectiles.bombletPrefab, new Vector3(pos.x, pos.y, pos.z), angle, attacker, damageValue * 0.8f, 50f, isCrit);
+                ProjectileManager.instance.FireProjectile(Resources.Projectiles.bombletPrefab, new Vector3(pos.x, pos.y, pos.z), angle, attacker, damageValue * 0.8f, 50f, isCrit);
             }
         }
         private void Explode()
