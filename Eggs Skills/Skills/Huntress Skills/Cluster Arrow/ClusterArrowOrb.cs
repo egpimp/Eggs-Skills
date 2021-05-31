@@ -30,9 +30,9 @@ namespace EggsSkills.Orbs
         }
         private void FireBomblets()
         {
-            for (int i = 0; i < (base.isCrit ? this.bombletCount : Math.Floor(this.bombletCount * 1.5f)); i += 1)
+            for (int i = 0; i < (!base.isCrit ? this.bombletCount : Math.Floor(this.bombletCount * 1.5f)); i += 1)
             {             
-                Quaternion angle = Quaternion.LookRotation((Vector3.up + new Vector3(UnityEngine.Random.Range(-5f,5f)/10f,UnityEngine.Random.Range(-5f,5f)/10f,UnityEngine.Random.Range(-5f,5f)/10f)) * (base.isCrit ? 1f : 1.25f));
+                Quaternion angle = Quaternion.LookRotation((Vector3.up + new Vector3(UnityEngine.Random.Range(-50f,50f)/100f,UnityEngine.Random.Range(-50f,50f)/100f,UnityEngine.Random.Range(-50f,50f)/100f)) * (!base.isCrit ? 1f : 1.25f));
                 var transform = target.transform;
                 var pos = transform.position;
                 ProjectileManager.instance.FireProjectile(Resources.Projectiles.bombletPrefab, new Vector3(pos.x, pos.y, pos.z), angle, attacker, damageValue * 0.8f, 50f, isCrit);
