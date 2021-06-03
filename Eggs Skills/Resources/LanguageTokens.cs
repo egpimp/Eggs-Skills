@@ -1,6 +1,7 @@
 ﻿using R2API;
 using EggsSkills.Config;
 using System;
+using EggsSkills.Utility;
 
 namespace EggsSkills.Resources
 {
@@ -19,6 +20,7 @@ namespace EggsSkills.Resources
             MercTokens();
             EngiTokens();
             MulTTokens();
+            Utilities.LogToConsole("Language tokens loaded");
         }
         internal static void ArtificerTokens()
         {
@@ -108,7 +110,7 @@ namespace EggsSkills.Resources
         {
             //Tesla Mine
             LanguageAPI.Add("ENGI_SECONDARY_TESLAMINE_NAME", "T-3514 Shock Mines");
-            LanguageAPI.Add("ENGI_SECONDARY_TESLAMINE_DESC", "<style=cIsDamage>Stunning.</style> Place a shock mine, that upon detonation deals <style=cIsDamage>200% damage</style> and leaves a lingering zone for <style=cIsDamage>" + (Configuration.GetConfigValue<int>(Configuration.EngiTeslaminePulses) - 1) + "seconds</style> that deals <style=cIsDamage>200% damage each second</style>.  Can place up to <style=cIsDamage>4</style>.");
+            LanguageAPI.Add("ENGI_SECONDARY_TESLAMINE_DESC", "<style=cIsDamage>Stunning.</style> Place a shock mine, that upon detonation deals <style=cIsDamage>200% damage</style> and leaves a lingering zone for <style=cIsDamage>" + (Configuration.GetConfigValue<int>(Configuration.EngiTeslaminePulses) - 1) + " seconds</style> that deals <style=cIsDamage>200% damage each second</style>.  Can place up to <style=cIsDamage>4</style>.");
 
             LanguageAPI.Add("ENGI_ELECTRICUNLOCKABLE_ACHIEVEMENT_NAME", "Engineer: Electric Boogaloo");
             LanguageAPI.Add("ENGI_ELECTRICUNLOCKABLE_ACHIEVEMENT_DESC", "As Engineer, have 4 different electric items at once.");

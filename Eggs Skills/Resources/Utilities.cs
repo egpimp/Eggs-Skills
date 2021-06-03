@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using EggsSkills.Config;
 
 namespace EggsSkills.Utility
 {
@@ -14,6 +13,10 @@ namespace EggsSkills.Utility
         internal static Vector3 GetDirection(Vector3 startPos, Vector3 endPos)
         {
             return (endPos - startPos).normalized;
+        }
+        internal static void LogToConsole(string logText)
+        {
+            Debug.Log("EggsSkills : " + logText);
         }
     }
 }

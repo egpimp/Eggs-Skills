@@ -2,6 +2,7 @@
 using UnityEngine;
 using Mono.Cecil;
 using EggsSkills.Resources;
+using EggsSkills.Utility;
 
 namespace EggsSkills.Properties
 {
@@ -20,11 +21,11 @@ namespace EggsSkills.Properties
             assetBundle = LoadAssetBundle(Resources.mainbundle);
             if (assetBundle)
             {
-                Debug.Log("Eggs Assetbundle successfully loaded");
+                Utilities.LogToConsole("Assetbundle successfully loaded");
             }
             else
             {
-                Debug.Log("Eggs Assetbundle failed to load");
+                Utilities.LogToConsole("Assetbundle failed to load");
             }
         }
         internal static Sprite TexToSprite(Texture2D tex)

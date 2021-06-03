@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using EggsSkills.Properties;
+using EggsSkills.Utility;
 
 namespace EggsSkills.Resources
 {
@@ -40,6 +41,7 @@ namespace EggsSkills.Resources
             EngiIcons();
             MercIcons();
             MulTIcons();
+            Utilities.LogToConsole("Sprites loaded");
         }
         internal static void CommandoIcons()
         {

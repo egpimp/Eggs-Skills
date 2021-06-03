@@ -16,6 +16,7 @@ using R2API.Utils;
 using EggsSkills.Unlocks;
 using System.Collections.Generic;
 using EggsSkills.Config;
+using EggsSkills.Utility;
 
 [module: UnverifiableCode]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -31,7 +32,8 @@ namespace EggsSkills
     nameof(LanguageAPI),
     nameof(LoadoutAPI),
     nameof(PrefabAPI),
-    nameof(UnlockableAPI)
+    nameof(UnlockableAPI),
+    nameof(CommandHelper)
 })]
     internal class SkillsLoader : BaseUnityPlugin
     {
@@ -51,15 +53,13 @@ namespace EggsSkills
         internal static List<Type> extraStates = new List<Type>();
         private void Awake()
         {
-            Debug.Log("Thanks SOM for the icon work <3");
+            Utilities.LogToConsole("Thanks SOM for the icon work <3");
+            CommandHelper.AddToConsoleWhenReady();
             Configuration.LoadConfig();
-            if (Configuration.ConfigEditingAgreement.Value)
-            {
-                Debug.Log("EggsSkills' config file has been edited");
-            }
             Assets.LoadResources();
             UnlocksRegistering.RegisterUnlockables();
             RegisterSkills();
+            Utilities.LogToConsole("EggsSkills fully loaded!");
         }
         private void RegisterSkills()
         {
@@ -112,7 +112,7 @@ namespace EggsSkills
                 foreach (SkillDef def in defList)
                 {
                     LoadoutAPI.AddSkillDef(def);
-                    Debug.Log("Skill: " + def.skillName + " Registered");
+                    Utilities.LogToConsole("Skill: " + def.skillName + " Registered");
                 }
                 foreach (Type skill in extraStates)
                 {
@@ -121,7 +121,7 @@ namespace EggsSkills
             }
             else
             {
-                Debug.Log("Did you really install my mod just to disable all the skills :(");
+                Utilities.LogToConsole("Did you really install my mod just to disable all the skills :(");
             }
         }
 

@@ -9,6 +9,7 @@ using EggsBuffs;
 using System.Linq;
 using System.Collections.Generic;
 using EggsSkills.Config;
+using EggsSkills.Utility;
 
 namespace EggsSkills.Resources
 {
@@ -46,12 +47,13 @@ namespace EggsSkills.Resources
                     {
                         ProjectileAPI.Add(proj);
                         PrefabAPI.RegisterNetworkPrefab(proj);
+                        Utilities.LogToConsole("Projectile: " + proj.name + " Registered");
                     }
                 }
             }
             else
             {
-                Debug.Log("No projectiles needed to be registered");
+                Utilities.LogToConsole("No projectiles needed to be registered");
             }
         }
         internal static void RegisterTeslaMine()

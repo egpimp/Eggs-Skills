@@ -1,6 +1,7 @@
 ﻿using EggsSkills.Config;
 using RoR2;
 using EggsSkills.Achievements;
+using EggsSkills.Utility;
 
 namespace EggsSkills.Unlocks
 {
@@ -20,50 +21,51 @@ namespace EggsSkills.Unlocks
 
         internal static void RegisterUnlockables()
         {
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableEngiSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableEngiSkills))
             {
                 EngiUnlockables();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableMageSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableMageSkills))
             {
                 ArtificerUnlockables();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableLoaderSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableLoaderSkills))
             {
                 LoaderUnlockables();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableCommandoSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableCommandoSkills))
             {
                 CommandoUnlockables();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableHuntressSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableHuntressSkills))
             {
                 HuntressUnlockables();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableBanditSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableBanditSkills))
             {
                 BanditUnlockables();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableToolbotSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableToolbotSkills))
             {
                 MulTUnlockables();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableMercSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableMercSkills))
             {
                 MercUnlockables();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableTreebotSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableTreebotSkills))
             {
                 RexUnlockables();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableCrocoSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableCrocoSkills))
             {
                 AcridUnlockables();
             }
-            if (Configuration.ConfigEditingAgreement.Value ? Configuration.EnableCaptainSkills.Value : true)
+            if (Configuration.GetConfigValue<bool>(Configuration.EnableCaptainSkills))
             {
                 CaptainUnlockables();
             }
+            Utilities.LogToConsole("Achievements registered");
         }
 
         internal static void EngiUnlockables()
