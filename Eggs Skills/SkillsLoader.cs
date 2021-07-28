@@ -25,7 +25,7 @@ namespace EggsSkills
 {
     [BepInDependency("com.Egg.EggsUtils", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "2.0.8")]
+    [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "2.0.9")]
     [R2APISubmoduleDependency(new string[]
 {
     nameof(ProjectileAPI),
@@ -528,6 +528,10 @@ namespace EggsSkills
             skillDefMagicBullet.skillDescriptionToken = "BANDIT_PRIMARY_MAGICBULLET_DESC";
             skillDefMagicBullet.skillName = "MagicBullet";
             skillDefMagicBullet.skillNameToken = "BANDIT_PRIMARY_MAGICBULLET_NAME";
+            skillDefMagicBullet.keywordTokens = new string[]
+            {
+                "KEYWORD_LUCKY"
+            };
 
             defList.Add(skillDefMagicBullet);
             Array.Resize(ref banditSkillFamilyPrimary.variants, banditSkillFamilyPrimary.variants.Length + 1);

@@ -1,6 +1,5 @@
 ﻿using EggsSkills.Config;
 using EntityStates.Bandit2.Weapon;
-using Facepunch.Steamworks.Callbacks;
 using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
@@ -59,9 +58,10 @@ namespace EggsSkills.EntityStates
                 falloffModel = BulletAttack.FalloffModel.None,
                 weapon = base.gameObject,
                 force = 50f,
-                hitCallback = CallBack
+                hitCallback = CallBack,
             };
             attack.Fire();
+            EffectManager.SimpleMuzzleFlash(assetRef.muzzleFlashPrefab, base.gameObject, this.assetRef.muzzleName, false);
         }
         public override void OnExit()
         {
@@ -101,17 +101,14 @@ namespace EggsSkills.EntityStates
                     HurtBox mainBox = hurtBox.hurtBoxGroup.mainHurtBox;
                     if (!hitHurtBoxes.Contains(mainBox))
                     {
-                        SimulateBullet(pos, mainBox);
                         this.hitHurtBoxes.Add(mainBox);
                         targetFound = true;
+                        this.recursion += 1;
+                        SimulateBullet(pos, mainBox);
                         break;
                     }
                 }
-                if (targetFound)
-                {
-                    this.recursion += 1;
-                }
-                else
+                if (!targetFound)
                 {
                     this.recursion = this.maxRecursion;
                 }
@@ -137,7 +134,7 @@ namespace EggsSkills.EntityStates
                     procCoefficient = 1f,
                     damageType = DamageType.Generic,
                     attacker = base.gameObject,
-                    crit = base.RollCrit(),
+                    crit = this.isCrit,
                     inflictor = base.gameObject,
                     position = box.transform.position
                 };

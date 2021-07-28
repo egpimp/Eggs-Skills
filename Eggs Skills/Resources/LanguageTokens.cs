@@ -60,7 +60,7 @@ namespace EggsSkills.Resources
 
             //Magic Bullet
             LanguageAPI.Add("BANDIT_PRIMARY_MAGICBULLET_NAME", "Magic Bullet");
-            LanguageAPI.Add("BANDIT_PRIMARY_MAGICBULLET_DESC", "Fire a bullet that deals <style=cIsDamage>200% damage</style>, and <style=cIsUtility>ricochets</style> to 1 nearby enemy for half damage.  Critical strikes are <style=cIsUtility>lucky (1)</style>");
+            LanguageAPI.Add("BANDIT_PRIMARY_MAGICBULLET_DESC", "Fire a bullet that deals <style=cIsDamage>200% damage</style>, and <style=cIsUtility>ricochets</style> to 1 nearby enemy for half damage.  Critical strikes are <style=cIsUtility>lucky: 1</style>");
 
             LanguageAPI.Add("BANDIT_HATUNLOCKABLE_ACHIEVEMENT_NAME", "Bandit: Hat trick");
             LanguageAPI.Add("BANDIT_HATUNLOCKABLE_ACHIEVEMENT_DESC", "As Bandit, kill 3 enemies in under 1 second");
@@ -142,7 +142,7 @@ namespace EggsSkills.Resources
 
             //Dash
             LanguageAPI.Add("COMMANDO_UTILITY_DASH_NAME", "Tactical Pursuit");
-            LanguageAPI.Add("COMMANDO_UTILITY_DASH_DESC", "<style=cIsUtility>Prepare: Secondary.</style> <style=cIsUtility>Dash</style> a short distance and become <style=cIsDamage>invulnerable</style> during and for a short period afterwards");
+            LanguageAPI.Add("COMMANDO_UTILITY_DASH_DESC", "<style=cIsDamage>Prepare: Secondary.</style> <style=cIsUtility>Dash</style> a short distance and become <style=cIsDamage>invulnerable</style> during and for a short period afterwards");
 
             LanguageAPI.Add("COMMANDO_PERSEVEREUNLOCKABLE_ACHIEVEMENT_NAME", "Commando: Perseverence");
             LanguageAPI.Add("COMMANDO_PERSEVEREUNLOCKABLE_ACHIEVEMENT_DESC", "As Commando, finish a teleporter event under 20% health");
