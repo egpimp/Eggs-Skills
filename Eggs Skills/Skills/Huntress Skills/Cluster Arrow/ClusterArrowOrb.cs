@@ -4,6 +4,8 @@ using RoR2;
 using RoR2.Projectile;
 using EggsSkills.Config;
 using System;
+using EggsUtils.Buffs;
+using UnityEngine.Networking;
 
 namespace EggsSkills.Orbs
 {
@@ -35,7 +37,10 @@ namespace EggsSkills.Orbs
                 Quaternion angle = Quaternion.LookRotation((Vector3.up + new Vector3(UnityEngine.Random.Range(-50f,50f)/100f,UnityEngine.Random.Range(-50f,50f)/100f,UnityEngine.Random.Range(-50f,50f)/100f)) * (!base.isCrit ? 1f : 1.25f));
                 var transform = target.transform;
                 var pos = transform.position;
-                ProjectileManager.instance.FireProjectile(Resources.Projectiles.bombletPrefab, new Vector3(pos.x, pos.y, pos.z), angle, attacker, damageValue * 0.8f, 50f, isCrit);
+                if (NetworkServer.active)
+                {
+                    ProjectileManager.instance.FireProjectile(Resources.Projectiles.bombletPrefab, new Vector3(pos.x, pos.y, pos.z), angle, attacker, damageValue * 0.8f, 50f, isCrit);
+                }
             }
         }
         private void Explode()

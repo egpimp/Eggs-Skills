@@ -16,16 +16,16 @@ using R2API.Utils;
 using EggsSkills.Unlocks;
 using System.Collections.Generic;
 using EggsSkills.Config;
-using EggsSkills.Utility;
+using EntityStates.Bandit2.Weapon;
 
 [module: UnverifiableCode]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
 
 namespace EggsSkills
 {
-    [BepInDependency("com.Egg.EggsBuffs", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInDependency("com.Egg.EggsUtils", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "2.0.7")]
+    [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "2.0.8")]
     [R2APISubmoduleDependency(new string[]
 {
     nameof(ProjectileAPI),
@@ -53,13 +53,13 @@ namespace EggsSkills
         internal static List<Type> extraStates = new List<Type>();
         private void Awake()
         {
-            Utilities.LogToConsole("Thanks SOM for the icon work <3");
+            EggsUtils.EggsUtils.LogToConsole("Thanks SOM for the icon work <3");
             CommandHelper.AddToConsoleWhenReady();
             Configuration.LoadConfig();
             Assets.LoadResources();
             UnlocksRegistering.RegisterUnlockables();
             RegisterSkills();
-            Utilities.LogToConsole("EggsSkills fully loaded!");
+            EggsUtils.EggsUtils.LogToConsole("EggsSkills fully loaded!");
         }
         private void RegisterSkills()
         {
@@ -112,7 +112,7 @@ namespace EggsSkills
                 foreach (SkillDef def in defList)
                 {
                     LoadoutAPI.AddSkillDef(def);
-                    Utilities.LogToConsole("Skill: " + def.skillName + " Registered");
+                    EggsUtils.EggsUtils.LogToConsole("Skill: " + def.skillName + " Registered");
                 }
                 foreach (Type skill in extraStates)
                 {
@@ -121,7 +121,7 @@ namespace EggsSkills
             }
             else
             {
-                Utilities.LogToConsole("Did you really install my mod just to disable all the skills :(");
+                EggsUtils.EggsUtils.LogToConsole("Did you really install my mod just to disable all the skills :(");
             }
         }
 
@@ -213,6 +213,7 @@ namespace EggsSkills
         {
             SkillLocator commandoSkillLocator = commandoRef.GetComponent<SkillLocator>();
             SkillFamily commandoSkillFamilyPrimary = commandoSkillLocator.primary.skillFamily;
+            SkillFamily commandoSkillFamilyUtility = commandoSkillLocator.utility.skillFamily;
 
             //Combat Shotgun
             SteppedSkillDef skillDefCombatshotgun = ScriptableObject.CreateInstance<SteppedSkillDef>();
@@ -239,6 +240,42 @@ namespace EggsSkills
                 skillDef = skillDefCombatshotgun,
                 unlockableDef = UnlocksRegistering.commandoShotgunUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefCombatshotgun.skillNameToken, false, null)
+            };
+
+            //Dash
+            SkillDef skillDefDash = ScriptableObject.CreateInstance<SkillDef>();
+            skillDefDash.activationState = new SerializableEntityStateType(typeof(CommandoDashEntity));
+            skillDefDash.activationStateMachineName = "Body";
+            skillDefDash.baseMaxStock = 2;
+            skillDefDash.baseRechargeInterval = 8f;
+            skillDefDash.beginSkillCooldownOnSkillEnd = true;
+            skillDefDash.fullRestockOnAssign = false;
+            skillDefDash.interruptPriority = InterruptPriority.PrioritySkill;
+            skillDefDash.isCombatSkill = false;
+            skillDefDash.mustKeyPress = true;
+            skillDefDash.canceledFromSprinting = false;
+            skillDefDash.cancelSprintingOnActivation = false;
+            skillDefDash.forceSprintDuringState = false;
+            skillDefDash.stockToConsume = 1;
+            skillDefDash.requiredStock = 1;
+            skillDefDash.rechargeStock = 1;
+            skillDefDash.icon = Resources.Sprites.dashIconS;
+            skillDefDash.skillDescriptionToken = "COMMANDO_UTILITY_DASH_DESC";
+            skillDefDash.skillName = "Dash";
+            skillDefDash.skillNameToken = "COMMANDO_UTILITY_DASH_NAME";
+            skillDefDash.keywordTokens = new string[]
+            {
+                "KEYWORD_AGILE",
+                "KEYWORD_PREPARE"
+            };
+
+            defList.Add(skillDefDash);
+            Array.Resize(ref commandoSkillFamilyUtility.variants, commandoSkillFamilyUtility.variants.Length + 1);
+            commandoSkillFamilyUtility.variants[commandoSkillFamilyUtility.variants.Length - 1] = new SkillFamily.Variant
+            {
+                skillDef = skillDefDash,
+                unlockableDef = UnlocksRegistering.commandoDashUnlockDef,
+                viewableNode = new ViewablesCatalog.Node(skillDefDash.skillNameToken, false, null)
             };
         }
 
@@ -444,6 +481,7 @@ namespace EggsSkills
         {
             SkillLocator banditSkillLocator = banditRef.GetComponent<SkillLocator>();
             SkillFamily banditSkillFamilyUtility = banditSkillLocator.utility.skillFamily;
+            SkillFamily banditSkillFamilyPrimary = banditSkillLocator.primary.skillFamily;
 
             //Thieves Cunning
             InvisOnSprintSkillDef skillDefInvisSprint = ScriptableObject.CreateInstance<InvisOnSprintSkillDef>();
@@ -465,6 +503,39 @@ namespace EggsSkills
                 skillDef = skillDefInvisSprint,
                 unlockableDef = UnlocksRegistering.banditInvisSprintUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefInvisSprint.skillNameToken, false, null)
+            };
+
+            //Magic bullet
+            ReloadSkillDef skillDefMagicBullet = ScriptableObject.CreateInstance<ReloadSkillDef>();
+            skillDefMagicBullet.activationState = new SerializableEntityStateType(typeof(MagicBulletEntity));
+            skillDefMagicBullet.reloadState = new SerializableEntityStateType(typeof(EnterReload));
+            skillDefMagicBullet.activationStateMachineName = "Weapon";
+            skillDefMagicBullet.baseMaxStock = 4;
+            skillDefMagicBullet.graceDuration = 0.8f;
+            skillDefMagicBullet.beginSkillCooldownOnSkillEnd = true;
+            skillDefMagicBullet.fullRestockOnAssign = false;
+            skillDefMagicBullet.isCombatSkill = true;
+            skillDefMagicBullet.mustKeyPress = true;
+            skillDefMagicBullet.reloadInterruptPriority = InterruptPriority.Any;
+            skillDefMagicBullet.canceledFromSprinting = true;
+            skillDefMagicBullet.cancelSprintingOnActivation = true;
+            skillDefMagicBullet.forceSprintDuringState = false;
+            skillDefMagicBullet.baseRechargeInterval = 0f;
+            skillDefMagicBullet.rechargeStock = 0;
+            skillDefMagicBullet.requiredStock = 1;
+            skillDefMagicBullet.stockToConsume = 1;
+            skillDefMagicBullet.icon = Resources.Sprites.magicBulletIconS;
+            skillDefMagicBullet.skillDescriptionToken = "BANDIT_PRIMARY_MAGICBULLET_DESC";
+            skillDefMagicBullet.skillName = "MagicBullet";
+            skillDefMagicBullet.skillNameToken = "BANDIT_PRIMARY_MAGICBULLET_NAME";
+
+            defList.Add(skillDefMagicBullet);
+            Array.Resize(ref banditSkillFamilyPrimary.variants, banditSkillFamilyPrimary.variants.Length + 1);
+            banditSkillFamilyPrimary.variants[banditSkillFamilyPrimary.variants.Length - 1] = new SkillFamily.Variant
+            {
+                skillDef = skillDefMagicBullet,
+                unlockableDef = UnlocksRegistering.banditMagicBulletUnlockDef,
+                viewableNode = new ViewablesCatalog.Node(skillDefMagicBullet.skillNameToken, false, null)
             };
         }
 

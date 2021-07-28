@@ -5,6 +5,7 @@ using EggsSkills.Resources;
 using EntityStates.Captain.Weapon;
 using RoR2.Stats;
 using EggsSkills.Config;
+using R2API;
 
 namespace EggsSkills.Achievements
 {

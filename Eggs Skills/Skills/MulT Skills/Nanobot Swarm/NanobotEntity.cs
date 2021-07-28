@@ -4,7 +4,7 @@ using RoR2.Projectile;
 using UnityEngine;
 using EntityStates.Toolbot;
 using EntityStates.GolemMonster;
-using EggsSkills.Utility;
+using EggsUtils.Helpers;
 
 namespace EggsSkills.EntityStates
 {
@@ -69,7 +69,7 @@ namespace EggsSkills.EntityStates
             Vector3 origHitPos = base.inputBank.GetAimRaycast(this.maxDist, out hit) ? hit.point : this.aimRay.GetPoint(this.maxDist);
             this.aimRay.origin = this.muzzleTransform.position;
             this.lineEffect.transform.parent = this.muzzleTransform;
-            this.aimRay.direction = Utilities.GetDirection(this.aimRay.origin, origHitPos);
+            this.aimRay.direction = Math.GetDirection(this.aimRay.origin, origHitPos);
             Vector3 newHitPos = Physics.Raycast(this.aimRay.origin, this.aimRay.direction, out hit, this.maxDist) ? hit.point : this.aimRay.GetPoint(this.maxDist);
             this.lineComponent.SetPositions(new Vector3[] { this.aimRay.origin, newHitPos});
         }

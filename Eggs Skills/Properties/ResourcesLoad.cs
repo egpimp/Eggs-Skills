@@ -1,8 +1,5 @@
-﻿using System;
-using UnityEngine;
-using Mono.Cecil;
+﻿using UnityEngine;
 using EggsSkills.Resources;
-using EggsSkills.Utility;
 
 namespace EggsSkills.Properties
 {
@@ -18,26 +15,15 @@ namespace EggsSkills.Properties
         }
         internal static void LoadMainAssetbundle()
         {
-            assetBundle = LoadAssetBundle(Resources.mainbundle);
+            assetBundle = (EggsUtils.Properties.Assets.LoadAssetBundle(Resources.eggsskillsbundle));
             if (assetBundle)
             {
-                Utilities.LogToConsole("Assetbundle successfully loaded");
+                EggsUtils.EggsUtils.LogToConsole("Assetbundle successfully loaded");
             }
             else
             {
-                Utilities.LogToConsole("Assetbundle failed to load");
+                EggsUtils.EggsUtils.LogToConsole("Assetbundle failed to load");
             }
-        }
-        internal static Sprite TexToSprite(Texture2D tex)
-        {
-            return Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-        }
-
-        internal static AssetBundle LoadAssetBundle(Byte[] resourceBytes)
-        {
-            if (resourceBytes == null) throw new ArgumentNullException(nameof(Resource));
-            var bundle = AssetBundle.LoadFromMemory(resourceBytes);
-            return bundle;
         }
     }
 }

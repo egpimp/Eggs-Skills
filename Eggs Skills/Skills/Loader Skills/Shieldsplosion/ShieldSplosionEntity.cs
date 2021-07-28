@@ -2,8 +2,8 @@
 using EntityStates;
 using UnityEngine;
 using EntityStates.JellyfishMonster;
-using EggsSkills.Utility;
 using EggsSkills.Config;
+using EggsUtils.Helpers;
 
 namespace EggsSkills.EntityStates
 {
@@ -28,11 +28,14 @@ namespace EggsSkills.EntityStates
         {
             float damageMod = (this.component.barrier / this.component.fullCombinedHealth) * this.damageCoefficient;
             float force = this.baseForce * (damageMod / 2);
-            float radius = this.baseRadius * Utilities.ConvertToRange(2f, 20f, 1f, 2f, damageMod);
+            float radius = this.baseRadius * Math.ConvertToRange(2f, 20f, 1f, 2f, damageMod);
 
             if (base.isAuthority)
             {
-                this.component.AddBarrier(-component.barrier);
+                if (this.shouldRemoveBarrier)
+                {
+                    this.component.AddBarrier(-component.barrier);
+                }
                 new BlastAttack
                 {
                     attacker = base.gameObject,

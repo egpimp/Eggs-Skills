@@ -5,11 +5,10 @@ using EntityStates;
 using RoR2.Projectile;
 using EggsSkills.EntityStates.TeslaMine.MineStates.ArmingStates;
 using R2API;
-using EggsBuffs;
+using EggsUtils.Buffs;
 using System.Linq;
 using System.Collections.Generic;
 using EggsSkills.Config;
-using EggsSkills.Utility;
 
 namespace EggsSkills.Resources
 {
@@ -47,18 +46,18 @@ namespace EggsSkills.Resources
                     {
                         ProjectileAPI.Add(proj);
                         PrefabAPI.RegisterNetworkPrefab(proj);
-                        Utilities.LogToConsole("Projectile: " + proj.name + " Registered");
+                        EggsUtils.EggsUtils.LogToConsole("Projectile: " + proj.name + " Registered");
                     }
                 }
             }
             else
             {
-                Utilities.LogToConsole("No projectiles needed to be registered");
+                EggsUtils.EggsUtils.LogToConsole("No projectiles needed to be registered");
             }
         }
         internal static void RegisterTeslaMine()
         {
-            teslaMinePrefab = UnityEngine.Resources.Load<GameObject>("prefabs/projectiles/engimine").InstantiateClone("TeslaMine");
+            teslaMinePrefab = UnityEngine.Resources.Load<GameObject>("prefabs/projectiles/engimine").InstantiateClone("TeslaMine", true);
             if (teslaMinePrefab)
             {
                 teslaMinePrefab.GetComponent<ProjectileSimple>().desiredForwardSpeed = 40f;
@@ -76,7 +75,7 @@ namespace EggsSkills.Resources
         }
         internal static void RegisterDebuffNade()
         {
-            debuffGrenadePrefab = UnityEngine.Resources.Load<GameObject>("prefabs/projectiles/engigrenadeprojectile").InstantiateClone("DebuffGrenade");
+            debuffGrenadePrefab = UnityEngine.Resources.Load<GameObject>("prefabs/projectiles/engigrenadeprojectile").InstantiateClone("DebuffGrenade", true);
             if (debuffGrenadePrefab)
             {
                 debuffGrenadePrefab.GetComponent<ProjectileSimple>().desiredForwardSpeed *= 1.5f;
@@ -85,7 +84,7 @@ namespace EggsSkills.Resources
                 debuffGrenadeExplosion.destroyOnWorld = true;
                 debuffGrenadeExplosion.blastRadius = Configuration.GetConfigValue<float>(Configuration.CaptainDebuffnadeRadius);
                 debuffGrenadeExplosion.falloffModel = BlastAttack.FalloffModel.Linear;
-                debuffGrenadeExplosion.blastProcCoefficient = BuffsLoading.ProcToDamageTypeEncoder(BuffsLoading.trackingOnHitIndex, 1f);
+                debuffGrenadeExplosion.blastProcCoefficient = BuffsLoading.ProcToDamageTypeEncoder(BuffsLoading.trackingOnHit.procIndex, 1f);
                 debuffGrenadeExplosion.impactEffect = UnityEngine.Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFXScavCannonImpactExplosion");
 
                 ProjectileDamage debuffGrenadeDamage = debuffGrenadePrefab.GetComponent<ProjectileDamage>();
@@ -96,7 +95,7 @@ namespace EggsSkills.Resources
         }
         internal static void RegisterNanoBeacon()
         {
-            nanoBeaconPrefab = UnityEngine.Resources.Load<GameObject>("prefabs/projectiles/toolbotgrenadelauncherprojectile").InstantiateClone("NanoBeacon");
+            nanoBeaconPrefab = UnityEngine.Resources.Load<GameObject>("prefabs/projectiles/toolbotgrenadelauncherprojectile").InstantiateClone("NanoBeacon", true);
             if (nanoBeaconPrefab)
             {
                 nanoBeaconPrefab.GetComponent<ProjectileSimple>().desiredForwardSpeed = 140f;
@@ -131,7 +130,7 @@ namespace EggsSkills.Resources
         }
         internal static void RegisterArrowBomblet()
         {
-            bombletPrefab = UnityEngine.Resources.Load<GameObject>("prefabs/projectiles/engigrenadeprojectile").InstantiateClone("ArrowBomblets");
+            bombletPrefab = UnityEngine.Resources.Load<GameObject>("prefabs/projectiles/engigrenadeprojectile").InstantiateClone("ArrowBomblets", true);
             if (bombletPrefab)
             {
                 bombletPrefab.GetComponent<ProjectileSimple>().desiredForwardSpeed /= 4;

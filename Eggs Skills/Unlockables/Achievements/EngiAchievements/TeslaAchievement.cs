@@ -3,6 +3,7 @@ using RoR2;
 using System;
 using UnityEngine;
 using EggsSkills.Config;
+using R2API;
 
 namespace EggsSkills.Achievements
 {

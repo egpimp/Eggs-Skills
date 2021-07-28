@@ -49,15 +49,15 @@ namespace EggsSkills.EntityStates
                 muzzleString = "MuzzleLeft";
                 base.PlayAnimation("Gesture Additive, Left", "FirePistol, Left");
             }
-            Fire(muzzleString, isCrit);
+            BulletFire(muzzleString, isCrit);
         }
-        private void Fire(string muzzleName, bool isCrit)
+        private void BulletFire(string muzzleName, bool isCrit)
         {
             Ray aimRay = base.GetAimRay();
             base.StartAimMode(aimRay, duration * 2f, false);
             if (base.isAuthority)
             {
-                BulletAttack bulletAttack = new BulletAttack
+                new BulletAttack
                 {
                     owner = base.gameObject,
                     weapon = base.gameObject,
@@ -75,12 +75,10 @@ namespace EggsSkills.EntityStates
                     hitEffectPrefab = this.hitEffectPrefab,
                     isCrit = isCrit,
                     HitEffectNormal = false,
-                    stopperMask = LayerIndex.world.mask,
                     smartCollision = true,
                     maxDistance = maxDist,
-                    damageType = DamageType.Generic
-                };
-                bulletAttack.Fire();
+                    damageType = DamageType.Generic,
+                }.Fire();
             }
             EffectManager.SimpleMuzzleFlash(muzzleEffectPrefab, base.gameObject, muzzleName, false);
             Util.PlaySound(FireShotgun.attackSoundString, base.gameObject);

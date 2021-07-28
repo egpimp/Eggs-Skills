@@ -3,7 +3,7 @@ using EntityStates;
 using UnityEngine;
 using System.Linq;
 using EntityStates.Treebot.Weapon;
-using EggsBuffs;
+using EggsUtils.Buffs;
 using EggsSkills.Config;
 
 namespace EggsSkills.EntityStates

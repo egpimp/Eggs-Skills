@@ -1,20 +1,18 @@
 ﻿using BepInEx.Configuration;
 using BepInEx;
-using EggsSkills.Utility;
 using UnityEngine;
 using System;
 using System.Linq;
 using RoR2;
 using System.Collections.Generic;
+using EggsUtils.Helpers;
 
 namespace EggsSkills.Config
 {
     internal static class Configuration
     {
-        private static string chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         private static ConfigFile configFile;
         private static string configCode;
-        private static int minCodeLength;
         //Main config options
         internal static ConfigEntry<bool> UnlockAll { get; private set; }
         internal static ConfigEntry<bool> ConfigEditingAgreement { get; private set; }
@@ -57,11 +55,17 @@ namespace EggsSkills.Config
         internal const float defaultBanditInvissprintBuffduration = 3f;
         internal static ConfigEntry<int> EngiTeslaminePulses { get; private set; }
         internal const int defaultEngiTeslaminePulses = 5;
+        internal static ConfigEntry<int> BanditMagicbulletLuckmod { get; private set; }
+        internal const int defaultMagicBulletLuckMod = 1;
+        internal static ConfigEntry<int> BanditMagicbulletRicochets { get; private set; }
+        internal const int defaultMagicBulletRicochets = 1;
+        internal static ConfigEntry<float> CommandoDashBuffTimer { get; private set; }
+        internal const float defaultCommandoDashBuffTimer = 1f;
         internal static void LoadConfig()
         {
             //Important configs
             configFile = new ConfigFile(Paths.ConfigPath + "/EggsSkills.cfg", true);
-            UnlockAll = configFile.Bind("Achievements", "UnlockAll", false, "Set to true to unlock all EggsSkills' achievements automatically.  Does not require ConfigEditingAgreement to be true to function.");
+            UnlockAll = configFile.Bind("Achievements", "UnlockAll", false, "Set to true to unlock all EggsSkills' achievements automatically.  Does not require ConfigEditingAgreement to be true to function");
             ConfigEditingAgreement = configFile.Bind("!Read this!", "ConfigEditingAgreement", false, "By setting this to true, you as the EggsSkills user agrees to not complain about bugs that may stem from mismatched configs.  Config values will automatically be applied as default unless this is set to true");
             EnableMageSkills = configFile.Bind("EnabledSkills", "EnableArtificerSkills", true, "Set to false to prevent EggsSkills' Artificer skills from listing");
             EnableBanditSkills = configFile.Bind("EnabledSkills", "EnableBanditSkills", true, "Set to false to prevent EggsSkills' Bandit skills from listing");
@@ -87,17 +91,20 @@ namespace EggsSkills.Config
             MercSlashHealthfraction = configFile.Bind("MercConfigs", "SlashportHealthFraction", defaultMercSlashHealthfraction, "What percent of missing health damage should Mercenary's Fatal Assault deal");
             TreebotPullRange = configFile.Bind("REXConfigs", "PullRange", defaultTreebotPullRange, "Radius at which enemies should be affected by REX's DIRECTIVE: Respire");
             TreebotPullSpeedcap = configFile.Bind("REXConfigs", "PullSpeedCap", defaultTreebotPullSpeedcap, "Should REX's DIRECTIVE: Respire be capped in how fast it can pulse");
-            ToolbotNanobotCountperenemy = configFile.Bind("MULTConfigs", "MULTNanobotCount", defaultToolbotNanobotCountperenemy, "How many nanobot swarms should MUL-T's Nanobot Swarm ability fire out per enemy");
+            ToolbotNanobotCountperenemy = configFile.Bind("MULTConfigs", "NanobotCount", defaultToolbotNanobotCountperenemy, "How many nanobot swarms should MUL-T's Nanobot Swarm ability fire out per enemy");
+            BanditMagicbulletLuckmod = configFile.Bind("BanditConfigs", "MagicBulletLuck", defaultMagicBulletLuckMod, "How much luck should be applied on critical strike from Bandit's Magic Bullet");
+            BanditMagicbulletRicochets = configFile.Bind("BanditConfigs", "MagicBulletRicochet", defaultMagicBulletRicochets, "What is the max amount of times Bandit's Magic Bullet should ricochet to new targets");
+            CommandoDashBuffTimer = configFile.Bind("CommandoConfigs", "DashBuffTimer", defaultCommandoDashBuffTimer, "How long should the Commando's Tactical Pursuit post-dash invulnerability last");
             if (ConfigEditingAgreement.Value)
             {
-                Utilities.LogToConsole("Config file has been edited");
+                EggsUtils.EggsUtils.LogToConsole("Config file has been edited");
             }
             else
             {
-                Utilities.LogToConsole("Config not changed, no values applied");
+                EggsUtils.EggsUtils.LogToConsole("Config not changed, no values applied");
             };
             PrepareConfigCode();
-            Utilities.LogToConsole("Config code is : " + configCode + ".  Type 'es_getconfig' in console to copy it to clipboard.");
+            EggsUtils.EggsUtils.LogToConsole("Config code is : " + configCode + ".  Type 'es_getconfig' in console to copy it to clipboard.");
         }
         internal static T GetConfigValue<T>(ConfigEntry<T> config)
         {
@@ -105,8 +112,8 @@ namespace EggsSkills.Config
         }
         private static void PrepareConfigCode()
         {
-            minCodeLength = configFile.Count;
             configCode = "";
+            int defaultCounter = 0;
             foreach (KeyValuePair<ConfigDefinition, ConfigEntryBase> config in configFile)
             {
                 ConfigEntryBase value = config.Value;
@@ -114,14 +121,27 @@ namespace EggsSkills.Config
                 string tempType;
                 if (value.BoxedValue.Equals(value.DefaultValue))
                 {
-                    tempType = "d";
+                    defaultCounter += 1;
+                    if(configFile.Last().Equals(config))
+                    {
+                        tempType = defaultCounter.ToString();
+                    }
+                    else
+                    {
+                        tempType = "";
+                    }
                 }
                 else
                 {
+                    if (defaultCounter > 0)
+                    {
+                        configCode += defaultCounter.ToString();
+                        defaultCounter = 0;
+                    }
                     tempType = value.BoxedValue.GetType().Name[0].ToString().ToLower();
                     if (tempType == "b")
                     {
-                        tempValue = (bool)value.BoxedValue ? "01" : "00";
+                        tempValue = (bool)value.BoxedValue ? "1" : "0";
                     }
                     else if (tempType == "s")
                     {
@@ -138,11 +158,12 @@ namespace EggsSkills.Config
                         }
                         else
                         {
-                            int whole = Convert.ToInt32(Math.Floor(floatValue));
-                            tempValue = ToBase62(whole);
+                            
+                            int whole = Convert.ToInt32(System.Math.Floor(floatValue));
+                            tempValue = Conversions.ToBase62(whole);
                             int dec = Convert.ToInt32((floatValue - whole) * 100f);
-                            value.BoxedValue = (float)whole + Convert.ToSingle(Math.Round(dec / 100f, 2));
-                            tempValue += ToBase62(dec);
+                            value.BoxedValue = (float)whole + Convert.ToSingle(System.Math.Round(dec / 100f, 2));
+                            tempValue += Conversions.ToBase62(dec);
                         }
                     }
                     else if (tempType == "i")
@@ -160,7 +181,7 @@ namespace EggsSkills.Config
                         }
                         else
                         {
-                            tempValue = ToBase62(intValue);
+                            tempValue = Conversions.ToBase62(intValue);
                         }
                     }
                     else if (tempType == "u")
@@ -178,7 +199,7 @@ namespace EggsSkills.Config
                         }
                         else
                         {
-                            tempValue = ToBase62(Convert.ToInt32(uintValue));
+                            tempValue = Conversions.ToBase62(Convert.ToInt32(uintValue));
                         }
                     }
                 }
@@ -191,47 +212,68 @@ namespace EggsSkills.Config
         {
             PrepareConfigCode();
             GUIUtility.systemCopyBuffer = configCode;
-            Utilities.LogToConsole(configCode + " Copied to clipboard");
+            EggsUtils.EggsUtils.LogToConsole(configCode + " Copied to clipboard");
         }
         internal static void LoadConfigCode(string code)
         {
-            
             int length = code.Length;
             int pointer = 0;
             int section = 0;
-            foreach (KeyValuePair<ConfigDefinition,ConfigEntryBase> config in configFile)
+            int numDefaults = 0;
+            foreach (KeyValuePair<ConfigDefinition, ConfigEntryBase> config in configFile)
             {
                 ConfigEntryBase configEntry = config.Value;
-                string pointed = code[pointer].ToString();
-                pointer += 1;
-                if (pointed == "d")
+                char pointed = code[pointer];
+                int num;
+                bool isLast = false;
+                if (numDefaults == 0)
                 {
-                    section = 0;
+                    while (int.TryParse(code.Substring(pointer, section + 1), out num))
+                    {
+                        section += 1;
+                        numDefaults = num;
+                        if(pointer + section >= code.Length)
+                        {
+                            isLast = true;
+                            break;
+                        }
+                    }
+                    if(section > 0)
+                    {
+                        pointer += section - (isLast ? 1 : 0);
+                        section = 0;
+                    }
+                }
+                if (numDefaults > 0)
+                {
+                    numDefaults -= 1;
                     configEntry.BoxedValue = configEntry.DefaultValue;
+                    continue;
                 }
-                else if (pointed == "b")
+                pointer += 1;
+                if (pointed == Convert.ToChar("b"))
+                {
+                    section = 1;
+                    configEntry.BoxedValue = code.Substring(pointer, section) == "1";
+                }
+                else if (pointed == Convert.ToChar("s"))
                 {
                     section = 2;
-                    configEntry.BoxedValue = code.Substring(pointer, section) == "01";
-                }
-                else if (pointed == "s")
-                {
-                    section = 2;
-                    int whole = FromBase62(code.Substring(pointer, section));
-                    int dec = FromBase62(code.Substring(pointer + section, section));
+                    int whole = Conversions.FromBase62(code.Substring(pointer, section));
+                    int dec = Conversions.FromBase62(code.Substring(pointer + section, section));
                     float convertedValue = whole + (dec / 100f);
                     configEntry.BoxedValue = convertedValue;
                     section += 2;
                 }
-                else if (pointed == "i")
+                else if (pointed == Convert.ToChar("i"))
                 {
                     section = 2;
-                    configEntry.BoxedValue = FromBase62(code.Substring(pointer, section));
+                    configEntry.BoxedValue = Conversions.FromBase62(code.Substring(pointer, section));
                 }
-                else if (pointed == "u")
+                else if (pointed == Convert.ToChar("u"))
                 {
                     section = 2;
-                    uint tempVal = (uint)FromBase62(code.Substring(pointer, section));
+                    uint tempVal = (uint) Conversions.FromBase62(code.Substring(pointer, section));
                     configEntry.BoxedValue = tempVal;
                 }
                 else
@@ -240,54 +282,20 @@ namespace EggsSkills.Config
                     return;
                 }
                 pointer += section;
+                section = 0;
             }
-            Utilities.LogToConsole("Config code loaded, restart game for it to take effect");
+            EggsUtils.EggsUtils.LogToConsole("Config code loaded, restart game for it to take effect");
             configFile.Save();
             configFile.Reload();
         }
 
-        private static string ToBase62(int num)
-        {
-            string str = "";
-            int tempNum = num;
-            while(tempNum > 0)
-            {
-                int val = tempNum % 62;
-                tempNum /= 62;
-                str = chars.ElementAt(val) + str;
-            }
-            while(str.Length < 2)
-            {
-                str = "0" + str;
-            }
-            return str;
-        }
-        private static int FromBase62(string str)
-        {
-            int val = 0;
-            for (int i = 0; i < str.Length; i++ )
-            {
-                char indexedChar = str[i];
-                int num;
-                if(str.Contains(indexedChar))
-                {
-                    int base62Val = chars.IndexOf(indexedChar);
-                    num = Convert.ToInt32(base62Val * (Math.Pow(62, (1 - i))));
-                }
-                else
-                {
-                    num = 0;
-                }
-                val += num;
-            }
-            return val;
-        }
-        [ConCommand(commandName = "ES_getconfig", flags = ConVarFlags.None, helpText = "Get your EggsSkills config setting as a shareable string.")]
+
+        [ConCommand(commandName = "es_getconfig", flags = ConVarFlags.None, helpText = "Get your EggsSkills config setting as a shareable string.")]
         private static void CCGetEggSkillsConfig(ConCommandArgs args)
         {
             GetConfigCode();
         }
-        [ConCommand(commandName = "ES_setconfig", flags = ConVarFlags.None, helpText ="Sets all of your EggsSkills config values to the one indicated by the config code.  If none specified, will take value from clipboard.  Case sensitive.  Must restart game to take effect.")]
+        [ConCommand(commandName = "es_setconfig", flags = ConVarFlags.None, helpText ="Sets all of your EggsSkills config values to the one indicated by the config code.  If none specified, will take value from clipboard.  Case sensitive.  Must restart game to take effect.")]
         private static void CCSetEggSkillsConfig(ConCommandArgs args)
         {
             string code = "";
@@ -304,14 +312,9 @@ namespace EggsSkills.Config
                 code = GUIUtility.systemCopyBuffer;
             }
             code.Trim();
-            if (code.Length < minCodeLength)
-            {
-                Debug.LogError("Invalid code length");
-                return;
-            }
             foreach (char _ in code)
             {
-                if (!chars.Contains(_))
+                if (!Conversions.chars.Contains(_))
                 {
                     Debug.LogError("Invalid character : " + _);
                     return;

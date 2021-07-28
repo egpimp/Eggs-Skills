@@ -63,9 +63,9 @@ namespace EggsSkills.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] mainbundle {
+        internal static byte[] eggsskillsbundle {
             get {
-                object obj = ResourceManager.GetObject("mainbundle", resourceCulture);
+                object obj = ResourceManager.GetObject("eggsskillsbundle", resourceCulture);
                 return ((byte[])(obj));
             }
         }

@@ -4,6 +4,7 @@ using UnityEngine;
 using EggsSkills.Resources;
 using System.Collections.Generic;
 using EggsSkills.Config;
+using R2API;
 
 namespace EggsSkills.Achievements
 {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using RoR2;
-using EggsBuffs;
+using EggsUtils.Buffs;
 using EntityStates.Bandit2;
 using EggsSkills.Config;
 

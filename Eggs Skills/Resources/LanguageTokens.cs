@@ -1,7 +1,7 @@
 ﻿using R2API;
 using EggsSkills.Config;
 using System;
-using EggsSkills.Utility;
+using IL.RoR2;
 
 namespace EggsSkills.Resources
 {
@@ -20,7 +20,7 @@ namespace EggsSkills.Resources
             MercTokens();
             EngiTokens();
             MulTTokens();
-            Utilities.LogToConsole("Language tokens loaded");
+            EggsUtils.EggsUtils.LogToConsole("Language tokens loaded");
         }
         internal static void ArtificerTokens()
         {
@@ -57,12 +57,22 @@ namespace EggsSkills.Resources
             LanguageAPI.Add("BANDIT_FLANKEDUNLOCKABLE_UNLOCKABLE_NAME", "Bandit: Flanked");
             LanguageAPI.Add("BANDIT_FLANKEDUNLOCKABLE_REWARD_ID", "Invis3Min");
             LanguageAPI.Add("BANDIT_FLANKEDUNLOCKABLE_ACHIEVEMENT_ID", "Invis3Min");
+
+            //Magic Bullet
+            LanguageAPI.Add("BANDIT_PRIMARY_MAGICBULLET_NAME", "Magic Bullet");
+            LanguageAPI.Add("BANDIT_PRIMARY_MAGICBULLET_DESC", "Fire a bullet that deals <style=cIsDamage>200% damage</style>, and <style=cIsUtility>ricochets</style> to 1 nearby enemy for half damage.  Critical strikes are <style=cIsUtility>lucky (1)</style>");
+
+            LanguageAPI.Add("BANDIT_HATUNLOCKABLE_ACHIEVEMENT_NAME", "Bandit: Hat trick");
+            LanguageAPI.Add("BANDIT_HATUNLOCKABLE_ACHIEVEMENT_DESC", "As Bandit, kill 3 enemies in under 1 second");
+            LanguageAPI.Add("BANDIT_HATUNLOCKABLE_UNLOCKABLE_NAME", "Bandit: Hat trick");
+            LanguageAPI.Add("BANDIT_HATUNLOCKABLE_REWARD_ID", "3FastKill");
+            LanguageAPI.Add("BANDIT_HATUNLOCKABLE_ACHIEVEMENT_ID", "3FastKill");
         }
         internal static void CaptainTokens()
         {
             //Captain
             LanguageAPI.Add("CAPTAIN_SECONDARY_DEBUFFNADE_NAME", "MK-4 Tracking Grenade");
-            LanguageAPI.Add("CAPTAIN_SECONDARY_DEBUFFNADE_DESC", "Fire a grenade that deals <style=cIsDamage>250% Damage</style> and inflicts <style=cArtifact>tracking</style> on enemies in a wide area for <style=cIsDamage>5 seconds</style>");
+            LanguageAPI.Add("CAPTAIN_SECONDARY_DEBUFFNADE_DESC", "Launch a grenade that deals <style=cIsDamage>250% Damage</style> and inflicts <style=cArtifact>tracking</style> on enemies in a wide area for <style=cIsDamage>5 seconds</style>");
 
             LanguageAPI.Add("CAPTAIN_SUPPORTUNLOCKABLE_ACHIEVEMENT_NAME", "Captain: My own backup");
             LanguageAPI.Add("CAPTAIN_SUPPORTUNLOCKABLE_ACHIEVEMENT_DESC", "As Captain, complete a stage past stage 3 without having deployed any orbital beacons");
@@ -129,6 +139,16 @@ namespace EggsSkills.Resources
             LanguageAPI.Add("COMMANDO_BULLETUNLOCKABLE_UNLOCKABLE_NAME", "Commando: 65% More Bullet");
             LanguageAPI.Add("COMMANDO_BULLETUNLOCKABLE_REWARD_ID", "20KillSpree");
             LanguageAPI.Add("COMMANDO_BULLETUNLOCKABLE_ACHIEVEMENT_ID", "20KillSpree");
+
+            //Dash
+            LanguageAPI.Add("COMMANDO_UTILITY_DASH_NAME", "Tactical Pursuit");
+            LanguageAPI.Add("COMMANDO_UTILITY_DASH_DESC", "<style=cIsUtility>Prepare: Secondary.</style> <style=cIsUtility>Dash</style> a short distance and become <style=cIsDamage>invulnerable</style> during and for a short period afterwards");
+
+            LanguageAPI.Add("COMMANDO_PERSEVEREUNLOCKABLE_ACHIEVEMENT_NAME", "Commando: Perseverence");
+            LanguageAPI.Add("COMMANDO_PERSEVEREUNLOCKABLE_ACHIEVEMENT_DESC", "As Commando, finish a teleporter event under 20% health");
+            LanguageAPI.Add("COMMANDO_PERSEVEREUNLOCKABLE_UNLOCKABLE_NAME", "Commando: Perseverence");
+            LanguageAPI.Add("COMMANDO_PERSEVEREUNLOCKABLE_REWARD_ID", "CLowHealthTeleporter");
+            LanguageAPI.Add("COMMANDO_PERSEVEREUNLOCKABLE_ACHIEVEMENT_ID", "CLowHealthTeleporter");
         }
         internal static void MercTokens()
         {
