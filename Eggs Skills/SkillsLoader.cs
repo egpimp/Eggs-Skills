@@ -25,7 +25,7 @@ namespace EggsSkills
 {
     [BepInDependency("com.Egg.EggsUtils", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "2.0.9")]
+    [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "2.0.10")]
     [R2APISubmoduleDependency(new string[]
 {
     nameof(ProjectileAPI),

@@ -3,6 +3,7 @@ using EntityStates.Bandit2.Weapon;
 using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace EggsSkills.EntityStates
 {
@@ -126,7 +127,7 @@ namespace EggsSkills.EntityStates
                 origin = origin + dir * dist
             };
             EffectManager.SpawnEffect(assetRef.tracerEffectPrefab, data, true);
-            if(base.isAuthority)
+            if (NetworkServer.active)
             {
                 DamageInfo info = new DamageInfo
                 {

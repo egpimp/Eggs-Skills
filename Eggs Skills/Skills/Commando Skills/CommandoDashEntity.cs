@@ -17,7 +17,7 @@ namespace EggsSkills.EntityStates
         {
             base.OnEnter();
             base.characterDirection.forward = ((base.inputBank.moveVector == Vector3.zero) ? base.characterDirection.forward : base.inputBank.moveVector).normalized;
-            base.characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, this.dashDuration + this.buffDuration);
+            base.characterBody.AddTimedBuff(RoR2Content.Buffs.Immune, this.dashDuration + this.buffDuration);
             this.dashSpeed = this.baseDashSpeed * base.moveSpeedStat;
             if (base.skillLocator.secondary.stock < base.skillLocator.secondary.maxStock)
             {
