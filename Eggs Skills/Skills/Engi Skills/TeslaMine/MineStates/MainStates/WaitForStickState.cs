@@ -1,39 +1,39 @@
 ﻿using EntityStates.Engi.Mine;
 using UnityEngine.Networking;
 using EggsSkills.EntityStates.TeslaMine.MineStates.ArmingStates;
-using RoR2;
 using RoR2.Projectile;
-using System.EnterpriseServices;
-using UnityEngine.Events;
-using EntityStates;
+
 
 namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
 {
     public class TeslaWaitForStick : BaseMineState
     {
+        //Duh yes should stick
         public override bool shouldStick => true;
+        //No reverting please
         public override bool shouldRevertToWaitForStickOnSurfaceLost => false;
+        //Helps find targets
         private ProjectileSphereTargetFinder targetFinder;
+
         public override void OnEnter()
         {
             base.OnEnter();
+            //Network check
             if(NetworkServer.active)
             {
+                //Set the arming machine state
                 armingStateMachine.SetNextState(new TeslaArmingUnarmedState());
+                //Establish the targetfnider
                 targetFinder = GetComponent<ProjectileSphereTargetFinder>();
-                if(targetFinder)
-                {
-                    targetFinder.enabled = false;
-                };
+                //It should exist, and if it does disable it cause we ain't searching yet
+                if(targetFinder) targetFinder.enabled = false;
             }
         }
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if(NetworkServer.active && projectileStickOnImpact.stuck)
-            {
-                outer.SetNextState(new TeslaArmState());
-            };
+            //Network check and only if object is stuck set it to the arming state
+            if(NetworkServer.active && projectileStickOnImpact.stuck) outer.SetNextState(new TeslaArmState());
         }
     }
 }

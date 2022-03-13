@@ -55,7 +55,7 @@ namespace EggsSkills.Achievements
             if (base.localUser != null && base.localUser.cachedBody != null && base.isUserAlive && base.meetsBodyRequirement)
             {
                 float healthFraction = 0.95f * base.localUser.cachedBody.healthComponent.fullCombinedHealth;
-                if (base.localUser.cachedBody.healthComponent.barrier >= healthFraction)
+                if (base.localUser.cachedBody.healthComponent.barrier > healthFraction)
                 {
                     base.Grant();
                 }

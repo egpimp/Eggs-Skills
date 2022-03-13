@@ -1,7 +1,4 @@
 ﻿using EntityStates.Engi.Mine;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EggsSkills.EntityStates.TeslaMine.MineStates.ArmingStates
 {
@@ -9,6 +6,7 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.ArmingStates
     {
         public override void OnEnter()
         {
+            //We're doing the same thing here afaik, just take an existing unarmed state and use the variables from it since it works
             var goodState = new MineArmingUnarmed();
             if(string.IsNullOrEmpty(pathToChildToEnable))
             {

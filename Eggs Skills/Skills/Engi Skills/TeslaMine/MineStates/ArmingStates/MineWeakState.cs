@@ -10,6 +10,7 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.ArmingStates
     {
         public override void OnEnter()
         {
+            //Steal variables again
             var goodState = new MineArmingWeak();
             if(string.IsNullOrEmpty(pathToChildToEnable))
             {
@@ -21,11 +22,13 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.ArmingStates
                 forceScale = goodState.forceScale;
                 damageScale = goodState.damageScale;
             }
+            //No trigger radius at this stage
             triggerRadius = 0f;
             base.OnEnter();
         }
         public override void FixedUpdate()
         {
+            //Set it to having been fully armed after 0.5 seconds
             base.FixedUpdate();
             if(NetworkServer.active && 0.5 <= fixedAge)
             {

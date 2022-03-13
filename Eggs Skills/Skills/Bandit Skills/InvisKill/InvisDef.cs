@@ -13,11 +13,12 @@ namespace EggsSkills.SkillDefs
     {
         public override BaseSkillInstanceData OnAssigned([NotNull] GenericSkill skillSlot)
         {
-            InvisHandler invisHandler = skillSlot.characterBody.gameObject.GetComponent<InvisHandler>();
-            if(!invisHandler)
-            {
-                invisHandler = skillSlot.characterBody.gameObject.AddComponent<InvisHandler>();
-            };
+            //Setup the invishandler
+            InvisHandler invisHandler;
+            //If it exists nab it, otherwise make it
+            if(skillSlot.characterBody.gameObject.TryGetComponent(out invisHandler)) invisHandler = skillSlot.characterBody.gameObject.AddComponent<InvisHandler>();
+            
+            //Return instance data with the invishandler
             return new InvisOnSprintSkillDef.InstanceData
             {
                 banditInvisHandler = skillSlot.GetComponent<InvisHandler>()
@@ -25,19 +26,24 @@ namespace EggsSkills.SkillDefs
         }
         private static bool IsInvis([NotNull] GenericSkill skillSlot)
         {
+            //Grab the handler
             InvisHandler invisHandler = ((InvisOnSprintSkillDef.InstanceData)skillSlot.skillInstanceData).banditInvisHandler;
+            //If it exists, check if invis, otherwise return false
             return (invisHandler != null) ? invisHandler.IsInvis() : false;
         }
         public override bool CanExecute([NotNull] GenericSkill skillSlot)
         {
+            //Can never execute
             return false;
         }
         public override bool IsReady([NotNull] GenericSkill skillSlot)
         {
+            //This makes it highlight only when player is invis
             return base.IsReady(skillSlot) && InvisOnSprintSkillDef.IsInvis(skillSlot);
         }
         protected class InstanceData : SkillDef.BaseSkillInstanceData
         {
+            //Instancedata
             public InvisHandler banditInvisHandler;
         }
     }

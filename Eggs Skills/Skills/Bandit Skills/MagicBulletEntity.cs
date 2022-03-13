@@ -3,95 +3,119 @@ using EntityStates.Bandit2.Weapon;
 using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace EggsSkills.EntityStates
 {
     class MagicBulletEntity : Bandit2FirePrimaryBase
     {
+        //We use this for referencing assets
         private Bandit2FireRifle assetRef = new Bandit2FireRifle();
 
+        //Whether or not it crit
         private bool isCrit;
 
+        //The actual bulletattack
         private BulletAttack attack;
 
-        private float baseCoef = 2f;
+        //Damage coefficient of the skill
+        private readonly float baseDamageCoef = 2f;
+        //End damage of the ability
         private float damage;
+        //Proc coefficient of the skill
+        private readonly float procCoef = 1f;
 
-        private int luckyMod = Configuration.GetConfigValue<int>(Configuration.BanditMagicbulletLuckmod);
-        private int maxRecursion = Configuration.GetConfigValue<int>(Configuration.BanditMagicbulletRicochets);
+        //How many richochets
+        private readonly int maxRecursion = Configuration.GetConfigValue(Configuration.BanditMagicbulletRicochets);
+        //Helps us track how many more times it can bounce
         private int recursion;
 
+        //Keeps track of enemies we already hit
         private List<HurtBox> hitHurtBoxes = new List<HurtBox>();
+
+        //Called on entry of the skillstate
         public override void OnEnter()
         {
+            //Base duration of the skill + animations
             this.baseDuration = 1.2f;
+            //Lowest possible duration of the skill
             this.minimumBaseDuration = 0.1f;
+            //Find out if it is critting
             this.isCrit = base.RollCrit();
-            if (isCrit)
-            {
-                base.characterBody.master.luck += this.luckyMod;
-            }
+            //It hasn't recursed yet, set to 0
             this.recursion = 0;
+            //Do standard onenter stuff
             base.OnEnter();
         }
 
+        //Called by base onenter, we replace it with our own special bullet
         public override void FireBullet(Ray aimRay)
         {
+            //Play the sound
             Util.PlaySound(this.assetRef.fireSoundString, base.gameObject);
-            this.damage = this.baseCoef * base.characterBody.damage;
-            attack = new BulletAttack
+            //Network check
+            if (base.isAuthority)
             {
-                origin = aimRay.origin,
-                aimVector = aimRay.direction,
-                tracerEffectPrefab = this.assetRef.tracerEffectPrefab,
-                muzzleName = this.assetRef.muzzleName,
-                hitEffectPrefab = this.assetRef.hitEffectPrefab,
-                damage = this.damage,
-                owner = base.gameObject,
-                isCrit = this.isCrit,
-                bulletCount = 1u,
-                maxDistance = 1000f,
-                smartCollision = true,
-                procCoefficient = 1f,
-                damageType = DamageType.Generic,
-                HitEffectNormal = false,
-                falloffModel = BulletAttack.FalloffModel.None,
-                weapon = base.gameObject,
-                force = 50f,
-                hitCallback = CallBack,
-            };
-            attack.Fire();
+                //Set the damage accordingly
+                this.damage = this.baseDamageCoef * base.characterBody.damage;
+                //Create the bulletattack
+                attack = new BulletAttack
+                {
+                    origin = aimRay.origin,
+                    aimVector = aimRay.direction,
+                    tracerEffectPrefab = this.assetRef.tracerEffectPrefab,
+                    muzzleName = this.assetRef.muzzleName,
+                    hitEffectPrefab = this.assetRef.hitEffectPrefab,
+                    damage = this.damage,
+                    owner = base.gameObject,
+                    isCrit = this.isCrit,
+                    maxDistance = 1000f,
+                    smartCollision = true,
+                    procCoefficient = this.procCoef,
+                    HitEffectNormal = false,
+                    falloffModel = BulletAttack.FalloffModel.None,
+                    weapon = base.gameObject,
+                    hitCallback = CallBack
+                };
+                //Fire
+                attack.Fire();
+            }
+            //Apply the muzzleflash
             EffectManager.SimpleMuzzleFlash(assetRef.muzzleFlashPrefab, base.gameObject, this.assetRef.muzzleName, false);
         }
+        
+        //Called when exiting the skill state
         public override void OnExit()
         {
-            if (isCrit)
-            {
-                base.characterBody.master.luck -= this.luckyMod;
-            }
+            //Proceed with standard exit procedure
             base.OnExit();
         }
 
-        private bool CallBack(ref BulletAttack.BulletHit hitInfo)
+        //Event called when bullet hits anything
+        private bool CallBack(BulletAttack bulletattack, ref BulletAttack.BulletHit hitInfo)
         {
-            bool result = this.attack.DefaultHitCallback(ref hitInfo);
+            //Run the hit as normal first
+            bool hit = BulletAttack.DefaultHitCallbackImplementation(bulletattack, ref hitInfo);
+            //Pos is where the bullet hit
             Vector3 pos = hitInfo.point;
-            if (hitInfo.hitHurtBox)
-            {
-                hitHurtBoxes.Add(hitInfo.hitHurtBox.hurtBoxGroup.mainHurtBox);
-            }
+            //If it actually hit something, add the main hurtbox of them to our list
+            if (hitInfo.hitHurtBox) hitHurtBoxes.Add(hitInfo.hitHurtBox.hurtBoxGroup.mainHurtBox);
+            //Execute our richochet code
             HandleRichochet(pos);
-            return result;
+            //Return the previously found hit / nohit
+            return hit;
         }
 
-
+        //What to do when attempting to richochet the bullet
         private void HandleRichochet(Vector3 pos)
         {
+            //Hold variable for whether target is found or not
             bool targetFound = false;
-            if (recursion < maxRecursion)
+            //If the bullet can still recurse...
+            if (this.recursion < this.maxRecursion)
             {
+                //Half the damage
                 this.damage /= 2;
+                //Loop via spheresearch
                 foreach (HurtBox hurtBox in new SphereSearch
                 {
                     origin = pos,
@@ -99,36 +123,49 @@ namespace EggsSkills.EntityStates
                     mask = LayerIndex.entityPrecise.mask,
                 }.RefreshCandidates().FilterCandidatesByHurtBoxTeam(TeamMask.GetEnemyTeams(base.teamComponent.teamIndex)).OrderCandidatesByDistance().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes())
                 {
+                    //Get the mainhurtbox
                     HurtBox mainBox = hurtBox.hurtBoxGroup.mainHurtBox;
+                    //If the mainhurtbox is not yet in our list...
                     if (!hitHurtBoxes.Contains(mainBox))
                     {
+                        //Add the found target to the list
                         this.hitHurtBoxes.Add(mainBox);
+                        //Trip the bool flag
                         targetFound = true;
+                        //Mark that we recursed 
                         this.recursion += 1;
+                        //Emulate the bullet, because doing another ACTUAL bullet attack is hell and a half, also feels bad to have all your shots miss cause some geometry
                         SimulateBullet(pos, mainBox);
+                        //End the loop cause we found our target
                         break;
                     }
                 }
-                if (!targetFound)
-                {
-                    this.recursion = this.maxRecursion;
-                }
+                //If we go through having never found a target, max out the recursion so the loop ends completely
+                if(!targetFound) this.recursion = this.maxRecursion;
             }
         }
 
+        //Just like the simulations
         private void SimulateBullet(Vector3 pos, HurtBox box)
         {
+            //Get the pos of where the bullet hit
             Vector3 origin = pos;
-            Vector3 dir = (box.transform.position - pos).normalized;
-            float dist = Vector3.Distance(box.transform.position, pos);
+            //Get the direction between enemy and bullet hit
+            Vector3 dir = EggsUtils.Helpers.Math.GetDirection(origin, box.transform.position);
+            //Distance between enemy and bullet hit pos
+            float dist = Vector3.Distance(box.transform.position, origin);
+            //Setup effectdata
             EffectData data = new EffectData()
             {
                 start = origin,
-                origin = origin + dir * dist
+                origin = box.transform.position
             };
+            //Play the effect
             EffectManager.SpawnEffect(assetRef.tracerEffectPrefab, data, true);
-            if (NetworkServer.active)
+            //Network check
+            if (base.isAuthority)
             {
+                //Setup damage info
                 DamageInfo info = new DamageInfo
                 {
                     damage = this.damage,
@@ -139,11 +176,14 @@ namespace EggsSkills.EntityStates
                     inflictor = base.gameObject,
                     position = box.transform.position
                 };
+                //Deal our the damage
                 box.healthComponent.TakeDamage(info);
+                //Run both onhit things so it actually onhits
                 GlobalEventManager.instance.OnHitEnemy(info, box.gameObject);
                 GlobalEventManager.instance.OnHitAll(info, box.gameObject);
-                this.HandleRichochet(box.transform.position);
             }
+            //Continue to attempt richocet
+            this.HandleRichochet(box.transform.position);
         }
     }
 }

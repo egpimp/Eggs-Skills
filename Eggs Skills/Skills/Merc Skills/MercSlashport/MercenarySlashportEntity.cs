@@ -9,62 +9,60 @@ namespace EggsSkills.EntityStates
 {
     class SlashportEntity : BaseState
     {
-        private float collisionDistance;
-        private float damageCoefficient = 7f;
+        //Skill damage coeffficient
+        private readonly float damageCoefficient = 7f;
+        //For handling cast time
         private float[] findMax;
-        private float healthFraction = Configuration.GetConfigValue<float>(Configuration.MercSlashHealthfraction);
-        private float procCoefficient = 1f;
+        //Missing health% fraction
+        private readonly float healthFraction = Configuration.GetConfigValue(Configuration.MercSlashHealthfraction);
+        //Proc coeff of ability
+        private readonly float procCoefficient = 1f;
 
-        private GameObject swingEffectPrefab = UnityEngine.Resources.Load<GameObject>("Prefabs/effects/MercSwordSlashWhirlwind");
-
+        //Target hurtbox
         private HurtBox targetBox;
 
-        private InputBankTest inputBank;
-
+        //Tracker
         private MercSlashportTracker mercTracker;
 
-        private string slashChildName = "GroundLight3Slash";
-
-        private Vector3 lookDir;
-        private Vector3 teleDir;
-        private Vector3 telePos;
+        //String for slash fx to play
+        private readonly string slashChildName = "GroundLight3Slash";
 
         public override void OnEnter()
         {            
             base.OnEnter();
             {
+                //This keeps the duration being too low and messing shit up
                 this.findMax = new float[] { 0.4f / base.attackSpeedStat, 0.1f };
+                //Grab the tracker
                 this.mercTracker = base.GetComponent<MercSlashportTracker>();
+                //Get the target hitbox
                 this.targetBox = this.mercTracker.trackingTarget;
-                this.inputBank = base.GetComponent<InputBankTest>();
+                //If the target still exists
                 if (this.targetBox.healthComponent.alive && targetBox)
                 {
-                    TemporaryOverlay temporaryOverlay = base.GetModelTransform().gameObject.AddComponent<TemporaryOverlay>();
-                    temporaryOverlay.duration = 0.1f;
-                    temporaryOverlay.animateShaderAlpha = true;
-                    temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
-                    temporaryOverlay.destroyComponentOnEnd = true;
-                    temporaryOverlay.originalMaterial = UnityEngine.Resources.Load<Material>("Materials/matHuntressFlashBright");
-                    temporaryOverlay.AddToCharacerModel(base.GetModelTransform().GetComponent<CharacterModel>());
-                    base.PlayAnimation("FullBody, Override", "EvisPrep", "EvisPrep.playbackRate", findMax.Max());
+                    //Handle overlay shit
+                    HandleOverlay();
+                    //Setup fx data
                     EffectData effectData = new EffectData
                     {
                         rotation = Util.QuaternionSafeLookRotation(this.inputBank.aimDirection),
                         origin = base.characterBody.corePosition
                     };
+                    //Play the blink fx
                     EffectManager.SpawnEffect(EvisDash.blinkPrefab, effectData, false);
+                    //Play the sound
                     Util.PlaySound(EvisDash.beginSoundString, base.gameObject);
+                    //Stop the movement during the cast
                     base.characterMotor.walkSpeedPenaltyCoefficient = 0f;
-                    base.SmallHop(base.characterMotor, 10f);
-                    this.collisionDistance = base.characterBody.radius + this.targetBox.collider.contactOffset;
-                    this.teleDir = (base.characterBody.corePosition - this.targetBox.transform.position).normalized;
-                    this.teleDir -= new Vector3(0, this.teleDir.y, 0);
-                    this.telePos = this.targetBox.transform.position + (this.teleDir * this.collisionDistance);
-                    base.characterMotor.Motor.SetPosition(this.telePos);
-                    this.lookDir = (this.telePos - this.targetBox.transform.position).normalized;
-                    base.characterDirection.forward = this.lookDir * -1;
+                    base.characterMotor.velocity = Vector3.zero;
+                    //Pop the player in the air
+                    base.SmallHop(base.characterMotor, 5f);
+                    //Handle the calculations
+                    HandleTeleport();
+                    //Check network
                     if (base.isAuthority)
                     {
+                        //Fire off first micro attack, no damage but applies expose and stuns them for the damage
                         new BlastAttack
                         {
                             position = this.targetBox.transform.position,
@@ -79,22 +77,30 @@ namespace EggsSkills.EntityStates
                             procCoefficient = 0f,
                             falloffModel = BlastAttack.FalloffModel.None,
                             damageColorIndex = default,
-                            damageType = DamageType.ApplyMercExpose,
+                            damageType = DamageType.ApplyMercExpose | DamageType.Stun1s,
                             attackerFiltering = default
                         }.Fire();
                     }
                 }
             }
         }
+
         public override void OnExit()
         {
+            //Play the animation
+            base.PlayAnimation("Gesture, Additive", "GroundLight3", "GroundLight.playbackRate", findMax.Max());
+            base.PlayAnimation("Gesture, Override", "GroundLight3", "GroundLight.playbackRate", findMax.Max());
+            //If the target actually exists
             if (this.targetBox)
             {
+                //Check network
                 if (base.isAuthority)
                 {
+                    //Fire off blastattack centered on target (Cleaner than overlapattack)
                     new BlastAttack
                     {
                         position = this.targetBox.transform.position,
+                        //Actual damage + % missing hp
                         baseDamage = base.damageStat * this.damageCoefficient + this.healthFraction * this.targetBox.healthComponent.missingCombinedHealth,
                         baseForce = 0,
                         radius = 0.5f,
@@ -110,25 +116,65 @@ namespace EggsSkills.EntityStates
                         attackerFiltering = default
                     }.Fire();
                 }
-                EffectManager.SimpleMuzzleFlash(this.swingEffectPrefab, base.gameObject, this.slashChildName, false);
-                base.PlayAnimation("FullBody, Override", "GroundLight3", "GroundLight.playbackRate", 1f);
+                //Fire off the swing fx
+                EffectManager.SimpleMuzzleFlash(GroundLight.comboSwingEffectPrefab, base.gameObject, this.slashChildName, true);
+                //Fire off sounds
                 Util.PlaySound(GroundLight.finisherAttackSoundString, base.gameObject);
                 Util.PlaySound(EvisDash.endSoundString, base.gameObject);
             }
+            //Fix the walkspeed no matter what
             base.characterMotor.walkSpeedPenaltyCoefficient = 1;
             base.OnExit();
         }
+
+        private void HandleTeleport()
+        {
+            //Get the distance to place merc at
+            float collisionDistance = base.characterBody.radius + this.targetBox.collider.contactOffset;
+            //Get the direction to teleport in
+            Vector3 teleDir = EggsUtils.Helpers.Math.GetDirection(base.characterBody.corePosition, this.targetBox.transform.position);
+            //Cut the Y component
+            teleDir -= new Vector3(0, teleDir.y, 0);
+            //Find the position to place the player at at; target position, - collision distance towards player original position
+            Vector3 telePos = this.targetBox.transform.position + (-teleDir * collisionDistance);
+            //Set the position
+            base.characterMotor.Motor.SetPosition(telePos);
+            //Set look direction towards enemy for effect
+            base.characterDirection.forward = teleDir;
+        }
+
+        private void HandleOverlay()
+        {
+            //Setup the overlay
+            TemporaryOverlay temporaryOverlay = base.GetModelTransform().gameObject.AddComponent<TemporaryOverlay>();
+            //Set the duration
+            temporaryOverlay.duration = 0.1f;
+            //Animate the curve
+            temporaryOverlay.animateShaderAlpha = true;
+            temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+            //Destroy it on end
+            temporaryOverlay.destroyComponentOnEnd = true;
+            //Set the material
+            temporaryOverlay.originalMaterial = LegacyResourcesAPI.Load<Material>("Materials/matHuntressFlashBright");
+            //Add to the character model
+            temporaryOverlay.AddToCharacerModel(base.GetModelTransform().GetComponent<CharacterModel>());
+        }
+
         public override void FixedUpdate()
         {
             base.FixedUpdate();
+            //Check the duration and network
             if (base.fixedAge >= findMax.Max() && base.isAuthority)
             {
+                //Set next state
                 this.outer.SetNextStateToMain();
                 return;
             };
         }
+
         public override InterruptPriority GetMinimumInterruptPriority()
         {
+            //Can only be interrupted if frozen
             return InterruptPriority.Frozen;
         }
     }

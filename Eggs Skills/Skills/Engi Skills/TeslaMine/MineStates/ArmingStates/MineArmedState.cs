@@ -1,7 +1,4 @@
 ﻿using EntityStates.Engi.Mine;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EggsSkills.EntityStates.TeslaMine.MineStates.ArmingStates
 {
@@ -9,16 +6,18 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.ArmingStates
     {
         public override void OnEnter()
         {
+            //Imma be honest, I don't understand most of this shit, it's just standard mine arming stuff tho
             var goodState = new MineArmingFull();
-            if(string.IsNullOrEmpty(pathToChildToEnable))
+            //Actually maybe, we're taking an existing mine state that works and stealing it's variables, I think
+            if(string.IsNullOrEmpty(base.pathToChildToEnable))
             {
-                pathToChildToEnable = goodState.pathToChildToEnable;
-                onEnterSfxPlaybackRate = goodState.onEnterSfxPlaybackRate;
-                onEnterSfx = goodState.onEnterSfx;
-                triggerRadius = goodState.triggerRadius;
-                blastRadiusScale = goodState.blastRadiusScale;
-                forceScale = goodState.forceScale;
-                damageScale = goodState.damageScale;
+                base.pathToChildToEnable = goodState.pathToChildToEnable;
+                base.onEnterSfxPlaybackRate = goodState.onEnterSfxPlaybackRate;
+                base.onEnterSfx = goodState.onEnterSfx;
+                base.triggerRadius = goodState.triggerRadius;
+                base.blastRadiusScale = goodState.blastRadiusScale;
+                base.forceScale = goodState.forceScale;
+                base.damageScale = goodState.damageScale;
             }
             base.OnEnter();
         }

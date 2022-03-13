@@ -8,99 +8,126 @@ namespace EggsSkills.EntityStates
 {
     class AcridPurgeEntity : BaseState
     {
-        private float blightDamageCoefficient = 3f;
-        private float detonationRadius = Configuration.GetConfigValue<float>(Configuration.CrocoPurgeBaseradius);
-        private float healthFraction = 0.1f;
-        private float maxTrackingDistance = 5000f;
-        private float poisonDamageCoefficient = 2.5f;
-        private float procCoefficient = 1f;
+        //Damage coefficient for blight effect
+        private readonly float blightDamageCoefficient = 3f;
+        //Detonation radius
+        private readonly float detonationRadius = Configuration.GetConfigValue(Configuration.CrocoPurgeBaseradius);
+        //Health fraction for poison effect
+        private readonly float healthFraction = 0.1f;
+        //Max distance for finding poisoned targets
+        private readonly float maxTrackingDistance = 5000f;
+        //Damage coefficient for poison effect
+        private readonly float poisonDamageCoefficient = 2.5f;
+        //Overall proc coefficient
+        private readonly float procCoefficient = 1f;
 
-        private GameObject bodyPrefab = UnityEngine.Resources.Load<GameObject>("prefabs/effects/impacteffects/CrocoDiseaseImpactEffect");
+        //Effect to be played on use
+        private GameObject bodyPrefab = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/CrocoDiseaseImpactEffect");
+
         public override void OnEnter()
         {
+            //Do normal onenter things first
             base.OnEnter();
+            //Play the animation
+            base.PlayAnimation("Gesture, Mouth", "FireSpit", "FireSpit.playbackRate", 1f);
+            //Spheresearch for enemies in range, starting from doggo foots
+            foreach (HurtBox hurtBox in new SphereSearch
             {
-                base.PlayAnimation("Gesture, Mouth", "FireSpit", "FireSpit.playbackRate", 1f);
-                foreach (HurtBox hurtBox in new SphereSearch
+                origin = base.characterBody.footPosition,
+                radius = this.maxTrackingDistance,
+                mask = LayerIndex.entityPrecise.mask
+            }.RefreshCandidates().FilterCandidatesByHurtBoxTeam(TeamMask.GetEnemyTeams(base.teamComponent.teamIndex)).OrderCandidatesByDistance().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes())
+            {
+                //Get the characterbody cause we need buffcount
+                CharacterBody body = hurtBox.healthComponent.body;
+                //Get health component for poison calc
+                HealthComponent component = hurtBox.healthComponent;
+                //If they have the poison debuff...
+                if(body.HasBuff(RoR2Content.Buffs.Poisoned))
                 {
-                    origin = base.characterBody.footPosition,
-                    radius = this.maxTrackingDistance,
-                    mask = LayerIndex.entityPrecise.mask
-                }.RefreshCandidates().FilterCandidatesByHurtBoxTeam(TeamMask.GetEnemyTeams(base.teamComponent.teamIndex)).OrderCandidatesByDistance().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes())
+                    //Network check
+                    if (base.isAuthority)
+                    {
+                        //Make blast attack and fire it at pos of all enemies
+                        new BlastAttack
+                        {
+                            position = body.corePosition,
+                            baseDamage = component.fullHealth * this.healthFraction + base.damageStat * this.poisonDamageCoefficient,
+                            baseForce = 0f,
+                            radius = this.detonationRadius,
+                            attacker = base.gameObject,
+                            inflictor = base.gameObject,
+                            teamIndex = base.teamComponent.teamIndex,
+                            crit = base.RollCrit(),
+                            procChainMask = default,
+                            procCoefficient = this.procCoefficient,
+                            falloffModel = BlastAttack.FalloffModel.None,
+                            damageColorIndex = default,
+                            damageType = DamageType.Generic,
+                            attackerFiltering = default
+                        }.Fire();
+                    }
+                    //Play sfx at enemies
+                    EffectManager.SimpleSoundEffect(BaseLeap.landingSound.index, body.footPosition, true);
+                    //Vfx data
+                    EffectData bodyEffectData = new EffectData
+                    {
+                        origin = body.corePosition,
+                        color = Color.green,
+                        scale = this.detonationRadius
+                    };
+                    //Play vfx at enemies
+                    EffectManager.SpawnEffect(bodyPrefab, bodyEffectData, true);
+                }
+                //Otherwise if they are blighted...
+                else if(body.HasBuff(RoR2Content.Buffs.Blight))
                 {
-                    CharacterBody body = hurtBox.healthComponent.body;
-                    HealthComponent component = hurtBox.healthComponent;
-                    if(body.HasBuff(RoR2Content.Buffs.Poisoned))
+                    //Network check
+                    if (base.isAuthority)
                     {
-                        if (base.isAuthority)
+                        //Make blast attack and fire it also at pos of all enemies affected
+                        new BlastAttack
                         {
-                            new BlastAttack
-                            {
-                                position = body.corePosition,
-                                baseDamage = component.fullHealth * this.healthFraction + base.damageStat * this.poisonDamageCoefficient,
-                                baseForce = 0f,
-                                radius = this.detonationRadius,
-                                attacker = base.gameObject,
-                                inflictor = base.gameObject,
-                                teamIndex = base.teamComponent.teamIndex,
-                                crit = base.RollCrit(),
-                                procChainMask = default,
-                                procCoefficient = this.procCoefficient,
-                                falloffModel = BlastAttack.FalloffModel.None,
-                                damageColorIndex = default,
-                                damageType = DamageType.Generic,
-                                attackerFiltering = default
-                            }.Fire();
-                        }
-                        EffectManager.SimpleSoundEffect(BaseLeap.landingSound.index, body.footPosition, true);
-                        EffectData bodyEffectData = new EffectData
-                        {
-                            origin = body.corePosition,
-                            color = Color.green,
-                            scale = this.detonationRadius
-                        };
-                        EffectManager.SpawnEffect(bodyPrefab, bodyEffectData, true);
+                            position = body.corePosition,
+                            baseDamage = base.damageStat * (this.blightDamageCoefficient * body.GetBuffCount(RoR2Content.Buffs.Blight)),
+                            baseForce = 0f,
+                            radius = this.detonationRadius,
+                            attacker = base.gameObject,
+                            inflictor = base.gameObject,
+                            teamIndex = base.teamComponent.teamIndex,
+                            crit = base.RollCrit(),
+                            procChainMask = default,
+                            procCoefficient = 1,
+                            falloffModel = BlastAttack.FalloffModel.None,
+                            damageColorIndex = default,
+                            damageType = DamageType.Generic,
+                            attackerFiltering = default
+                        }.Fire();
                     }
-                    else if(body.HasBuff(RoR2Content.Buffs.Blight))
+                    //Play sfx at enemy pos
+                    EffectManager.SimpleSoundEffect(BaseLeap.landingSound.index, body.footPosition, true);
+                    //Setup vfx data
+                    EffectData bodyEffectData = new EffectData
                     {
-                        if (base.isAuthority)
-                        {
-                            new BlastAttack
-                            {
-                                position = body.corePosition,
-                                baseDamage = base.damageStat * (this.blightDamageCoefficient * body.GetBuffCount(RoR2Content.Buffs.Blight)),
-                                baseForce = 0f,
-                                radius = this.detonationRadius,
-                                attacker = base.gameObject,
-                                inflictor = base.gameObject,
-                                teamIndex = base.teamComponent.teamIndex,
-                                crit = base.RollCrit(),
-                                procChainMask = default,
-                                procCoefficient = 1,
-                                falloffModel = BlastAttack.FalloffModel.None,
-                                damageColorIndex = default,
-                                damageType = DamageType.Generic,
-                                attackerFiltering = default
-                            }.Fire();
-                        }
-                        EffectManager.SimpleSoundEffect(BaseLeap.landingSound.index, body.footPosition, true);
-                        EffectData bodyEffectData = new EffectData
-                        {
-                            origin = body.corePosition,
-                            color = Color.yellow,
-                            scale = this.detonationRadius
-                        };
-                        EffectManager.SpawnEffect(bodyPrefab, bodyEffectData, true);
-                    }
+                        origin = body.corePosition,
+                        color = Color.yellow,
+                        scale = this.detonationRadius
+                    };
+                    //Play vfx data at enemy positions
+                    EffectManager.SpawnEffect(bodyPrefab, bodyEffectData, true);
                 }
             }
         }
         public override void FixedUpdate()
         {
+            //Run base fixedupdate stuff
             base.FixedUpdate();
+            //If the skill has been going on for 1/10 seconds and network check....
             if(base.fixedAge >= 0.1f && base.isAuthority)
             {
+                //Set state back to main state
                 this.outer.SetNextStateToMain();
+                //Return
                 return;
             };
         }

@@ -35,6 +35,7 @@ namespace EggsSkills.Resources
 
         internal static void LoadIcons()
         {
+            //Artifact of an attempt at something but it turned out to be not needed.  Harder to fix so w/e
             isHd = "hd";
             CommandoIcons();
             ArtificerIcons();
@@ -54,6 +55,7 @@ namespace EggsSkills.Resources
             //Shotgun
             Texture2D shotgunIcon = Assets.assetBundle.LoadAsset<Texture2D>("texcommandoshotgun" + isHd);
             shotgunIconS = EggsUtils.Properties.Assets.TexToSprite(shotgunIcon);
+            //Dash
             Texture2D dashIcon = Assets.assetBundle.LoadAsset<Texture2D>("texdash" + isHd);
             dashIconS = EggsUtils.Properties.Assets.TexToSprite(dashIcon);
         }

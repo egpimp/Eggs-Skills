@@ -73,59 +73,59 @@ namespace EggsSkills.Unlocks
 
         internal static void EngiUnlockables()
         {
-            engiTeslaUnlockDef = UnlockableAPI.AddUnlockable<TeslaMineAchievement>(true);
+            engiTeslaUnlockDef = UnlockableAPI.AddUnlockable<TeslaMineAchievement>();
         }
         
         internal static void ArtificerUnlockables()
         {
-            artificerZapportUnlockDef = UnlockableAPI.AddUnlockable<ZapportAchievement>(true);
+            artificerZapportUnlockDef = UnlockableAPI.AddUnlockable<ZapportAchievement>();
         }
 
         internal static void LoaderUnlockables()
         {
-            loaderShieldsplosionUnlockDef = UnlockableAPI.AddUnlockable<BarrierAchievement>(true);
+            loaderShieldsplosionUnlockDef = UnlockableAPI.AddUnlockable<BarrierAchievement>();
         }
 
         internal static void CommandoUnlockables()
         {
-            commandoShotgunUnlockDef = UnlockableAPI.AddUnlockable<ShotgunAchievement>(true);
-            commandoDashUnlockDef = UnlockableAPI.AddUnlockable<DashAchievement>(true);
+            commandoShotgunUnlockDef = UnlockableAPI.AddUnlockable<ShotgunAchievement>();
+            commandoDashUnlockDef = UnlockableAPI.AddUnlockable<DashAchievement>();
         }
 
         internal static void HuntressUnlockables()
         {
-            huntressClusterarrowUnlockDef = UnlockableAPI.AddUnlockable<BombArrowAchievement>(true);
+            huntressClusterarrowUnlockDef = UnlockableAPI.AddUnlockable<BombArrowAchievement>();
         }
 
         internal static void BanditUnlockables()
         {
-            banditInvisSprintUnlockDef = UnlockableAPI.AddUnlockable<InvisSprintAchievement>(true);
-            banditMagicBulletUnlockDef = UnlockableAPI.AddUnlockable<MagicBulletAchievement>(true);
+            banditInvisSprintUnlockDef = UnlockableAPI.AddUnlockable<InvisSprintAchievement>();
+            banditMagicBulletUnlockDef = UnlockableAPI.AddUnlockable<MagicBulletAchievement>();
         }
 
         internal static void MulTUnlockables()
         {
-            multNanobeaconUnlockDef = UnlockableAPI.AddUnlockable<NanoBotAchievement>(true);
+            multNanobeaconUnlockDef = UnlockableAPI.AddUnlockable<NanoBotAchievement>();
         }
 
         internal static void MercUnlockables()
         {
-            mercSlashportUnlockDef = UnlockableAPI.AddUnlockable<SlashportAchievement>(true);
+            mercSlashportUnlockDef = UnlockableAPI.AddUnlockable<SlashportAchievement>();
         }
 
         internal static void AcridUnlockables()
         {
-            acridExpungeUnlockDef = UnlockableAPI.AddUnlockable<ExpungeAchievement>(true);
+            acridExpungeUnlockDef = UnlockableAPI.AddUnlockable<ExpungeAchievement>();
         }
 
         internal static void CaptainUnlockables()
         {
-            captainDebuffnadeUnlockDef = UnlockableAPI.AddUnlockable<DebuffnadeAchievement>(true);
+            captainDebuffnadeUnlockDef = UnlockableAPI.AddUnlockable<DebuffnadeAchievement>();
         }
 
         internal static void RexUnlockables()
         {
-            rexRootUnlockDef = UnlockableAPI.AddUnlockable<RootAchievement>(true);
+            rexRootUnlockDef = UnlockableAPI.AddUnlockable<RootAchievement>();
         }
     }
 }
