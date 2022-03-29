@@ -16,9 +16,6 @@
     <Reference Include="0Harmony20">
       <HintPath>..\libs\0Harmony20.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\libs\Assembly-CSharp.dll</HintPath>
-    </Reference>
     <Reference Include="BepInEx">
       <HintPath>..\libs\BepInEx.dll</HintPath>
     </Reference>
@@ -64,8 +61,8 @@
     <Reference Include="LegacyResourcesAPI">
       <HintPath>..\libs\LegacyResourcesAPI.dll</HintPath>
     </Reference>
-    <Reference Include="MMHOOK_Assembly-CSharp">
-      <HintPath>..\libs\MMHOOK_Assembly-CSharp.dll</HintPath>
+    <Reference Include="MMHOOK_RoR2">
+      <HintPath>..\libs\MMHOOK_RoR2.dll</HintPath>
     </Reference>
     <Reference Include="ModLoader">
       <HintPath>..\libs\ModLoader.dll</HintPath>

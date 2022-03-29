@@ -18,7 +18,6 @@ namespace EggsSkills.Resources
         //List for holding all of the projectiles we add
         internal static List<GameObject> projList = new List<GameObject>();
 
-
         //Prefab for huntress cluster-bomb arrow bomblets
         internal static GameObject bombletPrefab;
         //Prefab for captain tracking grenade

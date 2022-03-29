@@ -4,6 +4,7 @@ using UnityEngine;
 using EntityStates.JellyfishMonster;
 using EggsSkills.Config;
 using EggsUtils.Helpers;
+using UnityEngine.Networking;
 
 namespace EggsSkills.EntityStates
 {
@@ -43,11 +44,11 @@ namespace EggsSkills.EntityStates
             float force = this.baseForce * (damageMod / 2);
             //Radius is based on damage, tripled at max barrier
             float radius = this.baseRadius * Math.ConvertToRange(2f, this.damageCoefficient, 1f, this.maxRadiusMult, damageMod);
+            //If barrier should be removed, remove it
+            if (this.shouldRemoveBarrier && NetworkServer.active) this.component.AddBarrier(-component.barrier);
             //Network check
             if (base.isAuthority)
             {
-                //If barrier should be removed, remove it
-                if (this.shouldRemoveBarrier) this.component.AddBarrier(-component.barrier);
                 //Perform the balst attack
                 new BlastAttack
                 {

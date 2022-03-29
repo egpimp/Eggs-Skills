@@ -66,7 +66,7 @@ namespace EggsSkills.Achievements
 
         private void DamageChecker(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
-            if (damageInfo.attacker)
+            if (damageInfo.attacker && damageInfo.attacker.GetComponent<CharacterBody>())
             {
                 if (base.isUserAlive && base.meetsBodyRequirement)
                 {

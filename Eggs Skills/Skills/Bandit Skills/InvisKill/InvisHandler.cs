@@ -3,6 +3,7 @@ using RoR2;
 using EggsUtils.Buffs;
 using EntityStates.Bandit2;
 using EggsSkills.Config;
+using UnityEngine.Networking;
 
 namespace EggsSkills
 {
@@ -24,6 +25,9 @@ namespace EggsSkills
         //Counts down while sprinting before invisible
         private float timeTilInvis;
 
+        //Input bank
+        private InputBankTest bank;
+
         private GenericSkill utilitySlot;
         private void Start()
         {
@@ -35,13 +39,19 @@ namespace EggsSkills
             this.utilitySlot = this.characterBody.skillLocator.utility;
             //Set invis to false
             this.isInvis = false;
+            //nab input bank
+            this.bank = base.GetComponent<InputBankTest>();
         }
         internal void MakeInvis()
         {
-            //Add cloak
-            this.characterBody.AddBuff(RoR2Content.Buffs.Cloak);
-            //Add cloak speed boost
-            this.characterBody.AddBuff(RoR2Content.Buffs.CloakSpeed);
+            //Execute server only
+            if (NetworkServer.active)
+            {
+                //Add cloak
+                this.characterBody.AddBuff(RoR2Content.Buffs.Cloak);
+                //Add cloak speed boost
+                this.characterBody.AddBuff(RoR2Content.Buffs.CloakSpeed);
+            }
             //Flag as invis
             this.isInvis = true;
             //Reset time-to-invis timer
@@ -53,12 +63,15 @@ namespace EggsSkills
         }
         internal void RemoveInvis()
         {
-            //Remove the cloak buff
-            this.characterBody.RemoveBuff(RoR2Content.Buffs.Cloak);
-            //Remove the cloak speed boost
-            this.characterBody.RemoveBuff(RoR2Content.Buffs.CloakSpeed);
-            //Give the post-cloak buff
-            this.characterBody.AddTimedBuff(BuffsLoading.buffDefCunning, this.buffDuration);
+            if (NetworkServer.active)
+            {
+                //Remove the cloak buff
+                this.characterBody.RemoveBuff(RoR2Content.Buffs.Cloak);
+                //Remove the cloak speed boost
+                this.characterBody.RemoveBuff(RoR2Content.Buffs.CloakSpeed);
+                //Give the post-cloak buff
+                this.characterBody.AddTimedBuff(BuffsLoading.buffDefCunning, this.buffDuration);
+            }
             //Take off a stock of the ability
             this.utilitySlot.DeductStock(1);
             //Flag as visible
@@ -96,6 +109,9 @@ namespace EggsSkills
 
             //If invis, don't count the cooldown yet
             if(this.isInvis) this.utilitySlot.rechargeStopwatch = this.holdTimer;
+
+            //Lastly, kill invis if m2 is used because they're agile I guess
+            if (this.bank.skill2.down && this.isInvis) this.RemoveInvis();
         }
         internal bool IsInvis()
         {

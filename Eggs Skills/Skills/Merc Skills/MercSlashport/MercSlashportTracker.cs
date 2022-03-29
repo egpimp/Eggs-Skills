@@ -90,7 +90,7 @@ namespace EggsSkills
             //Sort by distance
             this.search.sortMode = BullseyeSearch.SortMode.Distance;
             //Max dist and angle, dist based on speed
-            this.search.maxDistanceFilter = this.maxTrackingDistance * (this.characterBody.moveSpeed / 7);
+            this.search.maxDistanceFilter = this.maxTrackingDistance * 1;
             this.search.maxAngleFilter = this.maxTrackingAngle;
             //Refresh the targets
             this.search.RefreshCandidates();

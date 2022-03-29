@@ -16,7 +16,7 @@ namespace EggsSkills.SkillDefs
             //Setup the invishandler
             InvisHandler invisHandler;
             //If it exists nab it, otherwise make it
-            if(skillSlot.characterBody.gameObject.TryGetComponent(out invisHandler)) invisHandler = skillSlot.characterBody.gameObject.AddComponent<InvisHandler>();
+            if(!skillSlot.characterBody.gameObject.TryGetComponent(out invisHandler)) invisHandler = skillSlot.characterBody.gameObject.AddComponent<InvisHandler>();
             
             //Return instance data with the invishandler
             return new InvisOnSprintSkillDef.InstanceData

@@ -3,6 +3,7 @@ using EntityStates;
 using EntityStates.Croco;
 using RoR2;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace EggsSkills.EntityStates
 {
@@ -115,6 +116,11 @@ namespace EggsSkills.EntityStates
                     };
                     //Play vfx data at enemy positions
                     EffectManager.SpawnEffect(bodyPrefab, bodyEffectData, true);
+                }
+                if(NetworkServer.active)
+                {
+                    body.ClearTimedBuffs(RoR2Content.Buffs.Poisoned);
+                    body.ClearTimedBuffs(RoR2Content.Buffs.Blight);
                 }
             }
         }

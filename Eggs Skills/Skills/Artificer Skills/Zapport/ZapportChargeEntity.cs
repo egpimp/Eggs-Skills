@@ -47,6 +47,12 @@ namespace EggsSkills.EntityStates
         private float ranStopwatch;
         //Num to reset to when timer counts down
         private readonly float ranStopwatchMax = 0.05f;
+        //Additive multiplier per stock consumed.  Note we calc radius slightly differently because it scales waaaaay too hard otherwise
+        private readonly float stockBonusPerMultiplier = 1.5f;
+        private readonly float stockBonusRadiusPerMultiplier = 1.2f;
+        //Actual multiplier once calculated
+        private float stockMultiplier = 1f;
+        private float stockRadiusMultiplier = 1f;
 
         //Where my kersplodey go indicator
         private GameObject areaIndicator;
@@ -74,6 +80,14 @@ namespace EggsSkills.EntityStates
             this.areaIndicator = Object.Instantiate(ArrowRain.areaIndicatorPrefab);
             //Activate the area indicator
             this.areaIndicator.SetActive(true);
+            //Calculate the stock bonus with multiplier and remaining stocks
+            if (base.skillLocator.utility.stock > 0)
+            {
+                this.stockMultiplier = this.stockBonusPerMultiplier * base.skillLocator.utility.stock;
+                this.stockRadiusMultiplier = this.stockBonusRadiusPerMultiplier * base.skillLocator.utility.stock;
+            }
+            //Deduct the stocks
+            base.skillLocator.utility.RemoveAllStocks();
             //Play the charging sound
             Util.PlaySound(ChargeTrackingBomb.chargingSoundString, base.gameObject);
         }
@@ -102,7 +116,7 @@ namespace EggsSkills.EntityStates
             //Originally for testing purposes, it was actually more fun this way though so welcome to the age of holding max charge
             if (chargePercent >= 1f) chargePercent = 1f;
             //Calculate the radius, convert the charge percent (0.2 to 1) to the radius mult (1 to 2.5)
-            this.radius = this.baseRadius * EggsUtils.Helpers.Math.ConvertToRange(0f, 1f, 1f, this.maxRadiusMult, this.chargePercent);
+            this.radius = this.baseRadius * EggsUtils.Helpers.Math.ConvertToRange(0f, 1f, 1f, this.maxRadiusMult, this.chargePercent) * this.stockRadiusMultiplier;
             //Recalculate the intended move pos
             this.RecalculatePos();
             //Adjust indicator accordingly
@@ -114,6 +128,7 @@ namespace EggsSkills.EntityStates
             base.characterMotor.walkSpeedPenaltyCoefficient = 1f - this.chargePercent * this.maxMovePenalty;
             //Calculate damage, if not min charge the damage is the minimum, if min charge met damage is min + percent converted from 0.2 - 1 to 0 - 7.5, weirdness stops NREs
             this.damageMult = chargePercent >= minChargePercent ? baseDamageMult + EggsUtils.Helpers.Math.ConvertToRange(minChargePercent, 1f, 0f, this.maxDamageMultBonus, chargePercent) : baseDamageMult;
+            this.damageMult *= this.stockMultiplier;
 
             //If button is no longer held down AND the charge percent is at or above the minimum
             if ((!base.IsKeyDownAuthority() && this.chargePercent >= this.minChargePercent))
@@ -139,7 +154,7 @@ namespace EggsSkills.EntityStates
             //Should give us a amount of speed based on movespeed, 2x ms = 2x teleport distance
             float speedMod = base.moveSpeedStat / 7f;
             //Calculate distance with min distance, then add the bonus times the max distance times the speedmod.
-            this.distance = this.baseMinDistance + this.chargePercent * this.baseMaxDistanceBonus * speedMod;
+            this.distance = this.baseMinDistance + this.chargePercent * this.baseMaxDistanceBonus * speedMod * this.stockMultiplier;
             //Create the aimray
             Ray aimRay = GetAimRay();
             //Spherecast with the players radius, get all objects hit
@@ -188,7 +203,7 @@ namespace EggsSkills.EntityStates
 
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            return InterruptPriority.PrioritySkill;
+            return InterruptPriority.Frozen;
         }
     }
 }

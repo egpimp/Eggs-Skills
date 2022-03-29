@@ -5,6 +5,7 @@ using System.Linq;
 using EntityStates.Treebot.Weapon;
 using EggsUtils.Buffs;
 using EggsSkills.Config;
+using UnityEngine.Networking;
 
 namespace EggsSkills.EntityStates
 {
@@ -49,7 +50,7 @@ namespace EggsSkills.EntityStates
             //Set speed to the speed fraction
             base.characterMotor.walkSpeedPenaltyCoefficient = this.speedFraction;
             //Check network and give buff
-            if(base.isAuthority) base.characterBody.AddBuff(BuffsLoading.buffDefAdaptive);
+            if(NetworkServer.active) base.characterBody.AddBuff(BuffsLoading.buffDefAdaptive);
             //This is the first press of the button
             this.isFirstPress = true;
             //Set pull timer based the modifier
@@ -58,7 +59,7 @@ namespace EggsSkills.EntityStates
         public override void OnExit()
         {
             //Remove the buff
-            base.characterBody.RemoveBuff(BuffsLoading.buffDefAdaptive);
+            if(NetworkServer.active) base.characterBody.RemoveBuff(BuffsLoading.buffDefAdaptive);
             //Fix speed
             base.characterMotor.walkSpeedPenaltyCoefficient = 1f;
             base.OnExit();
@@ -140,7 +141,7 @@ namespace EggsSkills.EntityStates
 
                 //damage
                 //Network check
-                if (base.isAuthority)
+                if (NetworkServer.active)
                 {
                     //Prep damage
                     DamageInfo damageInfo = new DamageInfo
@@ -174,7 +175,7 @@ namespace EggsSkills.EntityStates
                 scale = this.baseRadius
             };
             //Play the fx
-            EffectManager.SpawnEffect(bodyPrefab, bodyEffectData, true);
+            if(base.isAuthority) EffectManager.SpawnEffect(bodyPrefab, bodyEffectData, true);
             //Play sound
             Util.PlaySound(FireMortar.fireSoundString, base.gameObject);
         }

@@ -37,7 +37,7 @@ namespace EggsSkills.Resources
         {
             //Zapport
             LanguageAPI.Add("ARTIFICER_UTILITY_ZAPPORT_NAME", "Quantum Transposition");
-            LanguageAPI.Add("ARTIFICER_UTILITY_ZAPPORT_DESC", "<style=cIsDamage>Stunning.</style> Charge to <style=cIsUtility>teleport</style> forward, dealing <style=cIsDamage>250%-1000% damage</style> to enemies near target location.");
+            LanguageAPI.Add("ARTIFICER_UTILITY_ZAPPORT_DESC", "<style=cIsDamage>Stunning. Overloading.</style> Charge to <style=cIsUtility>teleport</style> forward, dealing <style=cIsDamage>250%-1000% damage</style> to enemies near target location.");
 
             LanguageAPI.Add("ARTIFICER_FTLUNLOCKABLE_ACHIEVEMENT_NAME", "Artificer: FTL");
             LanguageAPI.Add("ARTIFICER_FTLUNLOCKABLE_ACHIEVEMENT_DESC", "As Artificer, reach 500% movespeed.");
@@ -70,7 +70,7 @@ namespace EggsSkills.Resources
             LanguageAPI.Add("BANDIT_FLANKEDUNLOCKABLE_ACHIEVEMENT_ID", "Invis3Min");
 
             //Magic Bullet
-            LanguageAPI.Add("BANDIT_PRIMARY_MAGICBULLET_NAME", "Magic Bullet");
+            LanguageAPI.Add("BANDIT_PRIMARY_MAGICBULLET_NAME", "Bounce");
             LanguageAPI.Add("BANDIT_PRIMARY_MAGICBULLET_DESC", "Fire a bullet that deals <style=cIsDamage>200% damage</style>, and <style=cIsUtility>ricochets</style> to " + Configuration.GetConfigValue(Configuration.BanditMagicbulletRicochets) + " nearby enem" + ((Configuration.GetConfigValue(Configuration.BanditMagicbulletRicochets) > 1) ? "ies" : "y") + "for half damage.");
 
             LanguageAPI.Add("BANDIT_HATUNLOCKABLE_ACHIEVEMENT_NAME", "Bandit: Hat trick");

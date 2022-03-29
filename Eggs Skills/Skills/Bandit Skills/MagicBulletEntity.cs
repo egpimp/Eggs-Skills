@@ -3,6 +3,7 @@ using EntityStates.Bandit2.Weapon;
 using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace EggsSkills.EntityStates
 {
@@ -43,6 +44,8 @@ namespace EggsSkills.EntityStates
             this.isCrit = base.RollCrit();
             //It hasn't recursed yet, set to 0
             this.recursion = 0;
+            //Make player face the aimdirection
+            base.StartAimMode();
             //Do standard onenter stuff
             base.OnEnter();
         }
@@ -162,26 +165,23 @@ namespace EggsSkills.EntityStates
             };
             //Play the effect
             EffectManager.SpawnEffect(assetRef.tracerEffectPrefab, data, true);
-            //Network check
-            if (base.isAuthority)
+            //This used to be takedamage but it was unreliable lol, just explode them point blank
+            new BlastAttack
             {
-                //Setup damage info
-                DamageInfo info = new DamageInfo
-                {
-                    damage = this.damage,
-                    procCoefficient = 1f,
-                    damageType = DamageType.Generic,
-                    attacker = base.gameObject,
-                    crit = this.isCrit,
-                    inflictor = base.gameObject,
-                    position = box.transform.position
-                };
-                //Deal our the damage
-                box.healthComponent.TakeDamage(info);
-                //Run both onhit things so it actually onhits
-                GlobalEventManager.instance.OnHitEnemy(info, box.gameObject);
-                GlobalEventManager.instance.OnHitAll(info, box.gameObject);
-            }
+                radius = 0.1f,
+                baseDamage = this.damage,
+                procCoefficient = 1f,
+                position = box.transform.position,
+                attacker = base.gameObject,
+                teamIndex = base.teamComponent.teamIndex,
+                baseForce = 0F,
+                bonusForce = Vector3.zero,
+                crit = base.RollCrit(),
+                damageType = DamageType.Generic,
+                falloffModel = BlastAttack.FalloffModel.None,
+                losType = BlastAttack.LoSType.None,
+                inflictor = base.gameObject
+            }.Fire();
             //Continue to attempt richocet
             this.HandleRichochet(box.transform.position);
         }

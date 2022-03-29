@@ -58,27 +58,19 @@ namespace EggsSkills.Achievements
                 if (self.netId != null && self.netId == base.localUser.cachedMasterController.master.netId)
                 {
                     int itemCount = 0;
+
                     Inventory inventory = self.inventory;
-                    if (inventory.GetItemCount(RoR2Content.Items.ChainLightning) >= 1)
-                    {
-                        itemCount += 1;
-                    }
-                    if (inventory.GetItemCount(RoR2Content.Items.ShockNearby) >= 1)
-                    {
-                        itemCount += 1;
-                    }
-                    if (inventory.GetEquipmentIndex() == RoR2Content.Equipment.Lightning.equipmentIndex || inventory.GetEquipmentIndex() == RoR2Content.Equipment.AffixBlue.equipmentIndex)
-                    {
-                        itemCount += 1;
-                    }
-                    if (inventory.GetItemCount(RoR2Content.Items.LightningStrikeOnHit) >= 1)
-                    {
-                        itemCount += 1;
-                    }
-                    if(inventory.GetItemCount(RoR2Content.Items.NovaOnLowHealth) >= 1)
-                    {
-                        itemCount += 1;
-                    }
+
+                    if (inventory.GetItemCount(RoR2Content.Items.ChainLightning) >= 1 || inventory.GetItemCount(DLC1Content.Items.ChainLightningVoid) >= 1) itemCount += 1;
+
+                    if (inventory.GetItemCount(RoR2Content.Items.ShockNearby) >= 1) itemCount += 1;
+
+                    if (inventory.GetItemCount(RoR2Content.Items.NovaOnLowHealth) >= 1) itemCount += 1;
+
+                    if (inventory.GetItemCount(RoR2Content.Items.LightningStrikeOnHit) >= 1) itemCount += 1;
+
+                    if (inventory.GetEquipmentIndex() == RoR2Content.Equipment.Lightning.equipmentIndex || inventory.GetEquipmentIndex() == RoR2Content.Equipment.AffixBlue.equipmentIndex || inventory.GetEquipmentIndex() == RoR2Content.Equipment.BFG.equipmentIndex || inventory.GetEquipmentIndex() == RoR2Content.Equipment.QuestVolatileBattery.equipmentIndex) itemCount += 1;
+                    
                     if (itemCount >= 4)
                     {
                         base.Grant();

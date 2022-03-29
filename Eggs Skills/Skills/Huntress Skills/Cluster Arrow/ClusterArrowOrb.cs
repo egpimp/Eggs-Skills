@@ -46,46 +46,38 @@ namespace EggsSkills.Orbs
         }
         private void FireBomblets()
         {
-            //Check network
-            if (NetworkServer.active)
-            {
                 //Repeat this for every bomblet needing to be fired; if it crits 1.5x it then floor that to get an int
-                for (int i = 0; i < (!base.isCrit ? this.bombletCount : Math.Floor(this.bombletCount * 1.5f)); i++)
-                {
-                    //Get a random upward angle, spread slightly increased on crit to spread bombs out better
-                    Quaternion angle = Quaternion.LookRotation((Vector3.up + new Vector3(UnityEngine.Random.Range(-50f, 50f) / 100f, UnityEngine.Random.Range(-50f, 50f) / 100f, UnityEngine.Random.Range(-50f, 50f) / 100f)) * (!base.isCrit ? 1f : 1.25f));
-                    //Grab the target's transform
-                    Transform transform = target.transform;
-                    //Then their position
-                    Vector3 pos = transform.position;
-                    //Network check, then fire the bomblet
-                    ProjectileManager.instance.FireProjectile(Resources.Projectiles.bombletPrefab, pos, angle, base.attacker, base.damageValue * this.bombletDamageCoef, 50f, base.isCrit);
-                }
+            for (int i = 0; i < (!base.isCrit ? this.bombletCount : Math.Floor(this.bombletCount * 1.5f)); i++)
+            {
+                //Get a random upward angle, spread slightly increased on crit to spread bombs out better
+                Quaternion angle = Quaternion.LookRotation((Vector3.up + new Vector3(UnityEngine.Random.Range(-50f, 50f) / 100f, UnityEngine.Random.Range(-50f, 50f) / 100f, UnityEngine.Random.Range(-50f, 50f) / 100f)) * (!base.isCrit ? 1f : 1.25f));
+                //Grab the target's transform
+                Transform transform = target.transform;
+                //Then their position
+                Vector3 pos = transform.position;
+                //Fire the bomblet
+                ProjectileManager.instance.FireProjectile(Resources.Projectiles.bombletPrefab, pos, angle, base.attacker, base.damageValue * this.bombletDamageCoef, 50f, base.isCrit);
             }
         }
         private void Explode()
         {
-            //If network check
-            if (NetworkServer.active)
+            //Make explosion
+            new BlastAttack
             {
-                //Make explosion
-                new BlastAttack
-                {
-                    baseDamage = damageValue * this.damageCoef,
-                    baseForce = 100f,
-                    attacker = attacker,
-                    inflictor = attacker,
-                    position = target.transform.position,
-                    radius = radius,
-                    teamIndex = teamIndex,
-                    procChainMask = default,
-                    procCoefficient = this.procCoeff,
-                    falloffModel = BlastAttack.FalloffModel.SweetSpot,
-                    damageColorIndex = default,
-                    crit = isCrit,
-                    losType = BlastAttack.LoSType.None,
-                }.Fire();
-            }
+                baseDamage = damageValue * this.damageCoef,
+                baseForce = 100f,
+                attacker = attacker,
+                inflictor = attacker,
+                position = target.transform.position,
+                radius = radius,
+                teamIndex = teamIndex,
+                procChainMask = default,
+                procCoefficient = this.procCoeff,
+                falloffModel = BlastAttack.FalloffModel.SweetSpot,
+                damageColorIndex = default,
+                crit = isCrit,
+                losType = BlastAttack.LoSType.None,
+            }.Fire();
             //Setup fx info
             EffectData effectData = new EffectData
             {

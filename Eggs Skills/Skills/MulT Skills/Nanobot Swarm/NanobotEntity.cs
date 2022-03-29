@@ -5,6 +5,7 @@ using UnityEngine;
 using EntityStates.Toolbot;
 using EntityStates.GolemMonster;
 using EggsUtils.Helpers;
+using UnityEngine.Networking;
 
 namespace EggsSkills.EntityStates
 {
@@ -68,6 +69,8 @@ namespace EggsSkills.EntityStates
         {
             //Standard exit procedure
             base.OnExit();
+            //Fire
+            if (base.isAuthority) Fire();
             //If the fx still exists, unexist it
             if(this.lineEffect)
             {
@@ -79,13 +82,19 @@ namespace EggsSkills.EntityStates
         {
             //Standard fixedupdate procedure
             base.FixedUpdate();
+            base.StartAimMode();
+            this.UpdateFx();
             //If the button is no longer held down and minimum time has passed
             if (!base.IsKeyDownAuthority() && base.fixedAge >= this.duration && base.isAuthority)
             {
-                //Fire and fix the state
-                this.Fire();
+                //fix the state
                 this.outer.SetNextStateToMain();
+                return;
             }
+        }
+
+        private void UpdateFx()
+        {
             //Otherwise keep updating the aimray
             this.aimRay = base.GetAimRay();
             //Grab the hit component
@@ -101,7 +110,7 @@ namespace EggsSkills.EntityStates
             //This gets us a new hitposition based off of the aimray coming from the muzzle
             Vector3 newHitPos = Physics.Raycast(this.aimRay.origin, this.aimRay.direction, out hit, this.maxDist) ? hit.point : this.aimRay.GetPoint(this.maxDist);
             //Set the positions of the line component based off the muzzle position and the determine hit position
-            this.lineComponent.SetPositions(new Vector3[] { this.aimRay.origin, newHitPos});
+            this.lineComponent.SetPositions(new Vector3[] { this.aimRay.origin, newHitPos });
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()
@@ -112,7 +121,7 @@ namespace EggsSkills.EntityStates
         private void Fire()
         {
             //Network check, then fire the projectile
-            if (base.isAuthority) ProjectileManager.instance.FireProjectile(Resources.Projectiles.nanoBeaconPrefab, this.aimRay.origin, Util.QuaternionSafeLookRotation(this.aimRay.direction), base.gameObject, base.damageStat, 50f, base.RollCrit());
+            ProjectileManager.instance.FireProjectile(Resources.Projectiles.nanoBeaconPrefab, this.aimRay.origin, Util.QuaternionSafeLookRotation(this.aimRay.direction), base.gameObject, base.damageStat, 50f, base.RollCrit());
             //Handle the fire animations
             base.PlayAnimation("Gesture, Additive", "FireBomb", "FireBomb.playbackRate", duration);
             base.PlayCrossfade("Stance, Override", "Empty", 0.1f);

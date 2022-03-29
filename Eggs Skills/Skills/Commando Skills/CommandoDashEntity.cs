@@ -3,6 +3,7 @@ using EntityStates;
 using RoR2;
 using UnityEngine;
 using EntityStates.Commando;
+using UnityEngine.Networking;
 
 namespace EggsSkills.EntityStates
 {
@@ -31,7 +32,7 @@ namespace EggsSkills.EntityStates
             //If moving, get move direction.  Otherwise, get character direction.
             base.characterDirection.forward = ((base.inputBank.moveVector == Vector3.zero) ? base.characterDirection.forward : base.inputBank.moveVector).normalized;
             //Get the invulnerability buff
-            base.characterBody.AddTimedBuff(RoR2Content.Buffs.Immune, this.dashDuration + this.buffDuration);
+            if(NetworkServer.active) base.characterBody.AddTimedBuff(RoR2Content.Buffs.Immune, this.dashDuration + this.buffDuration);
             //Determine dash speed with base speed and movespeed
             this.dashSpeed = this.baseDashSpeed * base.moveSpeedStat;
             //If secondary stock not at max, add a stock

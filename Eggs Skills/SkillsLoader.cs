@@ -17,6 +17,7 @@ using EggsSkills.Unlocks;
 using System.Collections.Generic;
 using EggsSkills.Config;
 using EntityStates.Bandit2.Weapon;
+using EntityStates.Bandit2;
 
 [module: UnverifiableCode]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -25,7 +26,7 @@ namespace EggsSkills
 {
     [BepInDependency("com.Egg.EggsUtils", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "2.1.1")]
+    [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "2.1.2")]
     [R2APISubmoduleDependency(new string[]
 {
     nameof(LanguageAPI),
@@ -138,8 +139,8 @@ namespace EggsSkills
             SkillDef skillDefZapport = ScriptableObject.CreateInstance<SkillDef>();
             skillDefZapport.activationState = new SerializableEntityStateType(typeof(ZapportChargeEntity));
             skillDefZapport.activationStateMachineName = "Weapon";
-            skillDefZapport.baseMaxStock = 1;
-            skillDefZapport.baseRechargeInterval = 12f;
+            skillDefZapport.baseMaxStock = 2;
+            skillDefZapport.baseRechargeInterval = 10f;
             skillDefZapport.beginSkillCooldownOnSkillEnd = true;
             skillDefZapport.fullRestockOnAssign = false;
             skillDefZapport.interruptPriority = InterruptPriority.PrioritySkill;
@@ -157,7 +158,8 @@ namespace EggsSkills
             skillDefZapport.skillNameToken = "ARTIFICER_UTILITY_ZAPPORT_NAME";
             skillDefZapport.keywordTokens = new string[]
             {
-                "KEYWORD_STUNNING"
+                "KEYWORD_STUNNING",
+                "KEYWORD_ENHANCING"
             };
 
             defList.Add(skillDefZapport);
@@ -168,7 +170,7 @@ namespace EggsSkills
                 unlockableDef = UnlocksRegistering.artificerZapportUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefZapport.skillNameToken, false, null)
             };
-            ContentAddition.AddEntityState<ZapportFireEntity>(out _);
+            ContentAddition.AddEntityState<ZapportChargeEntity>(out _);
         }
 
         private void RegisterMercenarySkills()
@@ -181,7 +183,7 @@ namespace EggsSkills
             skillDefSlashport.activationState = new SerializableEntityStateType(typeof(SlashportEntity));
             skillDefSlashport.activationStateMachineName = "Weapon";
             skillDefSlashport.baseMaxStock = 1;
-            skillDefSlashport.baseRechargeInterval = 5f;
+            skillDefSlashport.baseRechargeInterval = 9f;
             skillDefSlashport.beginSkillCooldownOnSkillEnd = true;
             skillDefSlashport.fullRestockOnAssign = false;
             skillDefSlashport.interruptPriority = InterruptPriority.PrioritySkill;
@@ -211,6 +213,7 @@ namespace EggsSkills
                 unlockableDef = UnlocksRegistering.mercSlashportUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefSlashport.skillNameToken, false, null)
             };
+            ContentAddition.AddEntityState<SlashportEntity>(out _);
         }
 
         private void RegisterCommandoSkills()
@@ -246,6 +249,7 @@ namespace EggsSkills
                 unlockableDef = UnlocksRegistering.commandoShotgunUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefCombatshotgun.skillNameToken, false, null)
             };
+            ContentAddition.AddEntityState<CombatShotgunEntity>(out _);
 
             //Dash
             SkillDef skillDefDash = ScriptableObject.CreateInstance<SkillDef>();
@@ -281,6 +285,7 @@ namespace EggsSkills
                 unlockableDef = UnlocksRegistering.commandoDashUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefDash.skillNameToken, false, null)
             };
+            ContentAddition.AddEntityState<CommandoDashEntity>(out _);
         }
 
         private void RegisterCaptainSkills()
@@ -293,7 +298,7 @@ namespace EggsSkills
             SkillDef skillDefDebuffnade = ScriptableObject.CreateInstance<SkillDef>();
             skillDefDebuffnade.activationState = new SerializableEntityStateType(typeof(DebuffGrenadeEntity));
             skillDefDebuffnade.activationStateMachineName = "Weapon";
-            skillDefDebuffnade.baseMaxStock = 2;
+            skillDefDebuffnade.baseMaxStock = 1;
             skillDefDebuffnade.baseRechargeInterval = 10f;
             skillDefDebuffnade.beginSkillCooldownOnSkillEnd = true;
             skillDefDebuffnade.fullRestockOnAssign = false;
@@ -323,6 +328,7 @@ namespace EggsSkills
                 unlockableDef = UnlocksRegistering.captainDebuffnadeUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefDebuffnade.skillNameToken, false, null)
             };
+            ContentAddition.AddEntityState<DebuffGrenadeEntity>(out _);
         }
 
         private void RegisterEngiSkills()
@@ -364,6 +370,7 @@ namespace EggsSkills
                 unlockableDef = UnlocksRegistering.engiTeslaUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefTeslamine.skillNameToken, false, null)
             };
+            ContentAddition.AddEntityState<TeslaMineFireState>(out _);
         }
 
         private void RegisterRexSkills()
@@ -407,6 +414,7 @@ namespace EggsSkills
                 unlockableDef = UnlocksRegistering.rexRootUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefRoot.skillNameToken, false, null)
             };
+            ContentAddition.AddEntityState<DirectiveRoot>(out _);
         }
 
         private void RegisterLoaderSkills()
@@ -418,7 +426,7 @@ namespace EggsSkills
             //Shieldsplosion
             ShieldsplosionDef skillDefShieldsplode = ScriptableObject.CreateInstance<ShieldsplosionDef>();
             skillDefShieldsplode.activationState = new SerializableEntityStateType(typeof(ShieldSplosionEntity));
-            skillDefShieldsplode.activationStateMachineName = "Weapon";
+            skillDefShieldsplode.activationStateMachineName = "Body";
             skillDefShieldsplode.baseMaxStock = 1;
             skillDefShieldsplode.baseRechargeInterval = 8f;
             skillDefShieldsplode.beginSkillCooldownOnSkillEnd = false;
@@ -445,6 +453,7 @@ namespace EggsSkills
                 unlockableDef = UnlocksRegistering.loaderShieldsplosionUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefShieldsplode.skillNameToken, false, null)
             };
+            ContentAddition.AddEntityState<ShieldSplosionEntity>(out _);
         }
 
         private void RegisterAcridSkills()
@@ -456,7 +465,7 @@ namespace EggsSkills
             //AcridPurge
             AcridPurgeDef skillDefExpunge = ScriptableObject.CreateInstance<AcridPurgeDef>();
             skillDefExpunge.activationState = new SerializableEntityStateType(typeof(AcridPurgeEntity));
-            skillDefExpunge.activationStateMachineName = "Weapon";
+            skillDefExpunge.activationStateMachineName = "Body";
             skillDefExpunge.baseMaxStock = 1;
             skillDefExpunge.baseRechargeInterval = 12f;
             skillDefExpunge.beginSkillCooldownOnSkillEnd = false;
@@ -483,6 +492,7 @@ namespace EggsSkills
                 unlockableDef = UnlocksRegistering.acridExpungeUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefExpunge.skillNameToken, false, null)
             };
+            ContentAddition.AddEntityState<AcridPurgeEntity>(out _);
         }
 
         private void RegisterBanditSkills()
@@ -495,8 +505,8 @@ namespace EggsSkills
             //Thieves Cunning
             InvisOnSprintSkillDef skillDefInvisSprint = ScriptableObject.CreateInstance<InvisOnSprintSkillDef>();
             //These two are dummies, don't actually exist, just there to stop errors
-            skillDefInvisSprint.activationState = new SerializableEntityStateType(typeof(MagicBulletEntity));
-            skillDefInvisSprint.activationStateMachineName = "Weapon";
+            skillDefInvisSprint.activationState = new SerializableEntityStateType(typeof(ThrowSmokebomb));
+            skillDefInvisSprint.activationStateMachineName = "Body";
             skillDefInvisSprint.baseMaxStock = 1;
             skillDefInvisSprint.baseRechargeInterval = 6f;
             skillDefInvisSprint.fullRestockOnAssign = false;
@@ -540,10 +550,6 @@ namespace EggsSkills
             skillDefMagicBullet.skillDescriptionToken = "BANDIT_PRIMARY_MAGICBULLET_DESC";
             skillDefMagicBullet.skillName = "MagicBullet";
             skillDefMagicBullet.skillNameToken = "BANDIT_PRIMARY_MAGICBULLET_NAME";
-            skillDefMagicBullet.keywordTokens = new string[]
-            {
-                "KEYWORD_LUCKY"
-            };
 
             defList.Add(skillDefMagicBullet);
             Array.Resize(ref banditSkillFamilyPrimary.variants, banditSkillFamilyPrimary.variants.Length + 1);
@@ -553,6 +559,7 @@ namespace EggsSkills
                 unlockableDef = UnlocksRegistering.banditMagicBulletUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefMagicBullet.skillNameToken, false, null)
             };
+            ContentAddition.AddEntityState<MagicBulletEntity>(out _);
         }
 
         private void RegisterHuntressSkills()
@@ -595,6 +602,7 @@ namespace EggsSkills
                 unlockableDef = UnlocksRegistering.huntressClusterarrowUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefClusterArrow.skillNameToken, false, null)
             };
+            ContentAddition.AddEntityState<ClusterBombArrow>(out _);
         }
 
         private void RegisterMultSkills()
@@ -637,6 +645,7 @@ namespace EggsSkills
                 unlockableDef = UnlocksRegistering.multNanobeaconUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefNanoSwarm.skillNameToken, false, null)
             };
+            ContentAddition.AddEntityState<NanobotEntity>(out _);
         }
         #endregion
 
@@ -663,7 +672,7 @@ namespace EggsSkills
                 ContentAddition.AddEntityState<TeslaWaitForTargetState>(out _);
                 ContentAddition.AddEntityState<TeslaPreDetState>(out _);
                 ContentAddition.AddEntityState<TeslaDetonateState>(out _);
-                EggsUtils.EggsUtils.LogToConsole("Tesla mine states loaded1");
+                EggsUtils.EggsUtils.LogToConsole("Tesla mine states loaded!");
             }
         }
     }
