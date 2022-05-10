@@ -4,9 +4,6 @@ using UnityEngine;
 
 namespace EggsSkills
 {
-    [RequireComponent(typeof(CharacterBody))]
-    [RequireComponent(typeof(InputBankTest))]
-    [RequireComponent(typeof(TeamComponent))]
     class AcridPurgeTracker : MonoBehaviour
     {
         //Characterbody of acrid
@@ -32,38 +29,38 @@ namespace EggsSkills
         private void Start()
         {
             //Get these three components
-            this.characterBody = GetComponent<CharacterBody>();
-            this.inputBank = GetComponent<InputBankTest>();
-            this.teamComponent = GetComponent<TeamComponent>();
+            characterBody = base.GetComponent<CharacterBody>();
+            inputBank = base.GetComponent<InputBankTest>();
+            teamComponent = base.GetComponent<TeamComponent>();
         }
         private void FixedUpdate()
         {
             //Tick up the stopwatch
-            this.trackerUpdateStopwatch += Time.fixedDeltaTime;
+            trackerUpdateStopwatch += Time.fixedDeltaTime;
             //If the stopwatch has gone on for .1 seconds...
-            if (this.trackerUpdateStopwatch >= 1f / this.trackerUpdateFrequency)
+            if (trackerUpdateStopwatch >= 1f / trackerUpdateFrequency)
             {
                 //Reset the timer
-                this.trackerUpdateStopwatch -= 1f / this.trackerUpdateFrequency;
+                trackerUpdateStopwatch -= 1f / trackerUpdateFrequency;
                 //Poisoncounter to 0 cause we haven't found any poisoned creatures yet
-                this.poisonCounter = 0;
+                poisonCounter = 0;
                 //Spheresearch it
                 foreach (HurtBox hurtBox in new SphereSearch
                 {
                     origin = characterBody.footPosition,
-                    radius = this.maxTrackingDistance,
+                    radius = maxTrackingDistance,
                     mask = LayerIndex.entityPrecise.mask
-                }.RefreshCandidates().FilterCandidatesByHurtBoxTeam(TeamMask.GetEnemyTeams(this.teamComponent.teamIndex)).OrderCandidatesByDistance().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes())
+                }.RefreshCandidates().FilterCandidatesByHurtBoxTeam(TeamMask.GetEnemyTeams(teamComponent.teamIndex)).OrderCandidatesByDistance().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes())
                 {
                     //Get the targets body component
                     CharacterBody body = hurtBox.healthComponent.body;
                     //Make sure they stats ain't brokeded
                     body.RecalculateStats();
                     //If they have either buff, tick up the counter
-                    if (body.HasBuff(RoR2Content.Buffs.Poisoned) || body.HasBuff(RoR2Content.Buffs.Blight)) this.poisonCounter += 1;
+                    if (body.HasBuff(RoR2Content.Buffs.Poisoned) || body.HasBuff(RoR2Content.Buffs.Blight)) poisonCounter += 1;
                 }
                 //Set the totalpoisoned count to what we found
-                this.totalPoisoned = this.poisonCounter;
+                totalPoisoned = poisonCounter;
             }
         }
         
@@ -71,7 +68,7 @@ namespace EggsSkills
         public float GetPoisonedCount()
         {
             //Just return how many poisoned targets we got
-            return this.totalPoisoned;
+            return totalPoisoned;
         }
     }
 }

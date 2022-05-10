@@ -39,26 +39,26 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
         {
             base.OnEnter();
             //Get the component
-            this.projectileDamage = GetComponent<ProjectileDamage>();
+            projectileDamage = GetComponent<ProjectileDamage>();
             //Start timer at 0 so it pops once at start
-            this.pulseTimer = 0f;
+            pulseTimer = 0f;
             //It has yet to pulse
-            this.pulseCounter = 0;
+            pulseCounter = 0;
         }
         public override void FixedUpdate()
         {
             base.FixedUpdate();
             //If it has pulsed max amount of times, kill the mine
-            if (this.pulseCounter >= this.maxPulseCount) this.Explode();
+            if (pulseCounter >= maxPulseCount) Explode();
             //If the timer is still above zero count it down
-            if (this.pulseTimer > 0) this.pulseTimer -= Time.fixedDeltaTime;
+            if (pulseTimer > 0) pulseTimer -= Time.fixedDeltaTime;
             //Otherwise...
             else
             {
                 //Reset the pulse timer
-                this.pulseTimer = this.fixedPulseTime;
+                pulseTimer = fixedPulseTime;
                 //Fire off a pulse
-                this.Pulse();
+                Pulse();
             }
         }
 
@@ -73,17 +73,14 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
                 {
                     attacker = base.projectileController.owner,
                     inflictor = base.gameObject,
-                    procChainMask = default,
-                    procCoefficient = this.procCoeff,
+                    procCoefficient = procCoeff,
                     teamIndex = base.projectileController.teamFilter.teamIndex,
-                    baseDamage = this.projectileDamage.damage,
+                    baseDamage = projectileDamage.damage,
                     baseForce = 0f,
                     falloffModel = BlastAttack.FalloffModel.None,
-                    crit = this.projectileDamage.crit,
-                    radius = this.radius,
+                    crit = projectileDamage.crit,
+                    radius = radius,
                     position = base.transform.position,
-                    damageColorIndex = default,
-                    attackerFiltering = AttackerFiltering.Default,
                     damageType = DamageType.Stun1s
                 }.Fire();
             }
@@ -92,14 +89,14 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
             {
                 origin = base.transform.position,
                 color = Color.blue,
-                scale = this.radius
+                scale = radius
             };
             //Spawn the vfx
             EffectManager.SpawnEffect(bodyPrefab, effectData, true);
             //Play the zappy sound
             Util.PlaySound(JellyNova.novaSoundString, gameObject);
             //Track that as a pulse
-            this.pulseCounter += 1;
+            pulseCounter += 1;
         }
         private void Explode()
         {

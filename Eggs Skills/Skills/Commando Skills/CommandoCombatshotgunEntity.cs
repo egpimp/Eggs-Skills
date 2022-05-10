@@ -52,7 +52,7 @@ namespace EggsSkills.EntityStates
             //Did we crit?
             bool isCrit;
             //Determine the cast-time
-            this.duration = this.baseDuration / base.attackSpeedStat;
+            duration = baseDuration / base.attackSpeedStat;
             //Muzzlestring establisher
             string muzzleString;
             //Determine if crit
@@ -93,17 +93,17 @@ namespace EggsSkills.EntityStates
                     origin = aimRay.origin,
                     aimVector = aimRay.direction,
                     //Min spread is 1 on non-crit, 0 on crit
-                    minSpread = 1f - this.critMod,
+                    minSpread = 1f - critMod,
                     //Max spread is 5 on non-crit, 3 on crit
-                    maxSpread = 5f - (this.critMod * 2f),
-                    bulletCount = this.bulletCount,
-                    procCoefficient = this.procCoefficient,
-                    damage = base.characterBody.damage * this.damageCoefficient,
-                    force = this.baseForce,
+                    maxSpread = 5f - (critMod * 2f),
+                    bulletCount = bulletCount,
+                    procCoefficient = procCoefficient,
+                    damage = base.characterBody.damage * damageCoefficient,
+                    force = baseForce,
                     muzzleName = muzzleName,
                     falloffModel = default,
-                    tracerEffectPrefab = this.tracerEffectPrefab,
-                    hitEffectPrefab = this.hitEffectPrefab,
+                    tracerEffectPrefab = tracerEffectPrefab,
+                    hitEffectPrefab = hitEffectPrefab,
                     isCrit = isCrit,
                     HitEffectNormal = false,
                     smartCollision = true,
@@ -116,17 +116,17 @@ namespace EggsSkills.EntityStates
             //Play the sound
             Util.PlaySound(FireShotgun.attackSoundString, base.gameObject);
             //Apply recoil, shifted towards side the bullet shot from
-            base.AddRecoil(-this.baseRecoil, this.baseRecoil, -2 * this.baseRecoil * (1 - (this.step % 2)), 2 * this.baseRecoil * (step % 2));
+            base.AddRecoil(-baseRecoil, baseRecoil, -2 * baseRecoil * (1 - (step % 2)), 2 * baseRecoil * (step % 2));
         }
         public override void FixedUpdate()
         {
             //Standard update procedure
             base.FixedUpdate();
             //If cast time over, and network check
-            if (base.fixedAge >= this.duration && base.isAuthority)
+            if (base.fixedAge >= duration && base.isAuthority)
             {
                 //Set the next state
-                this.outer.SetNextStateToMain();
+                outer.SetNextStateToMain();
                 return;
             }
         }

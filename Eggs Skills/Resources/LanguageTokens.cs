@@ -71,7 +71,7 @@ namespace EggsSkills.Resources
 
             //Magic Bullet
             LanguageAPI.Add("BANDIT_PRIMARY_MAGICBULLET_NAME", "Bounce");
-            LanguageAPI.Add("BANDIT_PRIMARY_MAGICBULLET_DESC", "Fire a bullet that deals <style=cIsDamage>200% damage</style>, and <style=cIsUtility>ricochets</style> to " + Configuration.GetConfigValue(Configuration.BanditMagicbulletRicochets) + " nearby enem" + ((Configuration.GetConfigValue(Configuration.BanditMagicbulletRicochets) > 1) ? "ies" : "y") + "for half damage.");
+            LanguageAPI.Add("BANDIT_PRIMARY_MAGICBULLET_DESC", "Fire a bullet that deals <style=cIsDamage>200% damage</style>, and <style=cIsUtility>ricochets</style> to " + Configuration.GetConfigValue(Configuration.BanditMagicbulletRicochets) + " nearby enem" + ((Configuration.GetConfigValue(Configuration.BanditMagicbulletRicochets) > 1) ? "ies" : "y") + " for <style=cIsDamage>60% of the previous shot's damage</style>.");
 
             LanguageAPI.Add("BANDIT_HATUNLOCKABLE_ACHIEVEMENT_NAME", "Bandit: Hat trick");
             LanguageAPI.Add("BANDIT_HATUNLOCKABLE_ACHIEVEMENT_DESC", "As Bandit, kill 3 enemies in under 1 second");
@@ -164,8 +164,8 @@ namespace EggsSkills.Resources
         internal static void MercTokens()
         {
             //Slashport
-            LanguageAPI.Add("MERCENARY_UTILITY_SLASHPORT_NAME", "Fatal Assault");
-            LanguageAPI.Add("MERCENARY_UTILITY_SLASHPORT_DESC", "<style=cIsDamage>Stunning.</style> Target an enemy to <style=cIsUtility>expose, teleport to</style> and strike them for <style=cIsDamage>700% damage, plus " + (Configuration.GetConfigValue(Configuration.MercSlashHealthfraction) * 100) + "% of their missing health</style>.");
+            LanguageAPI.Add("MERCENARY_SPECIAL_SLASHPORT_NAME", "Execute");
+            LanguageAPI.Add("MERCENARY_SPECIAL_SLASHPORT_DESC", "<style=cIsDamage>Slayer</style>. Target an enemy to <style=cIsUtility>expose, teleport to</style> and <style=cIsDamage>strike</style> them for <style=cIsDamage>700% damage</style>, <style=cIsUtility>stunning</style> nearby enemies.");
 
             LanguageAPI.Add("MERC_CULLUNLOCKABLE_ACHIEVEMENT_NAME", "Mercenary: Culled");
             LanguageAPI.Add("MERC_CULLUNLOCKABLE_ACHIEVEMENT_DESC", "As Mercenary, strike 10 unique exposed enemies with no more than 5 seconds between each strike");

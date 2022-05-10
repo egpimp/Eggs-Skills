@@ -28,13 +28,13 @@ namespace EggsSkills.EntityStates
             //Play sound
             Util.PlaySound(DodgeState.dodgeSoundString, base.gameObject);
             //Handle animation
-            base.PlayAnimation("Body", "DodgeForward", "Dodge.playbackRate", this.dashDuration);
+            base.PlayAnimation("Body", "DodgeForward", "Dodge.playbackRate", dashDuration);
             //If moving, get move direction.  Otherwise, get character direction.
             base.characterDirection.forward = ((base.inputBank.moveVector == Vector3.zero) ? base.characterDirection.forward : base.inputBank.moveVector).normalized;
             //Get the invulnerability buff
-            if(NetworkServer.active) base.characterBody.AddTimedBuff(RoR2Content.Buffs.Immune, this.dashDuration + this.buffDuration);
+            if(NetworkServer.active) base.characterBody.AddTimedBuff(RoR2Content.Buffs.Immune, dashDuration + buffDuration);
             //Determine dash speed with base speed and movespeed
-            this.dashSpeed = this.baseDashSpeed * base.moveSpeedStat;
+            dashSpeed = baseDashSpeed * base.moveSpeedStat;
             //If secondary stock not at max, add a stock
             if (base.skillLocator.secondary.stock < base.skillLocator.secondary.maxStock) base.skillLocator.secondary.AddOneStock();
         }
@@ -46,11 +46,13 @@ namespace EggsSkills.EntityStates
             //Determine the player move vector based on input
             base.characterBody.characterDirection.moveVector = base.inputBank.moveVector;
             //Get forward direction
-            this.forwardDirection = base.characterDirection.forward;
+            forwardDirection = base.characterDirection.forward;
+            //Gives us a 2 -> 0.5 scale based on dash duration, used to increase dash speed early and slow it down near end
+            float speedMult = 2 - EggsUtils.Helpers.Math.ConvertToRange(0f, dashDuration, 0f, 1.5f, base.fixedAge);
             //Execute motion per tick based on speed in forward direction
-            base.characterMotor.rootMotion += this.forwardDirection * Time.fixedDeltaTime * this.dashSpeed;
+            base.characterMotor.rootMotion += forwardDirection * Time.fixedDeltaTime * dashSpeed * speedMult;
             //If dash over, and network check, next state to main
-            if (base.fixedAge >= this.dashDuration && base.isAuthority) this.outer.SetNextStateToMain();
+            if (base.fixedAge >= dashDuration && base.isAuthority) outer.SetNextStateToMain();
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()

@@ -39,65 +39,65 @@ namespace EggsSkills
         private void Start()
         {
             //Setup the indicator
-            this.indicator = new Indicator(base.gameObject, LegacyResourcesAPI.Load<GameObject>("Prefabs/HuntressTrackingIndicator"));
+            indicator = new Indicator(base.gameObject, LegacyResourcesAPI.Load<GameObject>("Prefabs/HuntressTrackingIndicator"));
             //Grab characterbody
-            this.characterBody = base.GetComponent<CharacterBody>();
+            characterBody = base.GetComponent<CharacterBody>();
             //Grab inputbank
-            this.inputBank = base.GetComponent<InputBankTest>();
+            inputBank = base.GetComponent<InputBankTest>();
             //Grab teamcomponent
-            this.teamComponent = base.GetComponent<TeamComponent>();
+            teamComponent = base.GetComponent<TeamComponent>();
         }
 
         public HurtBox GetTrackingTarget()
         {
             //Return the tracking target
-            return this.trackingTarget;
+            return trackingTarget;
         }
 
         private void FixedUpdate()
         {
             //Update the tracker
-            this.trackerUpdateStopwatch += Time.fixedDeltaTime;
+            trackerUpdateStopwatch += Time.fixedDeltaTime;
             //If tracker hits the max
-            if (this.trackerUpdateStopwatch >= 1f / this.trackerUpdateFrequency)
+            if (trackerUpdateStopwatch >= 1f / trackerUpdateFrequency)
             {
                 //Reset the tracker
-                this.trackerUpdateStopwatch -= 1f / this.trackerUpdateFrequency;
+                trackerUpdateStopwatch -= 1f / trackerUpdateFrequency;
                 //Grab the target hurtbox
-                HurtBox hurtBox = this.trackingTarget;
+                HurtBox hurtBox = trackingTarget;
                 //Grab the aimray
-                Ray aimRay = new Ray(this.inputBank.aimOrigin, this.inputBank.aimDirection);
+                Ray aimRay = new Ray(inputBank.aimOrigin, inputBank.aimDirection);
                 //Search for a target with the aimray
-                this.SearchForTarget(aimRay);
+                SearchForTarget(aimRay);
                 //Get transform of the target if they exist
-                this.indicator.targetTransform = (this.trackingTarget ? this.trackingTarget.transform : null);
+                indicator.targetTransform = (trackingTarget ? trackingTarget.transform : null);
             }
             //If not on cooldown indicator allowed to display
-            if(this.characterBody.skillLocator.utility.cooldownRemaining <= 0) this.indicator.active = true;
+            if(characterBody.skillLocator.special.cooldownRemaining <= 0) indicator.active = true;
             //If on cooldown no indicator
-            else this.indicator.active = false;
+            else indicator.active = false;
         }
         private void SearchForTarget(Ray aimRay)
         {
             //Let it target non-allies
-            this.search.teamMaskFilter = TeamMask.GetUnprotectedTeams(this.teamComponent.teamIndex);
+            search.teamMaskFilter = TeamMask.GetUnprotectedTeams(teamComponent.teamIndex);
             //Must have LoS to target
-            this.search.filterByLoS = true;
+            search.filterByLoS = true;
             //Start search at player aimray
-            this.search.searchOrigin = aimRay.origin;
+            search.searchOrigin = aimRay.origin;
             //Search where player facing
-            this.search.searchDirection = aimRay.direction;
+            search.searchDirection = aimRay.direction;
             //Sort by distance
-            this.search.sortMode = BullseyeSearch.SortMode.Distance;
+            search.sortMode = BullseyeSearch.SortMode.Distance;
             //Max dist and angle, dist based on speed
-            this.search.maxDistanceFilter = this.maxTrackingDistance * 1;
-            this.search.maxAngleFilter = this.maxTrackingAngle;
+            search.maxDistanceFilter = this.maxTrackingDistance * 1;
+            search.maxAngleFilter = this.maxTrackingAngle;
             //Refresh the targets
-            this.search.RefreshCandidates();
+            search.RefreshCandidates();
             //Don't target self (lol)
-            this.search.FilterOutGameObject(base.gameObject);
+            search.FilterOutGameObject(base.gameObject);
             //Get the target
-            this.trackingTarget = this.search.GetResults().FirstOrDefault();
+            trackingTarget = this.search.GetResults().FirstOrDefault();
         }
     }
 }

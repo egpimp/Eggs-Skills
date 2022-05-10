@@ -47,7 +47,7 @@ namespace EggsSkills.Orbs
         private void FireBomblets()
         {
                 //Repeat this for every bomblet needing to be fired; if it crits 1.5x it then floor that to get an int
-            for (int i = 0; i < (!base.isCrit ? this.bombletCount : Math.Floor(this.bombletCount * 1.5f)); i++)
+            for (int i = 0; i < (!base.isCrit ? bombletCount : Math.Floor(bombletCount * 1.5f)); i++)
             {
                 //Get a random upward angle, spread slightly increased on crit to spread bombs out better
                 Quaternion angle = Quaternion.LookRotation((Vector3.up + new Vector3(UnityEngine.Random.Range(-50f, 50f) / 100f, UnityEngine.Random.Range(-50f, 50f) / 100f, UnityEngine.Random.Range(-50f, 50f) / 100f)) * (!base.isCrit ? 1f : 1.25f));
@@ -56,7 +56,7 @@ namespace EggsSkills.Orbs
                 //Then their position
                 Vector3 pos = transform.position;
                 //Fire the bomblet
-                ProjectileManager.instance.FireProjectile(Resources.Projectiles.bombletPrefab, pos, angle, base.attacker, base.damageValue * this.bombletDamageCoef, 50f, base.isCrit);
+                ProjectileManager.instance.FireProjectile(Resources.Projectiles.bombletPrefab, pos, angle, base.attacker, base.damageValue * bombletDamageCoef, 50f, base.isCrit);
             }
         }
         private void Explode()
@@ -64,17 +64,15 @@ namespace EggsSkills.Orbs
             //Make explosion
             new BlastAttack
             {
-                baseDamage = damageValue * this.damageCoef,
+                baseDamage = damageValue * damageCoef,
                 baseForce = 100f,
                 attacker = attacker,
                 inflictor = attacker,
                 position = target.transform.position,
                 radius = radius,
                 teamIndex = teamIndex,
-                procChainMask = default,
-                procCoefficient = this.procCoeff,
+                procCoefficient = procCoeff,
                 falloffModel = BlastAttack.FalloffModel.SweetSpot,
-                damageColorIndex = default,
                 crit = isCrit,
                 losType = BlastAttack.LoSType.None,
             }.Fire();

@@ -24,47 +24,47 @@ namespace EggsSkills.Unlocks
 
         internal static void RegisterUnlockables()
         {
-            if (Configuration.GetConfigValue<bool>(Configuration.EnableEngiSkills))
+            if (Configuration.GetConfigValue(Configuration.EnableEngiSkills))
             {
                 EngiUnlockables();
             }
-            if (Configuration.GetConfigValue<bool>(Configuration.EnableMageSkills))
+            if (Configuration.GetConfigValue(Configuration.EnableMageSkills))
             {
                 ArtificerUnlockables();
             }
-            if (Configuration.GetConfigValue<bool>(Configuration.EnableLoaderSkills))
+            if (Configuration.GetConfigValue(Configuration.EnableLoaderSkills))
             {
                 LoaderUnlockables();
             }
-            if (Configuration.GetConfigValue<bool>(Configuration.EnableCommandoSkills))
+            if (Configuration.GetConfigValue(Configuration.EnableCommandoSkills))
             {
                 CommandoUnlockables();
             }
-            if (Configuration.GetConfigValue<bool>(Configuration.EnableHuntressSkills))
+            if (Configuration.GetConfigValue(Configuration.EnableHuntressSkills))
             {
                 HuntressUnlockables();
             }
-            if (Configuration.GetConfigValue<bool>(Configuration.EnableBanditSkills))
+            if (Configuration.GetConfigValue(Configuration.EnableBanditSkills))
             {
                 BanditUnlockables();
             }
-            if (Configuration.GetConfigValue<bool>(Configuration.EnableToolbotSkills))
+            if (Configuration.GetConfigValue(Configuration.EnableToolbotSkills))
             {
                 MulTUnlockables();
             }
-            if (Configuration.GetConfigValue<bool>(Configuration.EnableMercSkills))
+            if (Configuration.GetConfigValue(Configuration.EnableMercSkills))
             {
                 MercUnlockables();
             }
-            if (Configuration.GetConfigValue<bool>(Configuration.EnableTreebotSkills))
+            if (Configuration.GetConfigValue(Configuration.EnableTreebotSkills))
             {
                 RexUnlockables();
             }
-            if (Configuration.GetConfigValue<bool>(Configuration.EnableCrocoSkills))
+            if (Configuration.GetConfigValue(Configuration.EnableCrocoSkills))
             {
                 AcridUnlockables();
             }
-            if (Configuration.GetConfigValue<bool>(Configuration.EnableCaptainSkills))
+            if (Configuration.GetConfigValue(Configuration.EnableCaptainSkills))
             {
                 CaptainUnlockables();
             }

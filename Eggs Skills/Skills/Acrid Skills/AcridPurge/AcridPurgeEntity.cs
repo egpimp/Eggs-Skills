@@ -3,7 +3,6 @@ using EntityStates;
 using EntityStates.Croco;
 using RoR2;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace EggsSkills.EntityStates
 {
@@ -35,7 +34,7 @@ namespace EggsSkills.EntityStates
             foreach (HurtBox hurtBox in new SphereSearch
             {
                 origin = base.characterBody.footPosition,
-                radius = this.maxTrackingDistance,
+                radius = maxTrackingDistance,
                 mask = LayerIndex.entityPrecise.mask
             }.RefreshCandidates().FilterCandidatesByHurtBoxTeam(TeamMask.GetEnemyTeams(base.teamComponent.teamIndex)).OrderCandidatesByDistance().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes())
             {
@@ -53,19 +52,15 @@ namespace EggsSkills.EntityStates
                         new BlastAttack
                         {
                             position = body.corePosition,
-                            baseDamage = component.fullHealth * this.healthFraction + base.damageStat * this.poisonDamageCoefficient,
+                            baseDamage = component.fullHealth * healthFraction + base.damageStat * poisonDamageCoefficient,
                             baseForce = 0f,
-                            radius = this.detonationRadius,
+                            radius = detonationRadius,
                             attacker = base.gameObject,
                             inflictor = base.gameObject,
                             teamIndex = base.teamComponent.teamIndex,
                             crit = base.RollCrit(),
-                            procChainMask = default,
-                            procCoefficient = this.procCoefficient,
+                            procCoefficient = procCoefficient,
                             falloffModel = BlastAttack.FalloffModel.None,
-                            damageColorIndex = default,
-                            damageType = DamageType.Generic,
-                            attackerFiltering = default
                         }.Fire();
                     }
                     //Play sfx at enemies
@@ -75,7 +70,7 @@ namespace EggsSkills.EntityStates
                     {
                         origin = body.corePosition,
                         color = Color.green,
-                        scale = this.detonationRadius
+                        scale = detonationRadius
                     };
                     //Play vfx at enemies
                     EffectManager.SpawnEffect(bodyPrefab, bodyEffectData, true);
@@ -90,19 +85,15 @@ namespace EggsSkills.EntityStates
                         new BlastAttack
                         {
                             position = body.corePosition,
-                            baseDamage = base.damageStat * (this.blightDamageCoefficient * body.GetBuffCount(RoR2Content.Buffs.Blight)),
+                            baseDamage = base.damageStat * (blightDamageCoefficient * body.GetBuffCount(RoR2Content.Buffs.Blight)),
                             baseForce = 0f,
-                            radius = this.detonationRadius,
+                            radius = detonationRadius,
                             attacker = base.gameObject,
                             inflictor = base.gameObject,
                             teamIndex = base.teamComponent.teamIndex,
                             crit = base.RollCrit(),
-                            procChainMask = default,
-                            procCoefficient = 1,
+                            procCoefficient = procCoefficient,
                             falloffModel = BlastAttack.FalloffModel.None,
-                            damageColorIndex = default,
-                            damageType = DamageType.Generic,
-                            attackerFiltering = default
                         }.Fire();
                     }
                     //Play sfx at enemy pos
@@ -112,15 +103,10 @@ namespace EggsSkills.EntityStates
                     {
                         origin = body.corePosition,
                         color = Color.yellow,
-                        scale = this.detonationRadius
+                        scale = detonationRadius
                     };
                     //Play vfx data at enemy positions
                     EffectManager.SpawnEffect(bodyPrefab, bodyEffectData, true);
-                }
-                if(NetworkServer.active)
-                {
-                    body.ClearTimedBuffs(RoR2Content.Buffs.Poisoned);
-                    body.ClearTimedBuffs(RoR2Content.Buffs.Blight);
                 }
             }
         }
@@ -132,7 +118,7 @@ namespace EggsSkills.EntityStates
             if(base.fixedAge >= 0.1f && base.isAuthority)
             {
                 //Set state back to main state
-                this.outer.SetNextStateToMain();
+                outer.SetNextStateToMain();
                 //Return
                 return;
             };

@@ -38,45 +38,45 @@ namespace EggsSkills.EntityStates
             //Grab the tracking component
             HuntressTracker huntressTracker = base.GetComponent<HuntressTracker>();
             //Find the target
-            if(huntressTracker && base.isAuthority) this.target = huntressTracker.GetTrackingTarget();
+            if(huntressTracker && base.isAuthority) target = huntressTracker.GetTrackingTarget();
             //Determine the cast-time
-            this.duration = this.baseDuration / base.attackSpeedStat;
+            duration = baseDuration / base.attackSpeedStat;
             //Get the transform of the model
-            Transform modelTransform = GetModelTransform();
+            Transform modelTransform = base.GetModelTransform();
             //If the model transform exists
             if(modelTransform)
             {
                 //Grab the child locator
                 ChildLocator childLocator = modelTransform.GetComponent<ChildLocator>();
                 //Find the muzzle with the given string
-                this.muzzle = childLocator.FindChild(this.assetRef.muzzleString);
+                muzzle = childLocator.FindChild(assetRef.muzzleString);
                 //Nab the animator
-                this.animator = modelTransform.GetComponent<Animator>();
+                animator = modelTransform.GetComponent<Animator>();
             }
             //Play the sound based on attack speed
             Util.PlayAttackSpeedSound(this.assetRef.attackSoundString, base.gameObject, base.attackSpeedStat);
             //Make sure body exists and do the thing where it looks towards where you aim
             if(base.characterBody) base.characterBody.SetAimTimer(duration + 1f);
             //Play the animations
-            base.PlayCrossfade("Gesture, Override", "FireSeekingShot", "FireSeekingShot.playbackRate", this.duration, this.duration * 0.2f / this.attackSpeedStat);
-            base.PlayCrossfade("Gesture, Additive", "FireSeekingShot", "FireSeekingShot.playbackRate", this.duration, this.duration * 0.2f / this.attackSpeedStat);
+            base.PlayCrossfade("Gesture, Override", "FireSeekingShot", "FireSeekingShot.playbackRate", duration, duration * 0.2f / attackSpeedStat);
+            base.PlayCrossfade("Gesture, Additive", "FireSeekingShot", "FireSeekingShot.playbackRate", duration, duration * 0.2f / attackSpeedStat);
         }
 
         public override void OnExit()
         {
             base.OnExit();
             //If it wasn't even attempted, try again
-            if(!this.wasArrowAttempted) this.Fire();
+            if(!wasArrowAttempted) Fire();
             //If for some reason it never even fired, refresh the stock
-            if (!this.wasArrowFired && NetworkServer.active) base.skillLocator.secondary.AddOneStock();
+            if (!wasArrowFired && NetworkServer.active) base.skillLocator.secondary.AddOneStock();
         }
 
         private void Fire()
         {
             //Keeps it on network only, and doesn't allow multiple arrow attempts
-            if (!NetworkServer.active || this.wasArrowAttempted) return;
+            if (!NetworkServer.active || wasArrowAttempted) return;
             //We have officially now made the attempt
-            this.wasArrowAttempted = true;
+            wasArrowAttempted = true;
             //Establish the orb
             GenericDamageOrb genericDamageOrb = new HuntressBombArrowOrb();
             //Set the damage to the player damage
@@ -87,15 +87,15 @@ namespace EggsSkills.EntityStates
             //Set the attacker to the player
             genericDamageOrb.attacker = base.gameObject;
             //If the target still exists by the time we fire
-            if (this.target)
+            if (target)
             {
-                this.wasArrowFired = true;
+                wasArrowFired = true;
                 //Apply the muzzle flash effect
-                EffectManager.SimpleMuzzleFlash(this.assetRef.muzzleflashEffectPrefab, base.gameObject, this.assetRef.muzzleString, false);
+                EffectManager.SimpleMuzzleFlash(assetRef.muzzleflashEffectPrefab, base.gameObject, assetRef.muzzleString, false);
                 //Set the origin to the muzzle position
-                genericDamageOrb.origin = this.muzzle.position;
+                genericDamageOrb.origin = muzzle.position;
                 //Set the target of the orb to the target we found
-                genericDamageOrb.target = this.target;
+                genericDamageOrb.target = target;
                 //Add the orb (Fire it)
                 OrbManager.instance.AddOrb(genericDamageOrb);
             }
@@ -105,21 +105,21 @@ namespace EggsSkills.EntityStates
         {
             base.FixedUpdate();
             //Idk what is really checked here, but it applies at the end of the animation so it works
-            if (!this.wasArrowAttempted && this.animator.GetFloat("FireSeekingShot.fire") > 0f) this.Fire();
+            if (!wasArrowAttempted && animator.GetFloat("FireSeekingShot.fire") > 0f) Fire();
             //Set the next state
-            if(base.fixedAge >= this.duration && base.isAuthority) this.outer.SetNextStateToMain();
+            if(base.fixedAge >= duration && base.isAuthority) outer.SetNextStateToMain();
             return;
         }
 
         //I don't understand networking shit very well, but I assume these help make sure the target isn't broken by weird lag shit
         public override void OnSerialize(NetworkWriter writer)
         {
-            writer.Write(HurtBoxReference.FromHurtBox(this.target));
+            writer.Write(HurtBoxReference.FromHurtBox(target));
         }
 
         public override void OnDeserialize(NetworkReader reader)
         {
-            this.target = reader.ReadHurtBoxReference().ResolveHurtBox();
+            target = reader.ReadHurtBoxReference().ResolveHurtBox();
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()

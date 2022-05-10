@@ -18,25 +18,43 @@ using System.Collections.Generic;
 using EggsSkills.Config;
 using EntityStates.Bandit2.Weapon;
 using EntityStates.Bandit2;
+using static EggsUtils.EggsUtils;
+using static EggsSkills.Config.Configuration;
 
 [module: UnverifiableCode]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
 
 namespace EggsSkills
 {
-    [BepInDependency("com.Egg.EggsUtils", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("com.Egg.EggsSkills", "Eggs Skills", "2.1.2")]
+    //Required compats
+    [BepInDependency(COMPAT_NAME, BepInDependency.DependencyFlags.HardDependency)]
+    [BepInDependency(API_NAME, BepInDependency.DependencyFlags.HardDependency)]
+    //Optional compats
+    [BepInDependency(SKILLSPLUS_NAME, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(AUTOSPRINT_NAME, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(CLASSICITEMS_NAME, BepInDependency.DependencyFlags.SoftDependency)]
+    //My mod
+    [BepInPlugin(MODNAME, MODTITLE, MODVERS)]
     [R2APISubmoduleDependency(new string[]
 {
     nameof(LanguageAPI),
     nameof(LoadoutAPI),
     nameof(PrefabAPI),
-    nameof(UnlockableAPI),
     nameof(CommandHelper)
 })]
     internal class SkillsLoader : BaseUnityPlugin
     {
+        //Mod focused stuff / strings
+        public const string MODNAME = "com.Egg.EggsSkills";
+        public const string MODTITLE = "Eggs Skills";
+        public const string MODVERS = "2.2.0";
+        //Hard dependancy strings
+        public const string API_NAME = "com.bepis.r2api";
+        //Soft dependancy strings
+        public const string SKILLSPLUS_NAME = "";
+        public const string AUTOSPRINT_NAME = "";
+        public const string CLASSICITEMS_NAME = "";
+
         #region Characterbody References
         //Nab artificer body
         internal static GameObject artificerRef = LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/MageBody");
@@ -64,11 +82,10 @@ namespace EggsSkills
 
         //List of all the skilldefs so we don't have to change every skill add case when r2api changes
         internal static List<SkillDef> defList = new List<SkillDef>();
-
         private void Awake()
         {
             //Thank SOM for being a poggers
-            EggsUtils.EggsUtils.LogToConsole("Thanks SOM for the icon work <3");
+            LogToConsole("Thanks SOM for the icon work <3");
             //Add our commands to the console
             CommandHelper.AddToConsoleWhenReady();
             //Load up the config file
@@ -80,7 +97,7 @@ namespace EggsSkills
             //Finally load up the skills
             RegisterSkills();
             //Tell the console that things went just as expected :)
-            EggsUtils.EggsUtils.LogToConsole("EggsSkills fully loaded!");
+            LogToConsole("EggsSkills fully loaded!");
         }
 
         //Main method for setting up all our skills
@@ -88,27 +105,27 @@ namespace EggsSkills
         {
             //For each character, if the configvalue says they are allowed to load up their skills load them, otherwise don't.  Simple.
             //Artificer
-            if (Configuration.GetConfigValue(Configuration.EnableMageSkills)) RegisterArtificerSkills();
+            if (GetConfigValue(EnableMageSkills)) RegisterArtificerSkills();
             //Mercenary
-            if (Configuration.GetConfigValue(Configuration.EnableMercSkills)) RegisterMercenarySkills();
+            if (GetConfigValue(EnableMercSkills)) RegisterMercenarySkills();
             //Commando
-            if (Configuration.GetConfigValue(Configuration.EnableCommandoSkills)) RegisterCommandoSkills();
+            if (GetConfigValue(EnableCommandoSkills)) RegisterCommandoSkills();
             //Engineer
-            if (Configuration.GetConfigValue(Configuration.EnableEngiSkills)) RegisterEngiSkills();
+            if (GetConfigValue(EnableEngiSkills)) RegisterEngiSkills();
             //Acrid (Yes he is called croco in the official code and it is beautiful)
-            if (Configuration.GetConfigValue(Configuration.EnableCrocoSkills)) RegisterAcridSkills();
+            if (GetConfigValue(EnableCrocoSkills)) RegisterAcridSkills();
             //Loader
-            if (Configuration.GetConfigValue(Configuration.EnableLoaderSkills)) RegisterLoaderSkills();
+            if (GetConfigValue(EnableLoaderSkills)) RegisterLoaderSkills();
             //Captain
-            if (Configuration.GetConfigValue(Configuration.EnableCaptainSkills)) RegisterCaptainSkills();
+            if (GetConfigValue(EnableCaptainSkills)) RegisterCaptainSkills();
             //REX
-            if (Configuration.GetConfigValue(Configuration.EnableTreebotSkills)) RegisterRexSkills();
+            if (GetConfigValue(EnableTreebotSkills)) RegisterRexSkills();
             //Bandit
-            if (Configuration.GetConfigValue(Configuration.EnableBanditSkills)) RegisterBanditSkills();
+            if (GetConfigValue(EnableBanditSkills)) RegisterBanditSkills();
             //Huntress
-            if (Configuration.GetConfigValue(Configuration.EnableHuntressSkills)) RegisterHuntressSkills();
+            if (GetConfigValue(EnableHuntressSkills)) RegisterHuntressSkills();
             //MUL-T
-            if (Configuration.GetConfigValue(Configuration.EnableToolbotSkills)) RegisterMultSkills();
+            if (GetConfigValue(EnableToolbotSkills)) RegisterMultSkills();
 
             //Register any states that aren't directly tied to skill activation (Basically, don't need skilldefs)
             RegisterExtraStates();
@@ -122,11 +139,11 @@ namespace EggsSkills
                     //Add skilldef via R2API
                     ContentAddition.AddSkillDef(def);
                     //Tell us each time a skill is registered, helps with sanity checks
-                    EggsUtils.EggsUtils.LogToConsole("Skill: " + def.skillName + " Registered");
+                    LogToConsole("Skill: " + def.skillName + " Registered");
                 }
             }
             //Sadness check
-            else EggsUtils.EggsUtils.LogToConsole("Did you really install my mod just to disable all the skills :(");
+            else LogToConsole("Did you really install my mod just to disable all the skills :(");
         }
         #region Skills
         private void RegisterArtificerSkills()
@@ -176,14 +193,14 @@ namespace EggsSkills
         private void RegisterMercenarySkills()
         {
             SkillLocator mercSkillLocator = mercenaryRef.GetComponent<SkillLocator>();
-            SkillFamily mercSkillFamilyUtility = mercSkillLocator.utility.skillFamily;
+            SkillFamily mercSkillFamilySpecial = mercSkillLocator.special.skillFamily;
 
             //Slashport
             MercSlashportDef skillDefSlashport = ScriptableObject.CreateInstance<MercSlashportDef>();
             skillDefSlashport.activationState = new SerializableEntityStateType(typeof(SlashportEntity));
             skillDefSlashport.activationStateMachineName = "Weapon";
             skillDefSlashport.baseMaxStock = 1;
-            skillDefSlashport.baseRechargeInterval = 9f;
+            skillDefSlashport.baseRechargeInterval = 8f;
             skillDefSlashport.beginSkillCooldownOnSkillEnd = true;
             skillDefSlashport.fullRestockOnAssign = false;
             skillDefSlashport.interruptPriority = InterruptPriority.PrioritySkill;
@@ -196,18 +213,19 @@ namespace EggsSkills
             skillDefSlashport.requiredStock = 1;
             skillDefSlashport.stockToConsume = 1;
             skillDefSlashport.icon = Resources.Sprites.slashportIconS;
-            skillDefSlashport.skillDescriptionToken = "MERCENARY_UTILITY_SLASHPORT_DESC";
+            skillDefSlashport.skillDescriptionToken = "MERCENARY_SPECIAL_SLASHPORT_DESC";
             skillDefSlashport.skillName = "Slashport";
-            skillDefSlashport.skillNameToken = "MERCENARY_UTILITY_SLASHPORT_NAME";
+            skillDefSlashport.skillNameToken = "MERCENARY_SPECIAL_SLASHPORT_NAME";
             skillDefSlashport.keywordTokens = new string[]
             {
                 "KEYWORD_EXPOSE",
-                "KEYWORD_STUNNING"
+                "KEYWORD_STUNNING",
+                "KEYWORD_SLAYER"
             };
 
             defList.Add(skillDefSlashport);
-            Array.Resize(ref mercSkillFamilyUtility.variants, mercSkillFamilyUtility.variants.Length + 1);
-            mercSkillFamilyUtility.variants[mercSkillFamilyUtility.variants.Length - 1] = new SkillFamily.Variant
+            Array.Resize(ref mercSkillFamilySpecial.variants, mercSkillFamilySpecial.variants.Length + 1);
+            mercSkillFamilySpecial.variants[mercSkillFamilySpecial.variants.Length - 1] = new SkillFamily.Variant
             {
                 skillDef = skillDefSlashport,
                 unlockableDef = UnlocksRegistering.mercSlashportUnlockDef,
@@ -256,7 +274,7 @@ namespace EggsSkills
             skillDefDash.activationState = new SerializableEntityStateType(typeof(CommandoDashEntity));
             skillDefDash.activationStateMachineName = "Body";
             skillDefDash.baseMaxStock = 2;
-            skillDefDash.baseRechargeInterval = 8f;
+            skillDefDash.baseRechargeInterval = 10f;
             skillDefDash.beginSkillCooldownOnSkillEnd = true;
             skillDefDash.fullRestockOnAssign = false;
             skillDefDash.interruptPriority = InterruptPriority.PrioritySkill;
@@ -264,7 +282,7 @@ namespace EggsSkills
             skillDefDash.mustKeyPress = true;
             skillDefDash.canceledFromSprinting = false;
             skillDefDash.cancelSprintingOnActivation = false;
-            skillDefDash.forceSprintDuringState = false;
+            skillDefDash.forceSprintDuringState = true;
             skillDefDash.stockToConsume = 1;
             skillDefDash.requiredStock = 1;
             skillDefDash.rechargeStock = 1;
@@ -652,15 +670,15 @@ namespace EggsSkills
         private void RegisterExtraStates()
         {
             //Artificer extra states
-            if (Configuration.GetConfigValue(Configuration.EnableMageSkills))
+            if (GetConfigValue(EnableMageSkills))
             {
                 //Artificer Zappot Fire State
                 ContentAddition.AddEntityState<ZapportFireEntity>(out _);
-                EggsUtils.EggsUtils.LogToConsole("Zapport fire state loaded!");
+                LogToConsole("Zapport fire state loaded!");
             }
 
             //Engi extra states
-            if (Configuration.GetConfigValue(Configuration.EnableEngiSkills))
+            if (GetConfigValue(EnableEngiSkills))
             {
                 //Tesla mine arming states
                 ContentAddition.AddEntityState<TeslaArmingUnarmedState>(out _);
@@ -672,7 +690,7 @@ namespace EggsSkills
                 ContentAddition.AddEntityState<TeslaWaitForTargetState>(out _);
                 ContentAddition.AddEntityState<TeslaPreDetState>(out _);
                 ContentAddition.AddEntityState<TeslaDetonateState>(out _);
-                EggsUtils.EggsUtils.LogToConsole("Tesla mine states loaded!");
+                LogToConsole("Tesla mine states loaded!");
             }
         }
     }

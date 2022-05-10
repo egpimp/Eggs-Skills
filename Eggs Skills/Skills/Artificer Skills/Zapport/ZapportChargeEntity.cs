@@ -69,22 +69,22 @@ namespace EggsSkills.EntityStates
             //Establish ran num at maxtimer
             ranStopwatch = ranStopwatchMax;
             //Start with 0% charge
-            this.chargePercent = 0f;
+            chargePercent = 0f;
             //Used to find min
             float[] findMinSpeed = new float[] { base.attackSpeedStat, 4f };
             //Gets the lower value between attackspeed and 4, then determine the maxcharge based on the basemaxcharge divided by the attack speed
-            this.maxCharge = this.baseMaxCharge / findMinSpeed.Min();
+            maxCharge = baseMaxCharge / findMinSpeed.Min();
             //Play the wall holding animation artificer has
             base.PlayAnimation("Gesture, Additive", "PrepWall", "PrepWall.playbackRate", 1);
             //Set the area indicator
-            this.areaIndicator = Object.Instantiate(ArrowRain.areaIndicatorPrefab);
+            areaIndicator = Object.Instantiate(ArrowRain.areaIndicatorPrefab);
             //Activate the area indicator
-            this.areaIndicator.SetActive(true);
+            areaIndicator.SetActive(true);
             //Calculate the stock bonus with multiplier and remaining stocks
             if (base.skillLocator.utility.stock > 0)
             {
-                this.stockMultiplier = this.stockBonusPerMultiplier * base.skillLocator.utility.stock;
-                this.stockRadiusMultiplier = this.stockBonusRadiusPerMultiplier * base.skillLocator.utility.stock;
+                stockMultiplier = stockBonusPerMultiplier * base.skillLocator.utility.stock;
+                stockRadiusMultiplier = stockBonusRadiusPerMultiplier * base.skillLocator.utility.stock;
             }
             //Deduct the stocks
             base.skillLocator.utility.RemoveAllStocks();
@@ -97,10 +97,10 @@ namespace EggsSkills.EntityStates
             //Fix the walkspeed
             base.characterMotor.walkSpeedPenaltyCoefficient = 1f;
             //If indicator exists
-            if (this.areaIndicator)
+            if (areaIndicator)
             {
                 //Deactivate and delet this
-                this.areaIndicator.SetActive(false);
+                areaIndicator.SetActive(false);
                 Destroy(areaIndicator);
             }
             //Base exit component
@@ -112,26 +112,26 @@ namespace EggsSkills.EntityStates
             //Handle base fixedupdate stuff
             base.FixedUpdate();
             //Calculate the percent charge based on how long ability been held and the maxcharge
-            this.chargePercent = base.fixedAge / this.maxCharge;
+            chargePercent = base.fixedAge / maxCharge;
             //Originally for testing purposes, it was actually more fun this way though so welcome to the age of holding max charge
             if (chargePercent >= 1f) chargePercent = 1f;
             //Calculate the radius, convert the charge percent (0.2 to 1) to the radius mult (1 to 2.5)
-            this.radius = this.baseRadius * EggsUtils.Helpers.Math.ConvertToRange(0f, 1f, 1f, this.maxRadiusMult, this.chargePercent) * this.stockRadiusMultiplier;
+            radius = baseRadius * EggsUtils.Helpers.Math.ConvertToRange(0f, 1f, 1f, maxRadiusMult, chargePercent) * stockRadiusMultiplier;
             //Recalculate the intended move pos
-            this.RecalculatePos();
+            RecalculatePos();
             //Adjust indicator accordingly
-            this.IndicatorUpdator();
+            IndicatorUpdator();
             //Play the fx while charging the skill
-            this.PlayChargeFX();
+            PlayChargeFX();
 
             //Set movespeed based on charge percent, 1x to (1 - maxMovePenalty) normal speed while charging
-            base.characterMotor.walkSpeedPenaltyCoefficient = 1f - this.chargePercent * this.maxMovePenalty;
+            base.characterMotor.walkSpeedPenaltyCoefficient = 1f - chargePercent * maxMovePenalty;
             //Calculate damage, if not min charge the damage is the minimum, if min charge met damage is min + percent converted from 0.2 - 1 to 0 - 7.5, weirdness stops NREs
-            this.damageMult = chargePercent >= minChargePercent ? baseDamageMult + EggsUtils.Helpers.Math.ConvertToRange(minChargePercent, 1f, 0f, this.maxDamageMultBonus, chargePercent) : baseDamageMult;
-            this.damageMult *= this.stockMultiplier;
+            damageMult = chargePercent >= minChargePercent ? baseDamageMult + EggsUtils.Helpers.Math.ConvertToRange(minChargePercent, 1f, 0f, maxDamageMultBonus, chargePercent) : baseDamageMult;
+            damageMult *= stockMultiplier;
 
             //If button is no longer held down AND the charge percent is at or above the minimum
-            if ((!base.IsKeyDownAuthority() && this.chargePercent >= this.minChargePercent))
+            if ((!base.IsKeyDownAuthority() && chargePercent >= minChargePercent))
             {
                 //Network check
                 if (base.isAuthority)
@@ -143,7 +143,7 @@ namespace EggsSkills.EntityStates
                     nextState.radius = radius;
                     nextState.movePos = calculatedMovePos;
                     //Execute next state
-                    this.outer.SetNextState(nextState);
+                    outer.SetNextState(nextState);
                 }
                 return;
             }
@@ -154,7 +154,7 @@ namespace EggsSkills.EntityStates
             //Should give us a amount of speed based on movespeed, 2x ms = 2x teleport distance
             float speedMod = base.moveSpeedStat / 7f;
             //Calculate distance with min distance, then add the bonus times the max distance times the speedmod.
-            this.distance = this.baseMinDistance + this.chargePercent * this.baseMaxDistanceBonus * speedMod * this.stockMultiplier;
+            distance = baseMinDistance + chargePercent * baseMaxDistanceBonus * speedMod * stockMultiplier;
             //Create the aimray
             Ray aimRay = GetAimRay();
             //Spherecast with the players radius, get all objects hit
@@ -178,9 +178,9 @@ namespace EggsSkills.EntityStates
         private void IndicatorUpdator()
         {
             //Set pos to the intended position
-            this.areaIndicator.transform.position = this.calculatedMovePos;
+            areaIndicator.transform.position = calculatedMovePos;
             //Set scale to the radius
-            this.areaIndicator.transform.localScale = this.radius * Vector3.one;
+            areaIndicator.transform.localScale = radius * Vector3.one;
         }
 
         private void PlayChargeFX()
@@ -188,16 +188,16 @@ namespace EggsSkills.EntityStates
             //Convert percent charge to a value ranging from minran% to maxran%
             float ranPercent = EggsUtils.Helpers.Math.ConvertToRange(0f, 1f, ranNumMin, ranNumMax, chargePercent);
             //If stopwatch isn't ticked all the way down, tick it down
-            if (this.ranStopwatch >= 0f) this.ranStopwatch -= Time.fixedDeltaTime;
+            if (ranStopwatch >= 0f) ranStopwatch -= Time.fixedDeltaTime;
             //If stopwatch is fully ticked down...
             else
             {
                 //Reset stopwatch before performing other stuff
-                this.ranStopwatch = this.ranStopwatchMax;
+                ranStopwatch = ranStopwatchMax;
                 //Grab random num 0 - 1
                 float ranNum = Range(0f, 1f);
                 //Check if it is lower than the ranPercent, functionally makes ranpercent a % chance of hitting & play at target pos
-                if (ranNum <= ranPercent) EffectManager.SimpleEffect(this.effectPrefab, this.calculatedMovePos + insideUnitSphere * this.radius, Quaternion.identity, true);
+                if (ranNum <= ranPercent) EffectManager.SimpleEffect(effectPrefab, calculatedMovePos + insideUnitSphere * radius, Quaternion.identity, true);
             }
         }
 

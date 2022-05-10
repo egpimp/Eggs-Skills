@@ -7,7 +7,6 @@ using UnityEngine.Networking;
 
 namespace EggsSkills
 {
-    [RequireComponent(typeof(CharacterBody))]
     class InvisHandler : MonoBehaviour
     {
         //Whether or not player is invis
@@ -32,15 +31,15 @@ namespace EggsSkills
         private void Start()
         {
             //Establish timer
-            this.timeTilInvis = this.baseTimeTilInvis;
+            timeTilInvis = baseTimeTilInvis;
             //Nab characterbody
-            this.characterBody = base.GetComponent<CharacterBody>();
+            characterBody = base.GetComponent<CharacterBody>();
             //Get the slot for utility
-            this.utilitySlot = this.characterBody.skillLocator.utility;
+            utilitySlot = characterBody.skillLocator.utility;
             //Set invis to false
-            this.isInvis = false;
+            isInvis = false;
             //nab input bank
-            this.bank = base.GetComponent<InputBankTest>();
+            bank = base.GetComponent<InputBankTest>();
         }
         internal void MakeInvis()
         {
@@ -48,84 +47,76 @@ namespace EggsSkills
             if (NetworkServer.active)
             {
                 //Add cloak
-                this.characterBody.AddBuff(RoR2Content.Buffs.Cloak);
+                characterBody.AddBuff(RoR2Content.Buffs.Cloak);
                 //Add cloak speed boost
-                this.characterBody.AddBuff(RoR2Content.Buffs.CloakSpeed);
+                characterBody.AddBuff(RoR2Content.Buffs.CloakSpeed);
             }
             //Flag as invis
-            this.isInvis = true;
+            isInvis = true;
             //Reset time-to-invis timer
-            this.timeTilInvis = this.baseTimeTilInvis;
+            timeTilInvis = baseTimeTilInvis;
             //Grab the current amount of cd counted down and put it in the hold
-            this.holdTimer = this.utilitySlot.rechargeStopwatch;
+            holdTimer = utilitySlot.rechargeStopwatch;
             //Play the fx
-            this.PlayEffects();
+            PlayEffects();
         }
         internal void RemoveInvis()
         {
             if (NetworkServer.active)
             {
                 //Remove the cloak buff
-                this.characterBody.RemoveBuff(RoR2Content.Buffs.Cloak);
+                characterBody.RemoveBuff(RoR2Content.Buffs.Cloak);
                 //Remove the cloak speed boost
-                this.characterBody.RemoveBuff(RoR2Content.Buffs.CloakSpeed);
+                characterBody.RemoveBuff(RoR2Content.Buffs.CloakSpeed);
                 //Give the post-cloak buff
-                this.characterBody.AddTimedBuff(BuffsLoading.buffDefCunning, this.buffDuration);
+                characterBody.AddTimedBuff(BuffsLoading.buffDefCunning, buffDuration);
             }
             //Take off a stock of the ability
-            this.utilitySlot.DeductStock(1);
+            utilitySlot.DeductStock(1);
             //Flag as visible
-            this.isInvis = false;
+            isInvis = false;
             //Play the fx
-            this.PlayEffects();
+            PlayEffects();
         }
         private void FixedUpdate()
         {
             //Structure here is weird, but we need slightly different events for slightly different cases
-            //If sprinting...
-            if(this.characterBody.isSprinting)
+            //If sprinting AND not invis
+            if (characterBody.isSprinting && !isInvis)
             {
-                //If sprinting AND not invis
-                if (!this.isInvis)
-                {
-                    //AND time exists to countdown, count time down
-                    if (this.timeTilInvis > 0) this.timeTilInvis -= Time.fixedDeltaTime;
-                    //AND countdown is up
-                    else
-                    {
-                        //AND there is a stock, activate invisibility
-                        if (this.characterBody.skillLocator.utility.stock > 0) this.MakeInvis();
-                    }
-                }
+                //AND time exists to countdown, count time down
+                if (timeTilInvis > 0) timeTilInvis -= Time.fixedDeltaTime;
+                //If countdown is up and there is a stock
+                else if (characterBody.skillLocator.utility.stock > 0) MakeInvis();
             }
-            //If NOT sprinting
-            else
+            //If NOT sprinting AND invis
+            else if (!characterBody.isSprinting)
             {
                 //If NOT sprinting AND invis, take away the invis
-                if (this.isInvis) this.RemoveInvis();
+                if (isInvis) RemoveInvis();
                 //Reset the invis timer
-                this.timeTilInvis = this.baseTimeTilInvis;
+                timeTilInvis = baseTimeTilInvis;
             }
 
             //If invis, don't count the cooldown yet
-            if(this.isInvis) this.utilitySlot.rechargeStopwatch = this.holdTimer;
+            if(isInvis) utilitySlot.rechargeStopwatch = holdTimer;
 
             //Lastly, kill invis if m2 is used because they're agile I guess
-            if (this.bank.skill2.down && this.isInvis) this.RemoveInvis();
+            if (bank.skill2.down && isInvis) RemoveInvis();
         }
         internal bool IsInvis()
         {
             //Accessor for invis check
-            return this.isInvis;
+            return isInvis;
         }
         private void PlayEffects()
         {
             //Play smoke-bomb fx
-            EffectManager.SimpleMuzzleFlash(StealthMode.smokeBombEffectPrefab, base.gameObject, StealthMode.smokeBombMuzzleString, false);
+            EffectManager.SimpleMuzzleFlash(StealthMode.smokeBombEffectPrefab, gameObject, StealthMode.smokeBombMuzzleString, false);
             //Sound string establish, enter sound if in stealth, exit sound if not stealth
             string soundString = isInvis ? StealthMode.enterStealthSound : StealthMode.exitStealthSound;
             //Play sound
-            Util.PlaySound(soundString, base.gameObject);
+            Util.PlaySound(soundString, gameObject);
         }
     }
 }

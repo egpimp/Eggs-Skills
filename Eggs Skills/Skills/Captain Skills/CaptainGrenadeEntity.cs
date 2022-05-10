@@ -19,7 +19,7 @@ namespace EggsSkills.EntityStates
             //Engage enter protocol
             base.OnEnter();
             //Set delay with the attack speed
-            this.delay = this.baseDelay / base.attackSpeedStat;
+            delay = baseDelay / base.attackSpeedStat;
             //Grab aimray
             var aimRay = GetAimRay();
             //Play the firing sound
@@ -28,17 +28,17 @@ namespace EggsSkills.EntityStates
             base.PlayAnimation("Gesture, Additive", "FireCaptainShotgun");
             base.PlayAnimation("Gesture, Override", "FireCaptainShotgun");
             //Network check, then fire projectile
-            if (base.isAuthority) ProjectileManager.instance.FireProjectile(Projectiles.debuffGrenadePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, base.damageStat * this.damageCoefficient , 0f, base.RollCrit());
+            if (base.isAuthority) ProjectileManager.instance.FireProjectile(Projectiles.debuffGrenadePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, base.damageStat * damageCoefficient , 0f, base.RollCrit());
         }
         public override void FixedUpdate()
         {
             //Standard update procedure
             base.FixedUpdate();
             //If cast time up, and network check
-            if(base.fixedAge >= this.delay && base.isAuthority)
+            if(base.fixedAge >= delay && base.isAuthority)
             {
                 //Set next state
-                this.outer.SetNextStateToMain();
+                outer.SetNextStateToMain();
                 return;
             }
         }

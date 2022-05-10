@@ -54,9 +54,9 @@ namespace EggsSkills.Config
         internal static ConfigEntry<uint> CommandoShotgunPellets { get; private set; }
         internal const uint defaultCommandoShotgunPellets = 6u;
 
-        //What is the missing health% damage of stabby
-        internal static ConfigEntry<float> MercSlashHealthfraction { get; private set; }
-        internal const float defaultMercSlashHealthfraction = 0.15f;
+        //How far are enemies stunned by the slash
+        internal static ConfigEntry<float> MercSlashStunrange { get; private set; }
+        internal const float defaultMercSlashStunrange = 16f;
 
         //How far do the robot grab yo ass
         internal static ConfigEntry<float> TreebotPullRange { get; private set; }
@@ -135,7 +135,7 @@ namespace EggsSkills.Config
             LoaderShieldsplodeRemovebarrieronuse = configFile.Bind("LoaderConfigs", "ShieldsplodeRemoveBarrierOnUse", defaultLoaderShieldsplodeRemovebarrieronuse, "Should Loader's Barrier Buster remove your barrier on use");
             EngiTeslaminePulses = configFile.Bind("EngiConfigs", "TeslaminePulseCount", defaultEngiTeslaminePulses, "How many times should Engineer's Shock Mines deal damage before dissapearing");
             CaptainDebuffnadeRadius = configFile.Bind("CaptainConfigs", "DebuffnadeRadius", defaultCaptainDebuffnadeRadius, "Radius of Captain's Tracking Grenade");
-            MercSlashHealthfraction = configFile.Bind("MercConfigs", "SlashportHealthFraction", defaultMercSlashHealthfraction, "What percent of missing health damage should Mercenary's Fatal Assault deal");
+            MercSlashStunrange = configFile.Bind("MercConfigs", "SlashportHealthFraction", defaultMercSlashStunrange, "What is the range on merc stunning enemies with this ability");
             TreebotPullRange = configFile.Bind("REXConfigs", "PullRange", defaultTreebotPullRange, "Radius at which enemies should be affected by REX's DIRECTIVE: Respire");
             TreebotPullSpeedcap = configFile.Bind("REXConfigs", "PullSpeedCap", defaultTreebotPullSpeedcap, "Should REX's DIRECTIVE: Respire be capped in how fast it can pulse");
             ToolbotNanobotCountperenemy = configFile.Bind("MULTConfigs", "NanobotCount", defaultToolbotNanobotCountperenemy, "How many nanobot swarms should MUL-T's Nanobot Swarm ability fire out per enemy");

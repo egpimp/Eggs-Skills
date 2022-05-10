@@ -57,31 +57,28 @@ namespace EggsSkills.EntityStates
             //Create fx data
             EffectData endEffectData = new EffectData
             {
-                scale = this.radius,
-                origin = this.characterBody.corePosition
+                scale = radius,
+                origin = characterBody.corePosition
             };
             //Spawn the fx
-            EffectManager.SpawnEffect(this.explosionPrefab, endEffectData, true);
+            EffectManager.SpawnEffect(explosionPrefab, endEffectData, true);
             //Network check
             if (base.isAuthority)
             {
                 //Create and fire blast attack
                 new BlastAttack
                 {
-                    position = this.characterBody.corePosition,
-                    baseDamage = base.damageStat * this.damageMult,
-                    baseForce = this.baseForce * this.damageMult,
+                    position = characterBody.corePosition,
+                    baseDamage = base.damageStat * damageMult,
+                    baseForce = baseForce * damageMult,
                     radius = radius,
                     attacker = base.gameObject,
                     inflictor = base.gameObject,
                     teamIndex = base.teamComponent.teamIndex,
-                    crit = RollCrit(),
-                    procChainMask = default(ProcChainMask),
-                    procCoefficient = this.procCoef,
+                    crit = base.RollCrit(),
+                    procCoefficient = procCoef,
                     falloffModel = BlastAttack.FalloffModel.None,
-                    damageColorIndex = DamageColorIndex.Default,
                     damageType = DamageType.Stun1s,
-                    attackerFiltering = AttackerFiltering.Default
                 }.Fire();
             }
         }
