@@ -1,32 +1,18 @@
 ﻿using RoR2;
-using EggsSkills.Resources;
-using System;
-using UnityEngine;
 using EggsSkills.Config;
-using R2API;
+using RoR2.Achievements;
+using UnityEngine;
 
 namespace EggsSkills.Achievements
 {
-    internal class ZapportAchievement : ModdedUnlockable
+    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, null)]
+    internal class ZapportAchievement : BaseAchievement
     {
-        public override string AchievementIdentifier { get; } = "ARTIFICER_FTLUNLOCKABLE_ACHIEVEMENT_ID";
-        public override string UnlockableIdentifier { get; } = "ARTIFICER_FTLUNLOCKABLE_REWARD_ID";
-        public override string AchievementNameToken { get; } = "ARTIFICER_FTLUNLOCKABLE_ACHIEVEMENT_NAME";
-        public override string PrerequisiteUnlockableIdentifier { get; } = "";
-        public override string UnlockableNameToken { get; } = "ARTIFICER_FTLUNLOCKABLE_UNLOCKABLE_NAME";
-        public override string AchievementDescToken { get; } = "ARTIFICER_FTLUNLOCKABLE_ACHIEVEMENT_DESC";
-        public override Sprite Sprite { get; } = Sprites.zapportIconS;
-        public override Func<string> GetHowToUnlock { get; } = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
-        {
-            Language.GetString("ARTIFICER_FTLUNLOCKABLE_ACHIEVEMENT_NAME"),
-            Language.GetString("ARTIFICER_FTLUNLOCKABLE_ACHIEVEMENT_DESC")
-        }));
+        internal const string ACHNAME = "MageFastMoveSpeed";
+        internal const string REWARDNAME = "EggsSkills.Zapport";
 
-        public override Func<string> GetUnlocked { get; } = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
-        {
-            Language.GetString("ARTIFICER_FTLUNLOCKABLE_ACHIEVEMENT_NAME"),
-            Language.GetString("ARTIFICER_FTLUNLOCKABLE_ACHIEVEMENT_DESC")
-        }));
+        //500% normal ms required
+        private static readonly float moveSpeedReq = 5f;
 
         public override BodyIndex LookUpRequiredBodyIndex()
         {
@@ -51,9 +37,11 @@ namespace EggsSkills.Achievements
 
         public void ClearCheck()
         {
+            //Make sure player is alive, and make sure they are arti
             if (base.isUserAlive && base.meetsBodyRequirement)
             {
-                if (base.localUser != null && base.localUser.cachedBody && base.localUser.cachedBody.moveSpeed / base.localUser.cachedBody.baseMoveSpeed >= 5f)
+                //Make sure local user exists, then make sure their body exists, then make sure their move speed meets the req
+                if (base.localUser != null && base.localUser.cachedBody && base.localUser.cachedBody.moveSpeed / base.localUser.cachedBody.baseMoveSpeed >= moveSpeedReq)
                 {
                     base.Grant();
                 }

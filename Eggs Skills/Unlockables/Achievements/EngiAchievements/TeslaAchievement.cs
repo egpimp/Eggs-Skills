@@ -1,33 +1,15 @@
-﻿using EggsSkills.Resources;
-using RoR2;
-using System;
-using UnityEngine;
+﻿using RoR2;
 using EggsSkills.Config;
-using R2API;
+using RoR2.Achievements;
 
 namespace EggsSkills.Achievements
 {
-    internal class TeslaMineAchievement : ModdedUnlockable
+    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, null)]
+    internal class TeslaMineAchievement : BaseAchievement
     {
-        public override string AchievementIdentifier { get; } = "ENGI_ELECTRICUNLOCKABLE_ACHIEVEMENT_ID";
-        public override string UnlockableIdentifier { get; } = "ENGI_ELECTRICUNLOCKABLE_REWARD_ID";
-        public override string AchievementNameToken { get; } = "ENGI_ELECTRICUNLOCKABLE_ACHIEVEMENT_NAME";
-        public override string PrerequisiteUnlockableIdentifier { get; } = "";
-        public override string UnlockableNameToken { get; } = "ENGI_ELECTRICUNLOCKABLE_UNLOCKABLE_NAME";
-        public override string AchievementDescToken { get; } = "ENGI_ELECTRICUNLOCKABLE_ACHIEVEMENT_DESC";
-        public override Sprite Sprite { get; } = Sprites.teslaMineIconS;
+        internal const string ACHNAME = "EngiMultipleElectricItems";
+        internal const string REWARDNAME = "EggsSkills.TeslaMine";
 
-        public override Func<string> GetHowToUnlock { get; } = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
-        {
-            Language.GetString("ENGI_ELECTRICUNLOCKABLE_ACHIEVEMENT_NAME"),
-            Language.GetString("ENGI_ELECTRICUNLOCKABLE_ACHIEVEMENT_DESC")
-        }));
-
-        public override Func<string> GetUnlocked { get; } = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
-        {
-            Language.GetString("ENGI_ELECTRICUNLOCKABLE_ACHIEVEMENT_NAME"),
-            Language.GetString("ENGI_ELECTRICUNLOCKABLE_ACHIEVEMENT_DESC")
-        }));
 
         public override BodyIndex LookUpRequiredBodyIndex()
         {

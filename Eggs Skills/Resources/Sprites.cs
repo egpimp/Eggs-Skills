@@ -5,8 +5,6 @@ namespace EggsSkills.Resources
 {
     class Sprites
     {
-        private static string isHd;
-
         internal static Sprite shotgunIconS;
 
         internal static Sprite zapportIconS;
@@ -35,8 +33,6 @@ namespace EggsSkills.Resources
 
         internal static void LoadIcons()
         {
-            //Artifact of an attempt at something but it turned out to be not needed.  Harder to fix so w/e
-            isHd = "hd";
             CommandoIcons();
             ArtificerIcons();
             BanditIcons();
@@ -53,73 +49,73 @@ namespace EggsSkills.Resources
         internal static void CommandoIcons()
         {
             //Shotgun
-            Texture2D shotgunIcon = Assets.assetBundle.LoadAsset<Texture2D>("texcommandoshotgun" + isHd);
+            Texture2D shotgunIcon = Assets.assetBundle.LoadAsset<Texture2D>("texcommandoshotgun");
             shotgunIconS = EggsUtils.Properties.Assets.TexToSprite(shotgunIcon);
             //Dash
-            Texture2D dashIcon = Assets.assetBundle.LoadAsset<Texture2D>("texdash" + isHd);
+            Texture2D dashIcon = Assets.assetBundle.LoadAsset<Texture2D>("texdash");
             dashIconS = EggsUtils.Properties.Assets.TexToSprite(dashIcon);
         }
         internal static void ArtificerIcons()
         {
             //Zapport
-            Texture2D zapportIcon = Assets.assetBundle.LoadAsset<Texture2D>("texsurgeteleport" + isHd);
+            Texture2D zapportIcon = Assets.assetBundle.LoadAsset<Texture2D>("texsurgeteleport");
             zapportIconS = EggsUtils.Properties.Assets.TexToSprite(zapportIcon);
         }
         internal static void BanditIcons()
         {
             //InvisSprint
-            Texture2D invisSprintIcon = Assets.assetBundle.LoadAsset<Texture2D>("texinvissprint" + isHd);
+            Texture2D invisSprintIcon = Assets.assetBundle.LoadAsset<Texture2D>("texinvissprint");
             invisSprintIconS = EggsUtils.Properties.Assets.TexToSprite(invisSprintIcon);
             //MagicBullet
-            Texture2D magicBulletIcon = Assets.assetBundle.LoadAsset<Texture2D>("texrichochet" + isHd);
+            Texture2D magicBulletIcon = Assets.assetBundle.LoadAsset<Texture2D>("texrichochet");
             magicBulletIconS = EggsUtils.Properties.Assets.TexToSprite(magicBulletIcon);
         }
         internal static void RexIcons()
         {
             //Respire
-            Texture2D rexrootIcon = Assets.assetBundle.LoadAsset<Texture2D>("texrexroot" + isHd);
+            Texture2D rexrootIcon = Assets.assetBundle.LoadAsset<Texture2D>("texrexroot");
             rexrootIconS = EggsUtils.Properties.Assets.TexToSprite(rexrootIcon);
         }
         internal static void AcridIcons()
         {
             //Expunge
-            Texture2D acridpurgeIcon = Assets.assetBundle.LoadAsset<Texture2D>("texexpunge" + isHd);
+            Texture2D acridpurgeIcon = Assets.assetBundle.LoadAsset<Texture2D>("texexpunge");
             acridpurgeIconS = EggsUtils.Properties.Assets.TexToSprite(acridpurgeIcon);
         }
         internal static void LoaderIcons()
         {
             //Shieldsplosion
-            Texture2D shieldSplosionIcon = Assets.assetBundle.LoadAsset<Texture2D>("texshieldsplosion" + isHd);
+            Texture2D shieldSplosionIcon = Assets.assetBundle.LoadAsset<Texture2D>("texshieldsplosion");
             shieldsplosionIconS = EggsUtils.Properties.Assets.TexToSprite(shieldSplosionIcon);
         }
         internal static void CaptainIcons()
         {
             //DebuffGrenade
-            Texture2D debuffNadeIcon = Assets.assetBundle.LoadAsset<Texture2D>("texdebuffnade" + isHd);
+            Texture2D debuffNadeIcon = Assets.assetBundle.LoadAsset<Texture2D>("texdebuffnade");
             debuffNadeIconS = EggsUtils.Properties.Assets.TexToSprite(debuffNadeIcon);
         }
         internal static void HuntressIcons()
         {
             //ClusterArrow
-            Texture2D clusterArrowIcon = Assets.assetBundle.LoadAsset<Texture2D>("texbombarrow" + isHd);
+            Texture2D clusterArrowIcon = Assets.assetBundle.LoadAsset<Texture2D>("texbombarrow");
             clusterArrowIconS = EggsUtils.Properties.Assets.TexToSprite(clusterArrowIcon);
         }
         internal static void MercIcons()
         {
             //Slashport
-            Texture2D slashportIcon = Assets.assetBundle.LoadAsset<Texture2D>("texfatalteleport" + isHd);
+            Texture2D slashportIcon = Assets.assetBundle.LoadAsset<Texture2D>("texfatalteleport");
             slashportIconS = EggsUtils.Properties.Assets.TexToSprite(slashportIcon);
         }
         internal static void EngiIcons()
         {
             //TeslaMines
-            Texture2D teslaMineIcon = Assets.assetBundle.LoadAsset<Texture2D>("texteslamine" + isHd);
+            Texture2D teslaMineIcon = Assets.assetBundle.LoadAsset<Texture2D>("texteslamine");
             teslaMineIconS = EggsUtils.Properties.Assets.TexToSprite(teslaMineIcon);
         }
         internal static void MulTIcons()
         {
             //Nanobots
-            Texture2D nanoBotsIcon = Assets.assetBundle.LoadAsset<Texture2D>("texnanobots" + isHd);
+            Texture2D nanoBotsIcon = Assets.assetBundle.LoadAsset<Texture2D>("texnanobots");
             nanoBotsIconS = EggsUtils.Properties.Assets.TexToSprite(nanoBotsIcon);
         }
     }

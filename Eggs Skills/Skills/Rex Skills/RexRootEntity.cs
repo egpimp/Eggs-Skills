@@ -156,7 +156,7 @@ namespace EggsSkills.EntityStates
                         damage = damageStat * damageCoefficient,
                         damageType = DamageType.Stun1s,
                         force = appliedForce,
-                        procCoefficient = 0.7f,
+                        procCoefficient = procCoef,
                         position = hurtBox.transform.position
                     };
                     //Apply damage

@@ -10,13 +10,13 @@ namespace EggsSkills
         public CharacterBody characterBody;
 
         //How far away can enemies be tracked by this
-        private float maxTrackingDistance = 50000f;
+        private static readonly float maxTrackingDistance = 50000f;
         //How many poisoned enemies
         private float poisonCounter;
         //Poison counter but more stable and safe for access
         private float totalPoisoned;
         //How many times per second to update the tracker
-        private float trackerUpdateFrequency = 10f;
+        private static readonly float trackerUpdateFrequency = 10f;
         //Handles the tracker updating
         private float trackerUpdateStopwatch;
 

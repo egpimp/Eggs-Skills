@@ -112,19 +112,19 @@ namespace EggsSkills.Config
             #region Pain
             //Important configs
             configFile = new ConfigFile(Paths.ConfigPath + "/EggsSkills.cfg", true);
-            UnlockAll = configFile.Bind("Achievements", "UnlockAll", false, "Set to true to unlock all EggsSkills' achievements automatically.  Does not require ConfigEditingAgreement to be true to function");
-            ConfigEditingAgreement = configFile.Bind("!Read this!", "ConfigEditingAgreement", false, "By setting this to true, you as the EggsSkills user agrees to not complain about bugs that may stem from mismatched configs.  Config values will automatically be applied as default unless this is set to true");
-            EnableMageSkills = configFile.Bind("EnabledSkills", "EnableArtificerSkills", true, "Set to false to prevent EggsSkills' Artificer skills from listing");
-            EnableBanditSkills = configFile.Bind("EnabledSkills", "EnableBanditSkills", true, "Set to false to prevent EggsSkills' Bandit skills from listing");
-            EnableMercSkills = configFile.Bind("EnabledSkills", "EnableMercSkills", true, "Set to false to prevent EggsSkills' Mercenary skills from listing");
-            EnableEngiSkills = configFile.Bind("EnabledSkills", "EnableEngiSkills", true, "Set to false to prevent EggsSkills' Engineer skills from listing");
-            EnableLoaderSkills = configFile.Bind("EnabledSkills", "EnableLoaderSkills", true, "Set to false to prevent EggsSkills' Loader skills from listing");
-            EnableCommandoSkills = configFile.Bind("EnabledSkills", "EnableCommandoSkills", true, "Set to false to prevent EggsSkills' Commando skills from listing");
-            EnableCrocoSkills = configFile.Bind("EnabledSkills", "EnableCrocoSkills", true, "Set to false to prevent EggsSkills' Acrid skills from listing");
-            EnableHuntressSkills = configFile.Bind("EnabledSkills", "EnableHuntressSkills", true, "Set to false to prevent EggsSkills' Huntress skills from listing");
-            EnableToolbotSkills = configFile.Bind("EnabledSkills", "EnableMULTSkills", true, "Set to false to prevent EggsSkills' MUL-T skills from listing");
-            EnableTreebotSkills = configFile.Bind("EnabledSkills", "EnableREXSkills", true, "Set to false to prevent EggsSkills' REX skills from listing");
-            EnableCaptainSkills = configFile.Bind("EnabledSkills", "EnableCaptainSkills", true, "Set to false to prevent EggsSkills' Captain skills from listing");
+            UnlockAll = configFile.Bind("!!Achievements!!", "UnlockAll", false, "Set to true to unlock all EggsSkills' achievements automatically.  Does not require ConfigEditingAgreement to be true to function");
+            ConfigEditingAgreement = configFile.Bind("!!!Read this!!!", "ConfigEditingAgreement", false, "By setting this to true, you as the EggsSkills user agrees to not complain about bugs that may stem from mismatched configs.  Config values will automatically be applied as default unless this is set to true");
+            EnableMageSkills = configFile.Bind("!EnabledSkills!", "EnableArtificerSkills", true, "Set to false to prevent EggsSkills' Artificer skills from listing");
+            EnableBanditSkills = configFile.Bind("!EnabledSkills!", "EnableBanditSkills", true, "Set to false to prevent EggsSkills' Bandit skills from listing");
+            EnableMercSkills = configFile.Bind("!EnabledSkills!", "EnableMercSkills", true, "Set to false to prevent EggsSkills' Mercenary skills from listing");
+            EnableEngiSkills = configFile.Bind("!EnabledSkills!", "EnableEngiSkills", true, "Set to false to prevent EggsSkills' Engineer skills from listing");
+            EnableLoaderSkills = configFile.Bind("!EnabledSkills!", "EnableLoaderSkills", true, "Set to false to prevent EggsSkills' Loader skills from listing");
+            EnableCommandoSkills = configFile.Bind("!EnabledSkills!", "EnableCommandoSkills", true, "Set to false to prevent EggsSkills' Commando skills from listing");
+            EnableCrocoSkills = configFile.Bind("!EnabledSkills!", "EnableCrocoSkills", true, "Set to false to prevent EggsSkills' Acrid skills from listing");
+            EnableHuntressSkills = configFile.Bind("!EnabledSkills!", "EnableHuntressSkills", true, "Set to false to prevent EggsSkills' Huntress skills from listing");
+            EnableToolbotSkills = configFile.Bind("!EnabledSkills!", "EnableMULTSkills", true, "Set to false to prevent EggsSkills' MUL-T skills from listing");
+            EnableTreebotSkills = configFile.Bind("!EnabledSkills!", "EnableREXSkills", true, "Set to false to prevent EggsSkills' REX skills from listing");
+            EnableCaptainSkills = configFile.Bind("!EnabledSkills!", "EnableCaptainSkills", true, "Set to false to prevent EggsSkills' Captain skills from listing");
             //Fun configs
             HuntressArrowBomblets = configFile.Bind("HuntressConfigs", "ArrowBomblets", defaultHuntressArrowBomblets, "How many bomblets are released from Huntress' Bomb Arrow.  Crits always release 1.5x this amount. (Egg is not responsible for CPU / GPU melting)");
             CommandoShotgunPellets = configFile.Bind("CommandoConfigs", "ShotgunPellets", defaultCommandoShotgunPellets, "How many bullets are fired per shot from Commando's Flechette Rounds");

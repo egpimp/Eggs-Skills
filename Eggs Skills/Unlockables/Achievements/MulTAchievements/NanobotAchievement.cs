@@ -1,34 +1,18 @@
-﻿using System;
-using RoR2;
-using UnityEngine;
-using EggsSkills.Resources;
+﻿using RoR2;
 using System.Collections.Generic;
 using EggsSkills.Config;
-using R2API;
+using RoR2.Achievements;
 
 namespace EggsSkills.Achievements
 {
-    class NanoBotAchievement : ModdedUnlockable
+    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, null)]
+    internal class NanoBotAchievement : BaseAchievement
     {
-        public override string AchievementIdentifier { get; } = "MULT_MOTHERSHIPUNLOCKABLE_ACHIEVEMENT_ID";
-        public override string UnlockableIdentifier { get; } = "MULT_MOTHERSHIPUNLOCKABLE_REWARD_ID";
-        public override string AchievementNameToken { get; } = "MULT_MOTHERSHIPUNLOCKABLE_ACHIEVEMENT_NAME";
-        public override string PrerequisiteUnlockableIdentifier { get; } = "";
-        public override string UnlockableNameToken { get; } = "MULT_MOTHERSHIPUNLOCKABLE_UNLOCKABLE_NAME";
-        public override string AchievementDescToken { get; } = "MULT_MOTHERSHIPUNLOCKABLE_ACHIEVEMENT_DESC";
-        public override Sprite Sprite { get; } = Sprites.nanoBotsIconS;
+        internal const string ACHNAME = "ToolbotManyDrones";
+        internal const string REWARDNAME = "EggsSkills.NanoBot";
 
-        public override Func<string> GetHowToUnlock { get; } = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
-        {
-            Language.GetString("MULT_MOTHERSHIPUNLOCKABLE_ACHIEVEMENT_NAME"),
-            Language.GetString("MULT_MOTHERSHIPUNLOCKABLE_ACHIEVEMENT_DESC")
-        }));
-
-        public override Func<string> GetUnlocked { get; } = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
-        {
-            Language.GetString("MULT_MOTHERSHIPUNLOCKABLE_ACHIEVEMENT_NAME"),
-            Language.GetString("MULT_MOTHERSHIPUNLOCKABLE_ACHIEVEMENT_DESC")
-        }));
+        //How many drones to unlock
+        private static readonly int droneReq = 8;
 
         public override BodyIndex LookUpRequiredBodyIndex()
         {
@@ -82,11 +66,11 @@ namespace EggsSkills.Achievements
                                             string droneName = tempMinion.name;
                                             if (nameList.Contains(droneName))
                                             {
-                                                validDrones += 1;
+                                                validDrones++;
                                             }
                                         }
                                     }
-                                    if (validDrones >= 8)
+                                    if (validDrones >= droneReq)
                                     {
                                         base.Grant();
                                     }

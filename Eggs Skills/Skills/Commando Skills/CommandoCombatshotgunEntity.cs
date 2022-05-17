@@ -10,6 +10,10 @@ namespace EggsSkills.EntityStates
 
     public class CombatShotgunEntity : BaseState, SteppedSkillDef.IStepSetter
     {
+        //Skills++ modifiers
+        public static float spp_procMod = 0f;
+        public static uint spp_bulletMod = 0;
+
         //Cast time pre-attack speed
         private readonly float baseDuration = 0.4f;
         //Force
@@ -23,7 +27,7 @@ namespace EggsSkills.EntityStates
         //Max firing range
         private readonly float maxDist = 200f;
         //Proc coefficient
-        private readonly float procCoefficient = 0.4f;
+        private readonly float procCoefficient = 0.4f + spp_procMod;
 
         //Hit fx
         private GameObject hitEffectPrefab = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/Hitspark1");
@@ -38,7 +42,7 @@ namespace EggsSkills.EntityStates
         private int step;
 
         //How many bullet go pew
-        private uint bulletCount = Configuration.GetConfigValue(Configuration.CommandoShotgunPellets);
+        private uint bulletCount = Configuration.GetConfigValue(Configuration.CommandoShotgunPellets) + spp_bulletMod;
 
         void SteppedSkillDef.IStepSetter.SetStep(int i)
         {
