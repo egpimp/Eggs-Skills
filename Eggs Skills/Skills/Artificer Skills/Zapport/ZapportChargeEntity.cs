@@ -11,6 +11,10 @@ namespace EggsSkills.EntityStates
 {
     class ZapportChargeEntity : BaseSkillState
     {
+        //Skills++ mods
+        public static float spp_damageMult = 1f;
+        public static float spp_distanceMult = 1f;
+
         //Min uncharged damage
         private readonly float baseDamageMult = 2.5f;
         //Initial seconds to charge
@@ -139,7 +143,7 @@ namespace EggsSkills.EntityStates
                     //Set next state
                     ZapportFireEntity nextState = new ZapportFireEntity();
                     //Transfer these stats to fire state
-                    nextState.damageMult = damageMult;
+                    nextState.damageMult = damageMult * spp_damageMult;
                     nextState.radius = radius;
                     nextState.movePos = calculatedMovePos;
                     //Execute next state
@@ -154,7 +158,7 @@ namespace EggsSkills.EntityStates
             //Should give us a amount of speed based on movespeed, 2x ms = 2x teleport distance
             float speedMod = base.moveSpeedStat / 7f;
             //Calculate distance with min distance, then add the bonus times the max distance times the speedmod.
-            distance = baseMinDistance + chargePercent * baseMaxDistanceBonus * speedMod * stockMultiplier;
+            distance = baseMinDistance + chargePercent * baseMaxDistanceBonus * speedMod * stockMultiplier * spp_distanceMult;
             //Create the aimray
             Ray aimRay = GetAimRay();
             //Spherecast with the players radius, get all objects hit

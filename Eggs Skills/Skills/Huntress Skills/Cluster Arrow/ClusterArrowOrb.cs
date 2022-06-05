@@ -1,7 +1,6 @@
 ﻿using RoR2.Orbs;
 using UnityEngine;
 using RoR2;
-using UnityEngine.Networking;
 using RoR2.Projectile;
 using EggsSkills.Config;
 using System;
@@ -10,6 +9,10 @@ namespace EggsSkills.Orbs
 {
     public class HuntressBombArrowOrb : GenericDamageOrb
     {
+        //Skills++
+        public float spp_orbDamageMult;
+        public int spp_orbBombletBonus;
+
         //Bomblet damage
         private readonly float bombletDamageCoef = 0.8f;
         //Explosion Damage
@@ -47,7 +50,7 @@ namespace EggsSkills.Orbs
         private void FireBomblets()
         {
                 //Repeat this for every bomblet needing to be fired; if it crits 1.5x it then floor that to get an int
-            for (int i = 0; i < (!base.isCrit ? bombletCount : Math.Floor(bombletCount * 1.5f)); i++)
+            for (int i = 0; i < (!base.isCrit ? bombletCount + spp_orbBombletBonus : Math.Floor((bombletCount + spp_orbBombletBonus) * 1.5f)); i++)
             {
                 //Get a random upward angle, spread slightly increased on crit to spread bombs out better
                 Quaternion angle = Quaternion.LookRotation((Vector3.up + new Vector3(UnityEngine.Random.Range(-50f, 50f) / 100f, UnityEngine.Random.Range(-50f, 50f) / 100f, UnityEngine.Random.Range(-50f, 50f) / 100f)) * (!base.isCrit ? 1f : 1.25f));
@@ -56,7 +59,7 @@ namespace EggsSkills.Orbs
                 //Then their position
                 Vector3 pos = transform.position;
                 //Fire the bomblet
-                ProjectileManager.instance.FireProjectile(Resources.Projectiles.bombletPrefab, pos, angle, base.attacker, base.damageValue * bombletDamageCoef, 50f, base.isCrit);
+                ProjectileManager.instance.FireProjectile(Resources.Projectiles.bombletPrefab, pos, angle, base.attacker, base.damageValue * bombletDamageCoef * spp_orbDamageMult, 50f, base.isCrit);
             }
         }
         private void Explode()
@@ -64,7 +67,7 @@ namespace EggsSkills.Orbs
             //Make explosion
             new BlastAttack
             {
-                baseDamage = damageValue * damageCoef,
+                baseDamage = damageValue * damageCoef * spp_orbDamageMult,
                 baseForce = 100f,
                 attacker = attacker,
                 inflictor = attacker,

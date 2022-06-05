@@ -10,6 +10,10 @@ namespace EggsSkills.EntityStates
 {
     class SlashportEntity : BaseState
     {
+        //Skills++
+        internal static float spp_damagemult = 1f;
+        internal static float spp_procbonus = 0f;
+
         //Skill damage coeffficient
         private readonly float damageCoefficient = 7f;
         //For handling cast time
@@ -101,14 +105,14 @@ namespace EggsSkills.EntityStates
                     {
                         position = targetBox.transform.position,
                         //Actual damage + % missing hp
-                        baseDamage = base.damageStat * this.damageCoefficient,
+                        baseDamage = base.damageStat * damageCoefficient * spp_damagemult,
                         baseForce = 0,
                         radius = 3f,
                         attacker = base.gameObject,
                         inflictor = base.gameObject,
                         teamIndex = base.teamComponent.teamIndex,
                         crit = base.RollCrit(),
-                        procCoefficient = procCoefficient,
+                        procCoefficient = procCoefficient + spp_procbonus,
                         falloffModel = BlastAttack.FalloffModel.None,
                         damageType = DamageType.BonusToLowHealth,
                     }.Fire();

@@ -9,6 +9,10 @@ namespace EggsSkills
 {
     class InvisHandler : MonoBehaviour
     {
+        //Skills++
+        public float spp_stunRadius = 0f;
+        public float spp_moveSpeedBonus = 1f;
+
         //Whether or not player is invis
         private bool isInvis;
 
@@ -59,6 +63,8 @@ namespace EggsSkills
             holdTimer = utilitySlot.rechargeStopwatch;
             //Play the fx
             PlayEffects();
+
+            characterBody.characterMotor.walkSpeedPenaltyCoefficient = spp_moveSpeedBonus;
         }
         internal void RemoveInvis()
         {
@@ -77,6 +83,24 @@ namespace EggsSkills
             isInvis = false;
             //Play the fx
             PlayEffects();
+
+            if(spp_stunRadius > 0f)
+            {
+                new BlastAttack
+                {
+                    baseDamage = 0f,
+                    radius = spp_stunRadius,
+                    attacker = null,
+                    inflictor = null,
+                    teamIndex = characterBody.teamComponent.teamIndex,
+                    crit = false,
+                    losType = BlastAttack.LoSType.None,
+                    position = characterBody.corePosition,
+                    damageType = DamageType.Stun1s
+                }.Fire();
+            }
+
+            characterBody.characterMotor.walkSpeedPenaltyCoefficient = 1f;
         }
         private void FixedUpdate()
         {

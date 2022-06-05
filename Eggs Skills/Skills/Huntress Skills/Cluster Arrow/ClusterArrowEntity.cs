@@ -8,8 +8,12 @@ using UnityEngine.Networking;
 
 namespace EggsSkills.EntityStates
 {
-    class ClusterBombArrow : BaseState
+    internal class ClusterBombArrow : BaseState
     {
+        //SkillS++
+        public static float spp_damageMult = 1f;
+        public static int spp_bombletBonus = 0;
+
         //Animator
         private Animator animator;
 
@@ -78,7 +82,11 @@ namespace EggsSkills.EntityStates
             //We have officially now made the attempt
             wasArrowAttempted = true;
             //Establish the orb
-            GenericDamageOrb genericDamageOrb = new HuntressBombArrowOrb();
+            GenericDamageOrb genericDamageOrb = new HuntressBombArrowOrb()
+            {
+                spp_orbDamageMult = spp_damageMult,
+                spp_orbBombletBonus = spp_bombletBonus
+            };
             //Set the damage to the player damage
             genericDamageOrb.damageValue = base.characterBody.damage;
             genericDamageOrb.isCrit = base.RollCrit();

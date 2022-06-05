@@ -116,7 +116,7 @@ namespace EggsSkills.Resources
                 //We want ours to explode on impact instead of bouncing around
                 debuffGrenadeExplosion.destroyOnWorld = true;
                 //We want hella more radius
-                debuffGrenadeExplosion.blastRadius = Configuration.GetConfigValue<float>(Configuration.CaptainDebuffnadeRadius);
+                debuffGrenadeExplosion.blastRadius = Configuration.GetConfigValue(Configuration.CaptainDebuffnadeRadius);
                 //Linear falloff, idk what it normally is but this way we know for sure its linear
                 debuffGrenadeExplosion.falloffModel = BlastAttack.FalloffModel.Linear;
                 //Implement our own proc coefficient-to-damage-type stuff

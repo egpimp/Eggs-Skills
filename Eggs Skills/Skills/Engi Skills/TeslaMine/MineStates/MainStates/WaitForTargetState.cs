@@ -9,6 +9,9 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
 {
     public class TeslaWaitForTargetState : BaseMineState
     {
+        //Skills++
+        public static float spp_radiusMult = 1f;
+
         //Target sphere finder component
         private ProjectileSphereTargetFinder targetFinder;
 

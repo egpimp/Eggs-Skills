@@ -8,6 +8,10 @@ namespace EggsSkills.EntityStates
 {
     class MagicBulletEntity : Bandit2FirePrimaryBase
     {
+        //Skills++
+        public static int spp_richochetMod = 0;
+        public static float spp_bounceMod = 0f;
+
         //We use this for referencing assets
         private Bandit2FireRifle assetRef = new Bandit2FireRifle();
 
@@ -21,10 +25,10 @@ namespace EggsSkills.EntityStates
         //Proc coefficient of the skill
         private readonly float procCoef = 1f;
         //What is damage multiplied by per richochet
-        private readonly float richochetMod = 0.6f;
+        private readonly float richochetMod = 0.6f + spp_bounceMod;
 
         //How many richochets
-        private readonly int maxRecursion = Configuration.GetConfigValue(Configuration.BanditMagicbulletRicochets);
+        private readonly int maxRecursion = Configuration.GetConfigValue(Configuration.BanditMagicbulletRicochets) + spp_richochetMod;
         //Helps us track how many more times it can bounce
         private int recursion;
 

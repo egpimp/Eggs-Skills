@@ -7,10 +7,13 @@ namespace EggsSkills.EntityStates
 {
     class DebuffGrenadeEntity : BaseState
     {
+        //Skills++
+        public static float spp_damageMult = 1f;
+
         //Standard cast time
         private readonly float baseDelay = 0.6f;
         //Damage coefficient
-        private readonly float damageCoefficient = 2.5f;
+        private readonly float damageCoefficient = 2.5f * spp_damageMult;
         //Post-attackspeed factoring cast time
         private float delay;
 
@@ -28,7 +31,8 @@ namespace EggsSkills.EntityStates
             base.PlayAnimation("Gesture, Additive", "FireCaptainShotgun");
             base.PlayAnimation("Gesture, Override", "FireCaptainShotgun");
             //Network check, then fire projectile
-            if (base.isAuthority) ProjectileManager.instance.FireProjectile(Projectiles.debuffGrenadePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, base.damageStat * damageCoefficient , 0f, base.RollCrit());
+            if (base.isAuthority) ProjectileManager.instance.FireProjectile(Projectiles.debuffGrenadePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, base.damageStat * damageCoefficient, 0f, base.RollCrit());
+            
         }
         public override void FixedUpdate()
         {

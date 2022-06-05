@@ -8,10 +8,14 @@ namespace EggsSkills.EntityStates
 {
     class AcridPurgeEntity : BaseState
     {
+        //Skills++ modifiers
+        public static float spp_damageMult = 1f;
+        public static float spp_radiusMult = 1f;
+
         //Damage coefficient for blight effect
         private readonly float blightDamageCoefficient = 3f;
         //Detonation radius
-        private readonly float detonationRadius = Configuration.GetConfigValue(Configuration.CrocoPurgeBaseradius);
+        private readonly float detonationRadius = Configuration.GetConfigValue(Configuration.CrocoPurgeBaseradius) * spp_radiusMult;
         //Health fraction for poison effect
         private readonly float healthFraction = 0.1f;
         //Max distance for finding poisoned targets
@@ -52,7 +56,7 @@ namespace EggsSkills.EntityStates
                         new BlastAttack
                         {
                             position = body.corePosition,
-                            baseDamage = component.fullHealth * healthFraction + base.damageStat * poisonDamageCoefficient,
+                            baseDamage = component.fullHealth * healthFraction + base.damageStat * poisonDamageCoefficient * spp_damageMult,
                             baseForce = 0f,
                             radius = detonationRadius,
                             attacker = base.gameObject,
@@ -85,7 +89,7 @@ namespace EggsSkills.EntityStates
                         new BlastAttack
                         {
                             position = body.corePosition,
-                            baseDamage = base.damageStat * (blightDamageCoefficient * body.GetBuffCount(RoR2Content.Buffs.Blight)),
+                            baseDamage = base.damageStat * (blightDamageCoefficient * body.GetBuffCount(RoR2Content.Buffs.Blight)) * spp_damageMult,
                             baseForce = 0f,
                             radius = detonationRadius,
                             attacker = base.gameObject,

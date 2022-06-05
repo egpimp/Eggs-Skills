@@ -10,6 +10,11 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
 {
     public class TeslaDetonateState : BaseMineState
     {
+        //Skill++
+        public static float spp_damageMult = 1f;
+        public static float spp_radiusMult = 1f;
+        public static int spp_pulseBonus = 0;
+
         //Should keep sticking at this point
         public override bool shouldStick => true;
         //And still should never revert
@@ -22,13 +27,13 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
         //timer for handling pulses
         private float pulseTimer;
         //Ouchies radius
-        private readonly float radius = 8f;
+        private readonly float radius = 8f * spp_radiusMult;
 
         //Prefab for the explode fx
         private GameObject bodyPrefab = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/JellyfishNova");
 
         //Max amount of electric pulses
-        private int maxPulseCount = Configuration.GetConfigValue(Configuration.EngiTeslaminePulses);
+        private int maxPulseCount = Configuration.GetConfigValue(Configuration.EngiTeslaminePulses) + spp_pulseBonus;
         //Counts pulses
         private int pulseCounter;
 
@@ -75,7 +80,7 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
                     inflictor = base.gameObject,
                     procCoefficient = procCoeff,
                     teamIndex = base.projectileController.teamFilter.teamIndex,
-                    baseDamage = projectileDamage.damage,
+                    baseDamage = projectileDamage.damage * spp_damageMult,
                     baseForce = 0f,
                     falloffModel = BlastAttack.FalloffModel.None,
                     crit = projectileDamage.crit,

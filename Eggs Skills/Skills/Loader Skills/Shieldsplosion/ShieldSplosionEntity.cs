@@ -10,6 +10,10 @@ namespace EggsSkills.EntityStates
 {
     class ShieldSplosionEntity : BaseSkillState
     {
+        //Skills++
+        internal static float spp_radiusMult = 1f;
+        internal static float spp_refund = 0f;
+
         //Should the barrier be removed on use?
         private readonly bool shouldRemoveBarrier = Configuration.GetConfigValue(Configuration.LoaderShieldsplodeRemovebarrieronuse);
 
@@ -33,44 +37,44 @@ namespace EggsSkills.EntityStates
         public override void OnEnter()
         {
             //Grab the health component
-            this.component = base.healthComponent;
+            component = base.healthComponent;
             base.OnEnter();
         }
         public override void OnExit()
         {
             //Take damage coeff and multiply it by % barrier to translate amount to damage
-            float damageMod = (this.component.barrier / this.component.fullCombinedHealth) * this.damageCoefficient;
+            float damageMod = (component.barrier / component.fullCombinedHealth) * damageCoefficient;
             //Get the force based on base force and half the damage multiplier
-            float force = this.baseForce * (damageMod / 2);
+            float force = baseForce * (damageMod / 2);
             //Radius is based on damage, tripled at max barrier
-            float radius = this.baseRadius * Math.ConvertToRange(2f, this.damageCoefficient, 1f, this.maxRadiusMult, damageMod);
+            float radius = baseRadius * Math.ConvertToRange(2f, damageCoefficient, 1f, maxRadiusMult, damageMod);
             //If barrier should be removed, remove it
-            if (this.shouldRemoveBarrier && NetworkServer.active) this.component.AddBarrier(-component.barrier);
+            if (shouldRemoveBarrier && NetworkServer.active) component.AddBarrier(-component.barrier);
             //Network check
             if (base.isAuthority)
             {
                 //Perform the balst attack
-                new BlastAttack
+                BlastAttack atk = new BlastAttack()
                 {
                     attacker = base.gameObject,
                     inflictor = base.gameObject,
                     //Triple damage at this part to match thing
                     baseDamage = base.damageStat * damageMod * 3,
                     position = base.characterBody.corePosition,
-                    radius = radius,
+                    radius = radius * spp_radiusMult,
                     baseForce = force,
                     crit = base.RollCrit(),
                     teamIndex = base.teamComponent.teamIndex,
-                    procChainMask = default,
-                    procCoefficient = this.procCoefficient,
+                    procCoefficient = procCoefficient,
                     falloffModel = BlastAttack.FalloffModel.None,
-                    damageColorIndex = default,
-                    damageType = DamageType.Generic,
-                    attackerFiltering = default
-                }.Fire();
+                    damageType = DamageType.AOE
+                };
+                atk.Fire();
             }
             //Play the sound
             Util.PlaySound(JellyNova.novaSoundString, base.gameObject);
+            //Refund barrier if spp enabled
+            if (NetworkServer.active) component.AddBarrier(component.fullCombinedHealth * spp_refund);
             //Setup fx data
             EffectData effectData = new EffectData
             {
@@ -79,9 +83,9 @@ namespace EggsSkills.EntityStates
                 scale = radius
             };
             //Spawn the fx
-            EffectManager.SpawnEffect(this.bodyPrefab, effectData, true);
+            EffectManager.SpawnEffect(bodyPrefab, effectData, true);
             //Apply the speed-buff from 'shedding' barrier
-            this.characterBody.AddTimedBuff(RoR2Content.Buffs.CloakSpeed, 3f);
+            characterBody.AddTimedBuff(RoR2Content.Buffs.CloakSpeed, 3f);
             base.OnExit();
         }
         public override void FixedUpdate()
@@ -91,7 +95,7 @@ namespace EggsSkills.EntityStates
             if (base.fixedAge >= 0.1f && base.isAuthority)
             {
                 //Then set next state
-                this.outer.SetNextStateToMain();
+                outer.SetNextStateToMain();
                 return;
             }
         }

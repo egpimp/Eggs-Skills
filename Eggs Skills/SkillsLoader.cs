@@ -43,7 +43,6 @@ namespace EggsSkills
     nameof(LanguageAPI),
     nameof(LoadoutAPI),
     nameof(PrefabAPI),
-    //nameof(CommandHelper),
 })]
     internal class SkillsLoader : BaseUnityPlugin
     {
@@ -57,6 +56,8 @@ namespace EggsSkills
         public const string SKILLSPLUS_NAME = "com.cwmlolzlz.skills";
         public const string AUTOSPRINT_NAME = "com.johnedwa.RTAutoSprintEx";
         public const string CLASSICITEMS_NAME = "";
+
+        public static bool skillsPlusLoaded = false;
 
         #region Characterbody References And Strings
 
@@ -99,13 +100,12 @@ namespace EggsSkills
         internal static List<SkillDef> defList = new List<SkillDef>();
         private void Awake()
         {
-
+            //Do the skills++ exist
+            skillsPlusLoaded = Chainloader.PluginInfos.ContainsKey(SKILLSPLUS_NAME);
             //Thank SOM for being a poggers
             LogToConsole("Thanks SOM for the icon work <3");
             //Autosprint
             AutosprintAgonyEngage();
-            //Add our commands to the console
-            CommandHelper.AddToConsoleWhenReady();
             //Load up the config file
             LoadConfig();
             //Load up all the resources
@@ -114,8 +114,7 @@ namespace EggsSkills
             UnlocksRegistering.RegisterUnlockables();
             //Finally load up the skills
             RegisterSkills();
-            //SkillsPlusPlus
-            if (Chainloader.PluginInfos.ContainsKey(SKILLSPLUS_NAME)) SkillsPlusPlusCompatibility();
+            if (skillsPlusLoaded) SkillsPlusPlusCompatibility();
             //Tell the console that things went just as expected :)
             LogToConsole("EggsSkills fully loaded!");
         }
@@ -191,7 +190,7 @@ namespace EggsSkills
             skillDefPurge.stockToConsume = 1;
             skillDefPurge.icon = Sprites.acridpurgeIconS;
             skillDefPurge.skillDescriptionToken = LanguageTokens.prefix + acridName.ToUpper() + "_" + "SPECIAL_PURGE" + LanguageTokens.dSuffix;
-            skillDefPurge.skillName = "Purge";
+            skillDefPurge.skillName = "ESPurge";
             skillDefPurge.skillNameToken = LanguageTokens.prefix + acridName.ToUpper() + "_" + "SPECIAL_PURGE" + LanguageTokens.nSuffix;
 
             defList.Add(skillDefPurge);
@@ -230,7 +229,7 @@ namespace EggsSkills
             skillDefZapport.stockToConsume = 1;
             skillDefZapport.icon = Sprites.zapportIconS;
             skillDefZapport.skillDescriptionToken = LanguageTokens.prefix + artificerName.ToUpper() + "_" + "UTILITY_ZAPPORT" + LanguageTokens.dSuffix;
-            skillDefZapport.skillName = "Zapport";
+            skillDefZapport.skillName = "ESZapport";
             skillDefZapport.skillNameToken = LanguageTokens.prefix + artificerName.ToUpper() + "_" + "UTILITY_ZAPPORT" + LanguageTokens.nSuffix;
             skillDefZapport.keywordTokens = new string[]
             {
@@ -259,7 +258,7 @@ namespace EggsSkills
             //Thieves Cunning
             InvisOnSprintSkillDef skillDefInvisSprint = ScriptableObject.CreateInstance<InvisOnSprintSkillDef>();
             //These two are dummies, don't actually exist, just there to stop errors
-            skillDefInvisSprint.activationState = new SerializableEntityStateType(typeof(ThrowSmokebomb));
+            skillDefInvisSprint.activationState = new SerializableEntityStateType(typeof(InvisDummyState));
             skillDefInvisSprint.activationStateMachineName = "Body";
             skillDefInvisSprint.baseMaxStock = 1;
             skillDefInvisSprint.baseRechargeInterval = 6f;
@@ -269,7 +268,7 @@ namespace EggsSkills
             skillDefInvisSprint.stockToConsume = 1;
             skillDefInvisSprint.icon = Sprites.invisSprintIconS;
             skillDefInvisSprint.skillDescriptionToken = LanguageTokens.prefix + banditName.ToUpper() + "_" + "UTILITY_INVISSPRINT" + LanguageTokens.dSuffix;
-            skillDefInvisSprint.skillName = "InvisSprint";
+            skillDefInvisSprint.skillName = "ESInvisSprint";
             skillDefInvisSprint.skillNameToken = LanguageTokens.prefix + banditName.ToUpper() + "_" + "UTILITY_INVISSPRINT" + LanguageTokens.nSuffix;
 
             defList.Add(skillDefInvisSprint);
@@ -302,7 +301,7 @@ namespace EggsSkills
             skillDefMagicBullet.stockToConsume = 1;
             skillDefMagicBullet.icon = Sprites.magicBulletIconS;
             skillDefMagicBullet.skillDescriptionToken = LanguageTokens.prefix + banditName.ToUpper() + "_" + "PRIMARY_MAGICBULLET" + LanguageTokens.dSuffix;
-            skillDefMagicBullet.skillName = "MagicBullet";
+            skillDefMagicBullet.skillName = "ESMagicBullet";
             skillDefMagicBullet.skillNameToken = LanguageTokens.prefix + banditName.ToUpper() + "_" + "PRIMARY_MAGICBULLET" + LanguageTokens.nSuffix;
 
             defList.Add(skillDefMagicBullet);
@@ -341,7 +340,7 @@ namespace EggsSkills
             skillDefDebuffnade.stockToConsume = 1;
             skillDefDebuffnade.icon = Sprites.debuffNadeIconS;
             skillDefDebuffnade.skillDescriptionToken = LanguageTokens.prefix + captainName.ToUpper() + "_" + "SECONDARY_DEBUFFNADE" + LanguageTokens.dSuffix;
-            skillDefDebuffnade.skillName = "Debuffnade";
+            skillDefDebuffnade.skillName = "ESDebuffNade";
             skillDefDebuffnade.skillNameToken = LanguageTokens.prefix + captainName.ToUpper() + "_" + "SECONDARY_DEBUFFNADE" + LanguageTokens.nSuffix;
             skillDefDebuffnade.keywordTokens = new string[]
             {
@@ -381,7 +380,7 @@ namespace EggsSkills
             skillDefCombatshotgun.stockToConsume = 0;
             skillDefCombatshotgun.icon = Sprites.shotgunIconS;
             skillDefCombatshotgun.skillDescriptionToken = LanguageTokens.prefix + commandoName.ToUpper() + "_" + "PRIMARY_COMBATSHOTGUN" + LanguageTokens.dSuffix;
-            skillDefCombatshotgun.skillName = "CombatShotgun";
+            skillDefCombatshotgun.skillName = "ESCombatShotgun";
             skillDefCombatshotgun.skillNameToken = LanguageTokens.prefix + commandoName.ToUpper() + "_" + "PRIMARY_COMBATSHOTGUN" + LanguageTokens.nSuffix;
 
             defList.Add(skillDefCombatshotgun);
@@ -413,7 +412,7 @@ namespace EggsSkills
             skillDefDash.rechargeStock = 1;
             skillDefDash.icon = Sprites.dashIconS;
             skillDefDash.skillDescriptionToken = LanguageTokens.prefix + commandoName.ToUpper() + "_" + "UTILITY_DASH" + LanguageTokens.dSuffix;
-            skillDefDash.skillName = "Dash";
+            skillDefDash.skillName = "ESDash";
             skillDefDash.skillNameToken = LanguageTokens.prefix + commandoName.ToUpper() + "_" + "UTILITY_DASH" + LanguageTokens.nSuffix;
             skillDefDash.keywordTokens = new string[]
             {
@@ -455,7 +454,7 @@ namespace EggsSkills
             skillDefTeslamine.stockToConsume = 1;
             skillDefTeslamine.icon = Sprites.teslaMineIconS;
             skillDefTeslamine.skillDescriptionToken = LanguageTokens.prefix + engineerName.ToUpper() + "_" + "SECONDARY_TESLAMINE" + LanguageTokens.dSuffix;
-            skillDefTeslamine.skillName = "TeslaMine";
+            skillDefTeslamine.skillName = "ESTeslaMine";
             skillDefTeslamine.skillNameToken = LanguageTokens.prefix + engineerName.ToUpper() + "_" + "SECONDARY_TESLAMINE" + LanguageTokens.nSuffix;
             skillDefTeslamine.keywordTokens = new string[]
             {
@@ -498,7 +497,7 @@ namespace EggsSkills
             skillDefClusterArrow.stockToConsume = 1;
             skillDefClusterArrow.icon = Sprites.clusterArrowIconS;
             skillDefClusterArrow.skillDescriptionToken = LanguageTokens.prefix + huntressName.ToUpper() + "_" + "SECONDARY_CLUSTERARROW" + LanguageTokens.dSuffix;
-            skillDefClusterArrow.skillName = "ClusterArrow";
+            skillDefClusterArrow.skillName = "ESClusterArrow";
             skillDefClusterArrow.skillNameToken = LanguageTokens.prefix + huntressName.ToUpper() + "_" + "SECONDARY_CLUSTERARROW" + LanguageTokens.nSuffix;
             skillDefClusterArrow.keywordTokens = new string[]
             {
@@ -541,7 +540,7 @@ namespace EggsSkills
             skillDefShieldsplode.stockToConsume = 1;
             skillDefShieldsplode.icon = Sprites.shieldsplosionIconS;
             skillDefShieldsplode.skillDescriptionToken = LanguageTokens.prefix + loaderName.ToUpper() + "_" + "SPECIAL_SHIELDSPLOSION" + LanguageTokens.dSuffix;
-            skillDefShieldsplode.skillName = "ShieldSplosion";
+            skillDefShieldsplode.skillName = "ESShieldSplosion";
             skillDefShieldsplode.skillNameToken = LanguageTokens.prefix + loaderName.ToUpper() + "_" + "SPECIAL_SHIELDSPLOSION" + LanguageTokens.nSuffix;
 
             defList.Add(skillDefShieldsplode);
@@ -579,7 +578,7 @@ namespace EggsSkills
             skillDefSlashport.stockToConsume = 1;
             skillDefSlashport.icon = Sprites.slashportIconS;
             skillDefSlashport.skillDescriptionToken = LanguageTokens.prefix + mercenaryName.ToUpper() + "_" + "SPECIAL_SLASHPORT" + LanguageTokens.dSuffix;
-            skillDefSlashport.skillName = "Slashport";
+            skillDefSlashport.skillName = "ESSlashport";
             skillDefSlashport.skillNameToken = LanguageTokens.prefix + mercenaryName.ToUpper() + "_" + "SPECIAL_SLASHPORT" + LanguageTokens.nSuffix;
             skillDefSlashport.keywordTokens = new string[]
             {
@@ -727,6 +726,7 @@ namespace EggsSkills
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
         private void SkillsPlusPlusCompatibility()
         {
+            skillsPlusLoaded = true;
             SkillsPlusPlus.SkillModifierManager.LoadSkillModifiers();
         }
     }

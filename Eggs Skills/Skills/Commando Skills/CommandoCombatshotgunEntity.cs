@@ -27,7 +27,7 @@ namespace EggsSkills.EntityStates
         //Max firing range
         private readonly float maxDist = 200f;
         //Proc coefficient
-        private readonly float procCoefficient = 0.4f + spp_procMod;
+        private readonly float procCoefficient = 0.6f + spp_procMod;
 
         //Hit fx
         private GameObject hitEffectPrefab = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/Hitspark1");
