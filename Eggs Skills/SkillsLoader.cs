@@ -622,9 +622,9 @@ namespace EggsSkills
             skillDefNanoSwarm.requiredStock = 1;
             skillDefNanoSwarm.stockToConsume = 1;
             skillDefNanoSwarm.icon = Sprites.nanoBotsIconS;
-            skillDefNanoSwarm.skillDescriptionToken = LanguageTokens.prefix + multName.ToUpper() + "_" + "SECONDARY_NANOBOT" + LanguageTokens.dSuffix;
-            skillDefNanoSwarm.skillName = "NanobotSwarm";
-            skillDefNanoSwarm.skillNameToken = LanguageTokens.prefix + multName.ToUpper() + "_" + "SECONDARY_NANOBOT" + LanguageTokens.nSuffix;
+            skillDefNanoSwarm.skillDescriptionToken = LanguageTokens.prefix + multName.ToUpper() + "_" + "SECONDARY_NANOBOTS" + LanguageTokens.dSuffix;
+            skillDefNanoSwarm.skillName = "ESNanobots";
+            skillDefNanoSwarm.skillNameToken = LanguageTokens.prefix + multName.ToUpper() + "_" + "SECONDARY_NANOBOTS" + LanguageTokens.nSuffix;
             skillDefNanoSwarm.keywordTokens = new string[]
             {
                 "KEYWORD_MARKING"
@@ -666,7 +666,7 @@ namespace EggsSkills
             skillDefRoot.stockToConsume = 1;
             skillDefRoot.icon = Sprites.rexrootIconS;
             skillDefRoot.skillDescriptionToken = LanguageTokens.prefix + rexName.ToUpper() + "_" + "SPECIAL_ROOT" + LanguageTokens.dSuffix;
-            skillDefRoot.skillName = "Root";
+            skillDefRoot.skillName = "ESRoot";
             skillDefRoot.skillNameToken = LanguageTokens.prefix + rexName.ToUpper() + "_" + "SPECIAL_ROOT" + LanguageTokens.nSuffix;
             skillDefRoot.keywordTokens = new string[]
             {

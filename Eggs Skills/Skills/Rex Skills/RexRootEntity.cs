@@ -11,19 +11,23 @@ namespace EggsSkills.EntityStates
 {
     class DirectiveRoot : BaseSkillState
     {
+        //Skills++
+        internal static float spp_radiusBonus = 0f;
+        internal static float spp_healMult = 1f;
+
         //Is the attack speed capped
-        private readonly bool cappedAttackspeed = Configuration.GetConfigValue<bool>(Configuration.TreebotPullSpeedcap);
+        private readonly bool cappedAttackspeed = Configuration.GetConfigValue(Configuration.TreebotPullSpeedcap);
         //Did I crit
         private bool isCrit;
         //Handles first press of the skill
         private bool isFirstPress;
 
         //What % barrier per enemy
-        private readonly float barrierCoefficient = 0.03f;
+        private readonly float barrierCoefficient = 0.03f * spp_healMult;
         //How long between pulls normally
         private readonly float basePullTimer = 1f;
         //Standard radius of the skill
-        private readonly float baseRadius = Configuration.GetConfigValue(Configuration.TreebotPullRange);
+        private readonly float baseRadius = Configuration.GetConfigValue(Configuration.TreebotPullRange) + spp_radiusBonus;
         //Standard damage coefficient of the skill
         private readonly float damageCoefficient = 2.5f;
         //Max attackspeed if enabled

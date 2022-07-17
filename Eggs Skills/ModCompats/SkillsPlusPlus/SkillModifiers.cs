@@ -161,6 +161,30 @@ namespace EggsSkills.SkillModifiers
     [SkillLevelModifier("ESNanobots", typeof(NanobotEntity))]
     class MultNanobotsModifier : SimpleSkillModifier<NanobotEntity>
     {
+        public override void OnSkillLeveledUp(int level, CharacterBody characterBody, SkillDef skillDef)
+        {
+            base.OnSkillLeveledUp(level, characterBody, skillDef);
+            //+10% nanobot damage
+            SwarmComponent.spp_damageMult = 1 + level * 0.1f;
+            //+20% nanobot healing
+            SwarmComponent.spp_healMult = 1 + level * 0.2f;
+            //+1 nanobot every other level
+            SwarmComponent.spp_swarmBonus = level / 2;
 
+        }
+    }
+
+    [SkillLevelModifier("ESRoot", typeof(DirectiveRoot))]
+    class RexRootModifier : SimpleSkillModifier<DirectiveRoot>
+    {
+        public override void OnSkillLeveledUp(int level, CharacterBody characterBody, SkillDef skillDef)
+        {
+            base.OnSkillLeveledUp(level, characterBody, skillDef);
+            //+4m radius
+            DirectiveRoot.spp_radiusBonus = level * 4f;
+            //+10% barrier
+            DirectiveRoot.spp_healMult = 1 + level * 0.1f;
+
+        }
     }
 }

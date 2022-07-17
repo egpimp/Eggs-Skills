@@ -7,7 +7,7 @@ namespace EggsSkills.Orbs
     class NanobotOrb : GenericDamageOrb
     {
         //Amount of health to heal
-        private readonly float healthFraction = 0.015f;
+        internal float healthFraction;
 
         public override void Begin()
         {
@@ -26,7 +26,7 @@ namespace EggsSkills.Orbs
             //Grab the owner's health component
             HealthComponent health = attacker.GetComponent<HealthComponent>();
             //If the target actually exists (so if orb hit something) heal the owner for the amount
-            if (target) health.HealFraction(this.healthFraction, default);
+            if (target) health.HealFraction(healthFraction, default);
         }
 
         public override GameObject GetOrbEffect()

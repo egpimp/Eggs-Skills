@@ -36,49 +36,49 @@ namespace EggsSkills
         private void Start()
         {
             //Start countdown
-            this.countDown = this.baseCountDown;
+            countDown = this.baseCountDown;
             //Prep stopwatch
-            this.stopwatch = this.stopwatchMax;
+            stopwatch = this.stopwatchMax;
             //Grab components and owner
-            this.owner = GetComponent<ProjectileController>().owner;
-            this.stick = GetComponent<ProjectileStickOnImpact>();
-            this.controller = GetComponent<ProjectileController>();
+            owner = GetComponent<ProjectileController>().owner;
+            stick = GetComponent<ProjectileStickOnImpact>();
+            controller = GetComponent<ProjectileController>();
             //Establish indicator 
-            this.indicator = Object.Instantiate(ArrowRain.areaIndicatorPrefab);
-            this.indicator.SetActive(true);
-            this.indicator.transform.position = base.transform.position;
-            this.indicator.transform.localScale = Vector3.zero;
+            indicator = Object.Instantiate(ArrowRain.areaIndicatorPrefab);
+            indicator.SetActive(true);
+            indicator.transform.position = base.transform.position;
+            indicator.transform.localScale = Vector3.zero;
         }
         private void FixedUpdate()
         {
             //Once it is found to be stuck, flip the flag indicating that it stuck to something
-            if (this.stick.stuck) this.flag2 = false;
+            if (stick.stuck) flag2 = false;
 
             //If it has stuck to anything at any point, this will run
-            if (!this.flag2)
+            if (!flag2)
             {
                 //If countdown still above 0...
-                if (this.countDown > 0)
+                if (countDown > 0)
                 {
                     //Run indicator stuff
                     MarkAffectedZone();
                     //Countdown the timer
-                    this.countDown -= Time.fixedDeltaTime;
+                    countDown -= Time.fixedDeltaTime;
                 }
                 //Otherwise if timer has fully countdown...
                 else
                 {
                     //If flag not tripped yet...
-                    if (this.flag)
+                    if (flag)
                     {
                         //Trip flag
-                        this.flag = !this.flag;
+                        flag = !flag;
                         //Kill indicator
-                        this.indicator.transform.localScale = Vector3.zero;
-                        this.indicator.SetActive(false);
+                        indicator.transform.localScale = Vector3.zero;
+                        indicator.SetActive(false);
                         GameObject.Destroy(indicator);
                         //Check network, then send position to owner component
-                        if (NetworkServer.active) this.owner.GetComponent<SwarmComponent>()?.GetTargets(this.controller.transform.position);
+                        if (NetworkServer.active) this.owner.GetComponent<SwarmComponent>()?.GetTargets(controller.transform.position);
                     }
                 }
             }
@@ -87,24 +87,24 @@ namespace EggsSkills
         private void MarkAffectedZone()
         {
             //If timer, tick it down
-            if (this.stopwatch >= 0f) this.stopwatch -= Time.fixedDeltaTime;
+            if (stopwatch >= 0f) stopwatch -= Time.fixedDeltaTime;
             //Otherwise reset the timer
-            else this.stopwatch = this.stopwatchMax;
+            else stopwatch = stopwatchMax;
 
             //Make sure position doesn't fcuk up
-            this.indicator.transform.position = base.transform.position;
+            indicator.transform.position = base.transform.position;
             //Set scale based on curve generator
-            this.indicator.transform.localScale = Vector3.one * GenerateLogScaleCurve();
+            indicator.transform.localScale = Vector3.one * GenerateLogScaleCurve();
         }
 
         private float GenerateLogScaleCurve()
         {
             //Makes counter move lo -> hi instead of hi -> low
-            float invert = this.stopwatchMax - this.stopwatch;
+            float invert = stopwatchMax - stopwatch;
             //Then convert that to a 1 -> max range instead
-            float convertedScale = EggsUtils.Helpers.Math.ConvertToRange(0f, this.stopwatchMax, 1f, this.radiusMax, invert);
+            float convertedScale = EggsUtils.Helpers.Math.ConvertToRange(0f, stopwatchMax, 1f, radiusMax, invert);
             //Generate the value
-            float lnFactor = -this.radiusMax / Mathf.Log(1f / radiusMax);
+            float lnFactor = -radiusMax / Mathf.Log(1f / radiusMax);
             //Return the log of the scale times the lnfactor
             return Mathf.Log(convertedScale) * lnFactor;
         }

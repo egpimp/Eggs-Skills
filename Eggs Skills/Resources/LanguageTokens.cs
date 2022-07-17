@@ -68,7 +68,7 @@ namespace EggsSkills.Resources
             //Sprint Invis
             LanguageAPI.Add(prefix + banditName.ToUpper() + "_" + "UTILITY_INVISSPRINT" + nSuffix, "Kinetic Refractor");
             LanguageAPI.Add(prefix + banditName.ToUpper() + "_" + "UTILITY_INVISSPRINT" + dSuffix, "Passively become <style=cIsUtility>invisible while sprinting</style>.  Gain a burst of <style=cIsUtility>movement speed and increased damage</style> upon leaving <style=cIsUtility>invisibility</style>.");
-            if (skillsPlusLoaded) LanguageAPI.Add("ESINVISSPRINT_UPGRADE" + dSuffix, "<style=cIsUtility>+10%</style> movement speed and <style=cIsUtility>+4</style> unit radius stun on exiting stealth");
+            if (skillsPlusLoaded) LanguageAPI.Add("ESINVISSPRINT_UPGRADE" + dSuffix, "<style=cIsUtility>+10%</style> movement speed and <style=cIsUtility>+4m</style> radius stun on exiting stealth");
 
             LanguageAPI.Add(ach_prefix + InvisSprintAchievement.ACHNAME.ToUpper() + nSuffix, "Bandit: Flanked");
             LanguageAPI.Add(ach_prefix + InvisSprintAchievement.ACHNAME.ToUpper() + dSuffix, "As Bandit, remain invisible for a total of 3 minutes in a run");
@@ -159,8 +159,9 @@ namespace EggsSkills.Resources
         internal static void MulTTokens()
         {
             //Nanobots
-            LanguageAPI.Add(prefix + multName.ToUpper() + "_" + "SECONDARY_NANOBOT" + nSuffix, "Nanobot Swarm");
-            LanguageAPI.Add(prefix + multName.ToUpper() + "_" + "SECONDARY_NANOBOT" + dSuffix, "Fire a <style=cIsUtility>beacon</style> that deals <style=cIsDamage>100% damage</style> and inflicts <style=cArtifact>tracking</style> on impact.  After a delay, release <style=cIsDamage>nanobot swarms</style> for each nearby enemy that deal <style=cIsDamage>" + Configuration.GetConfigValue(Configuration.ToolbotNanobotCountperenemy) + "x80% damage</style> and <style=cIsHealing>heal for 1.5% max hp each</style>");
+            LanguageAPI.Add(prefix + multName.ToUpper() + "_" + "SECONDARY_NANOBOTS" + nSuffix, "Nanobot Swarm");
+            LanguageAPI.Add(prefix + multName.ToUpper() + "_" + "SECONDARY_NANOBOTS" + dSuffix, "Fire a <style=cIsUtility>beacon</style> that deals <style=cIsDamage>100% damage</style> and inflicts <style=cArtifact>tracking</style> on impact.  After a delay, release <style=cIsDamage>nanobot swarms</style> for each nearby enemy that deal <style=cIsDamage>" + Configuration.GetConfigValue(Configuration.ToolbotNanobotCountperenemy) + "x80% damage</style> and <style=cIsHealing>heal for 1.5% max hp each</style>");
+            if (skillsPlusLoaded) LanguageAPI.Add("ESNANOBOTS_UPGRADE" + dSuffix, "<style=cIsHealing>+20%</style> healing, <style=cIsDamage>+10%</style> damage, and <style=cIsUtility>+1</style> swarm per enemy every 2 levels");
 
             LanguageAPI.Add(ach_prefix + NanoBotAchievement.ACHNAME.ToUpper() + nSuffix, "MUL-T: Mothership");
             LanguageAPI.Add(ach_prefix + NanoBotAchievement.ACHNAME.ToUpper() + dSuffix, "As MUL-T, have 8 drone followers at once");
@@ -171,6 +172,7 @@ namespace EggsSkills.Resources
             //Respire
             LanguageAPI.Add(prefix + rexName.ToUpper() + "_" + "SPECIAL_ROOT" + nSuffix, "DIRECTIVE: Respire");
             LanguageAPI.Add(prefix + rexName.ToUpper() + "_" + "SPECIAL_ROOT" + dSuffix, "<style=cIsDamage>Stunning.</style> <style=cIsUtility>Slow</style> yourself, but gain <style=cIsUtility>adaptive</style> for up to 8 seconds.  While active, deal <style=cIsDamage>250% damage</style> per second to nearby enemies, gaining <style=cIsHealing>barrier</style> per enemy hit and <style=cIsDamage>pulling them towards you</style>.");
+            if (skillsPlusLoaded) LanguageAPI.Add("ESROOT_UPGRADE" + dSuffix, "<style=cIsUtility>+4m</style> radius and <style=cIsHealing>+10%</style> barrier gained per hit");
 
             LanguageAPI.Add(ach_prefix + RootAchievement.ACHNAME.ToUpper() + nSuffix, "REX: Breathing Room");
             LanguageAPI.Add(ach_prefix + RootAchievement.ACHNAME.ToUpper() + dSuffix, "As REX, kill 100 enemies in close range in a single run");
