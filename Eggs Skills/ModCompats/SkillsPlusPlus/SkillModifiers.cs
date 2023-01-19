@@ -8,16 +8,17 @@ using UnityEngine.Networking;
 
 namespace EggsSkills.SkillModifiers
 {
-    [SkillLevelModifier("ESPurge", typeof(AcridPurgeEntity))]
-    class AcridPurgeModifier : SimpleSkillModifier<AcridPurgeEntity>
+    #region Skills
+    [SkillLevelModifier("ESPurge", typeof(AcridPurgeEntityUpgrade))]
+    class AcridPurgeModifier : SimpleSkillModifier<AcridPurgeEntityUpgrade>
     {
         public override void OnSkillLeveledUp(int level, CharacterBody characterBody, SkillDef skillDef)
         {
             base.OnSkillLeveledUp(level, characterBody, skillDef);
             //+20% radius per level
-            AcridPurgeEntity.spp_radiusMult = 1 + level * 0.2f;
+            AcridPurgeEntityUpgrade.spp_radiusMult = 1 + level * 0.2f;
             //+10% damage per level
-            AcridPurgeEntity.spp_damageMult = 1 + level * 0.1f;
+            AcridPurgeEntityUpgrade.spp_damageMult = 1 + level * 0.1f;
         }
     }
 
@@ -174,6 +175,19 @@ namespace EggsSkills.SkillModifiers
         }
     }
 
+    [SkillLevelModifier("ESLanceRounds", typeof(LancerRoundsEntity))]
+    class LanceRoundsUpgradeModifier : SimpleSkillModifier<LancerRoundsEntity>
+    {
+        public override void OnSkillLeveledUp(int level, CharacterBody characterBody, SkillDef skillDef)
+        {
+            base.OnSkillLeveledUp(level, characterBody, skillDef);
+            //+0.1 proc chance
+            LancerRoundsEntity.spp_procMod = level * 0.1f;
+            //+15% damage
+            LancerRoundsEntity.spp_damageMult = 1 + level * 0.15f;
+        }
+    }
+
     [SkillLevelModifier("ESRoot", typeof(DirectiveRoot))]
     class RexRootModifier : SimpleSkillModifier<DirectiveRoot>
     {
@@ -187,4 +201,47 @@ namespace EggsSkills.SkillModifiers
 
         }
     }
+    #endregion
+
+    #region Scepter Skills
+    [SkillLevelModifier("ESPurge_UG", typeof(AcridPurgeEntityUpgrade))]
+    class AcridPurgeUpgradeModifier : SimpleSkillModifier<AcridPurgeEntityUpgrade>
+    {
+        public override void OnSkillLeveledUp(int level, CharacterBody characterBody, SkillDef skillDef)
+        {
+            base.OnSkillLeveledUp(level, characterBody, skillDef);
+            //+20% radius per level
+            AcridPurgeEntityUpgrade.spp_radiusMult = 1 + level * 0.2f;
+            //+10% damage per level
+            AcridPurgeEntityUpgrade.spp_damageMult = 1 + level * 0.1f;
+        }
+    }
+
+    [SkillLevelModifier("ESSlashport_UG", typeof(SlashportEntityUpgrade))]
+    class SlashportUpgradeModifier : SimpleSkillModifier<SlashportEntityUpgrade>
+    {
+        public override void OnSkillLeveledUp(int level, CharacterBody characterBody, SkillDef skillDef)
+        {
+            base.OnSkillLeveledUp(level, characterBody, skillDef);
+            //+20% damage
+            SlashportEntityUpgrade.spp_damagemult = 1 + level * 0.2f;
+            //+0.1 proc coeficcient
+            SlashportEntityUpgrade.spp_procbonus = level * 0.1f;
+        }
+    }
+
+    [SkillLevelModifier("ESRoot_UG", typeof(DirectiveRootUpgraded))]
+    class RexRootUpgradeModifier : SimpleSkillModifier<DirectiveRootUpgraded>
+    {
+        public override void OnSkillLeveledUp(int level, CharacterBody characterBody, SkillDef skillDef)
+        {
+            base.OnSkillLeveledUp(level, characterBody, skillDef);
+            //+4m radius
+            DirectiveRootUpgraded.spp_radiusBonus = level * 4f;
+            //+10% barrier
+            DirectiveRootUpgraded.spp_healMult = 1 + level * 0.1f;
+
+        }
+    }
+    #endregion
 }

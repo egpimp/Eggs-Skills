@@ -3,6 +3,8 @@ using EntityStates;
 using EntityStates.Croco;
 using RoR2;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using EggsSkills.ModCompats;
 
 namespace EggsSkills.EntityStates
 {
@@ -14,6 +16,8 @@ namespace EggsSkills.EntityStates
 
         //Damage coefficient for blight effect
         private readonly float blightDamageCoefficient = 3f;
+        //Deep root damage coefficient
+        private readonly float drDamageCoefficient = 5f;
         //Detonation radius
         private readonly float detonationRadius = Configuration.GetConfigValue(Configuration.CrocoPurgeBaseradius) * spp_radiusMult;
         //Health fraction for poison effect
@@ -21,12 +25,12 @@ namespace EggsSkills.EntityStates
         //Max distance for finding poisoned targets
         private readonly float maxTrackingDistance = 5000f;
         //Damage coefficient for poison effect
-        private readonly float poisonDamageCoefficient = 2.5f;
+        private readonly float poisonDamageCoefficient = 2f;
         //Overall proc coefficient
         private readonly float procCoefficient = 1f;
 
         //Effect to be played on use
-        private GameObject bodyPrefab = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/CrocoDiseaseImpactEffect");
+        private GameObject bodyPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Croco/CrocoDiseaseImpactEffect.prefab").WaitForCompletion();
 
         public override void OnEnter()
         {
@@ -79,8 +83,8 @@ namespace EggsSkills.EntityStates
                     //Play vfx at enemies
                     EffectManager.SpawnEffect(bodyPrefab, bodyEffectData, true);
                 }
-                //Otherwise if they are blighted...
-                else if(body.HasBuff(RoR2Content.Buffs.Blight))
+                //If blighted...
+                if(body.HasBuff(RoR2Content.Buffs.Blight))
                 {
                     //Network check
                     if (base.isAuthority)
@@ -107,6 +111,39 @@ namespace EggsSkills.EntityStates
                     {
                         origin = body.corePosition,
                         color = Color.yellow,
+                        scale = detonationRadius
+                    };
+                    //Play vfx data at enemy positions
+                    EffectManager.SpawnEffect(bodyPrefab, bodyEffectData, true);
+                }
+                //Third case for other mod passive
+                if (DeeprotCompat.CheckHasDeeprot(body) || DeeprotCompat.CheckHasSoulrot(body))
+                {
+                    if(base.isAuthority)
+                    {
+                        //Make blast attack and fire it at pos of all enemies
+                        new BlastAttack
+                        {
+                            position = body.corePosition,
+                            baseDamage = base.damageStat * drDamageCoefficient * spp_damageMult,
+                            baseForce = 0f,
+                            radius = detonationRadius,
+                            attacker = base.gameObject,
+                            inflictor = base.gameObject,
+                            teamIndex = base.teamComponent.teamIndex,
+                            crit = base.RollCrit(),
+                            procCoefficient = procCoefficient,
+                            falloffModel = BlastAttack.FalloffModel.None,
+                            damageType = DamageType.Stun1s
+                        }.Fire();
+                    }
+                    //Play sfx at enemy pos
+                    EffectManager.SimpleSoundEffect(BaseLeap.landingSound.index, body.footPosition, true);
+                    //Setup vfx data
+                    EffectData bodyEffectData = new EffectData
+                    {
+                        origin = body.corePosition,
+                        color = Color.magenta,
                         scale = detonationRadius
                     };
                     //Play vfx data at enemy positions

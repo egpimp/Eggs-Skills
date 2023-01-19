@@ -11,8 +11,6 @@ namespace EggsSkills.Properties
         {
             //Loads the main asset bundle just like it says
             LoadMainAssetbundle();
-            //Register the language tokens
-            LanguageTokens.RegisterLanguageTokens();
             //Loads our icons (U the best SOM)
             Sprites.LoadIcons();
             //Registers our custom projectiles
@@ -23,9 +21,9 @@ namespace EggsSkills.Properties
             //Assign the assetbundle
             assetBundle = EggsUtils.Properties.Assets.LoadAssetBundle(Resources.eggsskillsbundle);
             //If it exists it loaded just fine
-            if (assetBundle) EggsUtils.EggsUtils.LogToConsole("Assetbundle successfully loaded");
+            if (assetBundle) Log.LogMessage("Assetbundle successfully loaded");
             //Otherwise, it didn't load just fine
-            else EggsUtils.EggsUtils.LogToConsole("Assetbundle failed to load");
+            else Log.LogMessage("Assetbundle failed to load");
         }
     }
 }

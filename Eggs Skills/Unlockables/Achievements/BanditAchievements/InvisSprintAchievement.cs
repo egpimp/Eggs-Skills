@@ -12,7 +12,8 @@ namespace EggsSkills.Achievements
         internal const string REWARDNAME = "EggsSkills.InvisSprint";
 
         //Countdown for achievement
-        private float countDown = 180f;
+        private static float baseCountDown = 180f;
+        private float countDown;
 
         public override BodyIndex LookUpRequiredBodyIndex()
         {
@@ -23,16 +24,15 @@ namespace EggsSkills.Achievements
         {
             base.OnInstall();
             RoR2Application.onFixedUpdate += InvisTracker;
-            if (Configuration.UnlockAll.Value)
-            {
-                base.Grant();
-            }
+            Run.onRunStartGlobal += ResetTimer;
+            if (Configuration.UnlockAll.Value) base.Grant();
         }
 
         public override void OnUninstall()
         {
             base.OnUninstall();
-            RoR2Application.onFixedUpdate += InvisTracker;
+            RoR2Application.onFixedUpdate -= InvisTracker;
+            Run.onRunStartGlobal -= ResetTimer;
         }
 
         private void InvisTracker()
@@ -48,10 +48,14 @@ namespace EggsSkills.Achievements
                         if (body.HasBuff(RoR2Content.Buffs.Cloak) && countDown >= 0) countDown -= Time.fixedDeltaTime;
                         //If time is up u good homie
                         if (countDown <= 0) base.Grant();
-                        Debug.Log("Tick: " + countDown);
                     }
                 }
             }
+        }
+
+        private void ResetTimer(Run run)
+        {
+            countDown = baseCountDown;
         }
     }
 }

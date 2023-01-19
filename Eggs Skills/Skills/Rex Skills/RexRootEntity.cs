@@ -6,6 +6,7 @@ using EntityStates.Treebot.Weapon;
 using EggsUtils.Buffs;
 using EggsSkills.Config;
 using UnityEngine.Networking;
+using UnityEngine.AddressableAssets;
 
 namespace EggsSkills.EntityStates
 {
@@ -44,8 +45,8 @@ namespace EggsSkills.EntityStates
         private readonly float speedFraction = 0.8f;
 
         //Skill fx
-        private GameObject bodyPrefab = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/TreebotPounderExplosion");
-        
+        private GameObject bodyPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Junk/Treebot/TreebotPounderExplosion.prefab").WaitForCompletion();
+
         public override void OnEnter()
         {
             base.OnEnter();

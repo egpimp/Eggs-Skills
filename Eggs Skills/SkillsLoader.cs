@@ -2,152 +2,105 @@
 using EntityStates;
 using RoR2;
 using UnityEngine;
-using BepInEx;
 using RoR2.Skills;
-using EggsSkills.Properties;
 using EggsSkills.SkillDefs;
 using EggsSkills.EntityStates.TeslaMine.MineStates.MainStates;
 using EggsSkills.EntityStates.TeslaMine.MineStates.ArmingStates;
 using R2API;
-using System.Security;
-using System.Security.Permissions;
 using EggsSkills.EntityStates;
-using R2API.Utils;
 using EggsSkills.Unlocks;
 using System.Collections.Generic;
 using EntityStates.Bandit2.Weapon;
-using EntityStates.Bandit2;
-using static EggsUtils.EggsUtils;
 using static EggsSkills.Config.Configuration;
 using EggsSkills.Resources;
-using BepInEx.Bootstrap;
 using System.Runtime.CompilerServices;
-
-[module: UnverifiableCode]
-[assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
+using static EggsSkills.EggsSkills;
+using UnityEngine.AddressableAssets;
 
 namespace EggsSkills
 {
-    [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
-    //Required compats
-    [BepInDependency(COMPAT_NAME, BepInDependency.DependencyFlags.HardDependency)]
-    [BepInDependency(API_NAME, BepInDependency.DependencyFlags.HardDependency)]
-    //Optional compats
-    [BepInDependency(SKILLSPLUS_NAME, BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency(AUTOSPRINT_NAME, BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency(CLASSICITEMS_NAME, BepInDependency.DependencyFlags.SoftDependency)]
-    //My mod
-    [BepInPlugin(MODNAME, MODTITLE, MODVERS)]
-    [R2APISubmoduleDependency(new string[]
-{
-    nameof(LanguageAPI),
-    nameof(LoadoutAPI),
-    nameof(PrefabAPI),
-})]
-    internal class SkillsLoader : BaseUnityPlugin
+    internal class SkillsLoader
     {
-        //Mod focused stuff / strings
-        public const string MODNAME = "com.Egg.EggsSkills";
-        public const string MODTITLE = "Eggs Skills";
-        public const string MODVERS = "2.2.0";
-        //Hard dependancy strings
-        public const string API_NAME = "com.bepis.r2api";
-        //Soft dependancy strings
-        public const string SKILLSPLUS_NAME = "com.cwmlolzlz.skills";
-        public const string AUTOSPRINT_NAME = "com.johnedwa.RTAutoSprintEx";
-        public const string CLASSICITEMS_NAME = "";
-
-        public static bool skillsPlusLoaded = false;
-
-        #region Characterbody References And Strings
+        #region Characterbody References
 
         //Nab artificer body
-        internal static readonly string artificerName = "Mage";
-        internal static GameObject artificerRef = LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/" + artificerName + "Body");
+        internal static GameObject artificerRef = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Mage/MageBody.prefab").WaitForCompletion();
         //Nab merc body
-        internal static readonly string mercenaryName = "Merc";
-        internal static GameObject mercenaryRef = LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/" + mercenaryName + "Body");
+        internal static GameObject mercenaryRef = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercBody.prefab").WaitForCompletion();
         //Nab commando body
-        internal static readonly string commandoName = "Commando";
-        internal static GameObject commandoRef = LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/" + commandoName + "Body");
+        internal static GameObject commandoRef = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion();
         //Nab engi body
-        internal static readonly string engineerName = "Engi";
-        internal static GameObject engineerRef = LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/" + engineerName + "Body");
+        internal static GameObject engineerRef = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiBody.prefab").WaitForCompletion();
         //Nab REX body
-        internal static readonly string rexName = "Treebot";
-        internal static GameObject rexRef = LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/" + rexName + "Body");
+        internal static GameObject rexRef = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Treebot/TreebotBody.prefab").WaitForCompletion();
         //Nab loader body
-        internal static readonly string loaderName = "Loader";
-        internal static GameObject loaderRef = LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/"+ loaderName + "Body");
+        internal static GameObject loaderRef = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Loader/LoaderBody.prefab").WaitForCompletion();
         //Nab acrid body
-        internal static readonly string acridName = "Croco";
-        internal static GameObject acridRef = LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/" + acridName + "Body");
+        internal static GameObject acridRef = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Croco/CrocoBody.prefab").WaitForCompletion();
         //Nab captain body
-        internal static readonly string captainName = "Captain";
-        internal static GameObject captainRef = LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/" + captainName + "Body");
+        internal static GameObject captainRef = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Captain/CaptainBody.prefab").WaitForCompletion();
         //Nab bandit body
-        internal static readonly string banditName = "Bandit2";
-        internal static GameObject banditRef = LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/" + banditName + "Body");
+        internal static GameObject banditRef = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Bandit2/Bandit2Body.prefab").WaitForCompletion();
         //Nab MUL-T body
-        internal static readonly string multName = "Toolbot";
-        internal static GameObject multRef = LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/" + multName + "Body");
+        internal static GameObject multRef = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Toolbot/ToolbotBody.prefab").WaitForCompletion();
         //Nab huntress body
-        internal static readonly string huntressName = "Huntress";
-        internal static GameObject huntressRef = LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/" + huntressName + "Body");
+        internal static GameObject huntressRef = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Huntress/HuntressBody.prefab").WaitForCompletion();
+        //Nab railgunner Body
+        internal static GameObject railgunnerRef = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/Railgunner/RailgunnerBody.prefab").WaitForCompletion();
+        //Nab void fiend body
+        internal static GameObject voidFiendRef = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/VoidSurvivor/VoidSurvivorBody.prefab").WaitForCompletion();
         #endregion
 
         //List of all the skilldefs so we don't have to change every skill add case when r2api changes
         internal static List<SkillDef> defList = new List<SkillDef>();
-        private void Awake()
+        
+        //Helps us add the scepter compat
+        internal struct SkillUpgradeContainer
         {
-            //Do the skills++ exist
-            skillsPlusLoaded = Chainloader.PluginInfos.ContainsKey(SKILLSPLUS_NAME);
-            //Thank SOM for being a poggers
-            LogToConsole("Thanks SOM for the icon work <3");
-            //Autosprint
-            AutosprintAgonyEngage();
-            //Load up the config file
-            LoadConfig();
-            //Load up all the resources
-            Assets.LoadResources();
-            //Load up achievements and unlockables before skills
-            UnlocksRegistering.RegisterUnlockables();
-            //Finally load up the skills
-            RegisterSkills();
-            if (skillsPlusLoaded) SkillsPlusPlusCompatibility();
-            //Tell the console that things went just as expected :)
-            LogToConsole("EggsSkills fully loaded!");
+            internal string body;
+            internal SkillDef normalSkillDef;
+            internal SkillDef upgradedSkillDef;
+            internal SkillSlot slot;
+            internal int index;
         }
+        internal static Dictionary<string, SkillUpgradeContainer> skillsToHandle;
 
         //Main method for setting up all our skills
-        private void RegisterSkills()
+        internal static void RegisterSkills()
         {
             //For each character, if the configvalue says they are allowed to load up their skills load them, otherwise don't.  Simple.
             //Artificer
-            if (GetConfigValue(EnableMageSkills)) RegisterArtificerSkills();
+            try { if (GetConfigValue(EnableMageSkills)) RegisterArtificerSkills(); } catch { Log.LogError("Failed to load Artificer skills"); }
             //Mercenary
-            if (GetConfigValue(EnableMercSkills)) RegisterMercenarySkills();
+            try { if (GetConfigValue(EnableMercSkills)) RegisterMercenarySkills(); } catch { Log.LogError("Failed to load Mercenary skills"); }
             //Commando
-            if (GetConfigValue(EnableCommandoSkills)) RegisterCommandoSkills();
+            try { if (GetConfigValue(EnableCommandoSkills)) RegisterCommandoSkills(); } catch { Log.LogError("Failed to load Commando skills"); }
             //Engineer
-            if (GetConfigValue(EnableEngiSkills)) RegisterEngiSkills();
-            //Acrid (Yes he is called croco in the official code and it is beautiful)
-            if (GetConfigValue(EnableCrocoSkills)) RegisterAcridSkills();
+            try { if (GetConfigValue(EnableEngiSkills)) RegisterEngiSkills(); } catch { Log.LogError("Failed to load Engineer skills"); }
+            //Acrid
+            try { if (GetConfigValue(EnableCrocoSkills)) RegisterAcridSkills(); } catch { Log.LogError("Failed to load Acrid skills"); }
             //Loader
-            if (GetConfigValue(EnableLoaderSkills)) RegisterLoaderSkills();
+            try { if (GetConfigValue(EnableLoaderSkills)) RegisterLoaderSkills(); } catch { Log.LogError("Failed to load Loader skills"); }
             //Captain
-            if (GetConfigValue(EnableCaptainSkills)) RegisterCaptainSkills();
+            try { if (GetConfigValue(EnableCaptainSkills)) RegisterCaptainSkills(); } catch { Log.LogError("Failed to load Captain skills"); }
             //REX
-            if (GetConfigValue(EnableTreebotSkills)) RegisterRexSkills();
+            try { if (GetConfigValue(EnableTreebotSkills)) RegisterRexSkills(); } catch { Log.LogError("Failed to load REX skills"); }
             //Bandit
-            if (GetConfigValue(EnableBanditSkills)) RegisterBanditSkills();
+            try { if (GetConfigValue(EnableBanditSkills)) RegisterBanditSkills(); } catch { Log.LogError("Failed to load Bandit skills"); }
             //Huntress
-            if (GetConfigValue(EnableHuntressSkills)) RegisterHuntressSkills();
+            try { if (GetConfigValue(EnableHuntressSkills)) RegisterHuntressSkills(); } catch { Log.LogError("Failed to laod Huntress skills"); }
             //MUL-T
-            if (GetConfigValue(EnableToolbotSkills)) RegisterMultSkills();
+            try { if (GetConfigValue(EnableToolbotSkills)) RegisterMultSkills(); } catch { Log.LogError("Failed to load MUL-T skills"); }
+            //Railgunner
+            try { if (GetConfigValue(EnableRailgunnerSkills)) RegisterRailgunnerSkills(); } catch { Log.LogError("Failed to load Railgunner skills"); }
+            //Void fiend
+            try { if (GetConfigValue(EnableVoidfiendSkills)) RegisterVoidfiendSkills(); } catch { Log.LogError("Failed to load Void Fiend skills"); }
+
+            //Load scepter skills if supposed to
+            try { if (classicItemsLoaded) RegisterScepterSkills(); } catch { Log.LogError("Failed to load one or more scepter replacements"); }
 
             //Register any states that aren't directly tied to skill activation (Basically, don't need skilldefs)
-            RegisterExtraStates();
+            try { RegisterExtraStates(); } catch { Log.LogError("Failed to load one or more extra entity-states"); }
 
             //As long as there are any skilldefs waiting to be added...
             if (defList.Count > 0)
@@ -155,28 +108,36 @@ namespace EggsSkills
                 //For every skilldef queue'd up to be added...
                 foreach (SkillDef def in defList)
                 {
-                    //Add skilldef via R2API
-                    ContentAddition.AddSkillDef(def);
-                    //Tell us each time a skill is registered, helps with sanity checks
-                    LogToConsole("Skill: " + def.skillName + " Registered");
+                    try
+                    {
+                        //Add skilldef via R2API
+                        ContentAddition.AddSkillDef(def);
+                        //Tell us each time a skill is registered, helps with sanity checks
+                        Log.LogMessage("Skill: " + def.skillName + " Registered");
+                    }
+                    catch
+                    {
+                        Log.LogError("Skilldef failed to be registered");
+                    }
                 }
             }
             //Sadness check
-            else LogToConsole("Did you really install my mod just to disable all the skills :(");
+            else Log.LogMessage("Did you really install my mod just to disable all the skills :(");
         }
         #region Skills
-        private void RegisterAcridSkills()
+        private static void RegisterAcridSkills()
         {
             //Nab the skillocator and skillfamilies
             SkillLocator acridSkillLocator = acridRef.GetComponent<SkillLocator>();
             SkillFamily acridSkillFamilySpecial = acridSkillLocator.special.skillFamily;
+            SkillFamily acricSkillFamilyPrimary = acridSkillLocator.primary.skillFamily;
 
             //AcridPurge
             AcridPurgeDef skillDefPurge = ScriptableObject.CreateInstance<AcridPurgeDef>();
             skillDefPurge.activationState = new SerializableEntityStateType(typeof(AcridPurgeEntity));
             skillDefPurge.activationStateMachineName = "Body";
             skillDefPurge.baseMaxStock = 1;
-            skillDefPurge.baseRechargeInterval = 12f;
+            skillDefPurge.baseRechargeInterval = 16f;
             skillDefPurge.beginSkillCooldownOnSkillEnd = false;
             skillDefPurge.fullRestockOnAssign = false;
             skillDefPurge.interruptPriority = InterruptPriority.Skill;
@@ -189,9 +150,9 @@ namespace EggsSkills
             skillDefPurge.requiredStock = 1;
             skillDefPurge.stockToConsume = 1;
             skillDefPurge.icon = Sprites.acridpurgeIconS;
-            skillDefPurge.skillDescriptionToken = LanguageTokens.prefix + acridName.ToUpper() + "_" + "SPECIAL_PURGE" + LanguageTokens.dSuffix;
-            skillDefPurge.skillName = "ESPurge";
-            skillDefPurge.skillNameToken = LanguageTokens.prefix + acridName.ToUpper() + "_" + "SPECIAL_PURGE" + LanguageTokens.nSuffix;
+            skillDefPurge.skillDescriptionToken = "ES_CROCO_SPECIAL_PURGE_DESCRIPTION";
+            skillDefPurge.skillName = ((ScriptableObject)skillDefPurge).name = "ESPurge";
+            skillDefPurge.skillNameToken = "ES_CROCO_SPECIAL_PURGE_NAME";
 
             defList.Add(skillDefPurge);
             Array.Resize(ref acridSkillFamilySpecial.variants, acridSkillFamilySpecial.variants.Length + 1);
@@ -201,10 +162,12 @@ namespace EggsSkills
                 unlockableDef = UnlocksRegistering.acridPurgeUnlockDef,
                 viewableNode = new ViewablesCatalog.Node(skillDefPurge.skillNameToken, false, null)
             };
-            ContentAddition.AddEntityState<AcridPurgeEntity>(out _);
+            ContentAddition.AddEntityState<AcridPurgeEntityUpgrade>(out _);
+
+            if(classicItemsLoaded) skillsToHandle.Add(skillDefPurge.skillName, new SkillUpgradeContainer { normalSkillDef = skillDefPurge, body = "Croco", slot = SkillSlot.Special, index = acridSkillFamilySpecial.variants.Length - 1});
         }
 
-        private void RegisterArtificerSkills()
+        private static void RegisterArtificerSkills()
         {
             //Nab the skillocator and skillfamilies
             SkillLocator artificerSkillLocator = artificerRef.GetComponent<SkillLocator>();
@@ -228,13 +191,13 @@ namespace EggsSkills
             skillDefZapport.requiredStock = 1;
             skillDefZapport.stockToConsume = 1;
             skillDefZapport.icon = Sprites.zapportIconS;
-            skillDefZapport.skillDescriptionToken = LanguageTokens.prefix + artificerName.ToUpper() + "_" + "UTILITY_ZAPPORT" + LanguageTokens.dSuffix;
-            skillDefZapport.skillName = "ESZapport";
-            skillDefZapport.skillNameToken = LanguageTokens.prefix + artificerName.ToUpper() + "_" + "UTILITY_ZAPPORT" + LanguageTokens.nSuffix;
+            skillDefZapport.skillDescriptionToken = "ES_MAGE_UTILITY_ZAPPORT_DESCRIPTION";
+            skillDefZapport.skillName = ((ScriptableObject)skillDefZapport).name = "ESZapport";
+            skillDefZapport.skillNameToken = "ES_MAGE_UTILITY_ZAPPORT_NAME";
             skillDefZapport.keywordTokens = new string[]
             {
                 "KEYWORD_STUNNING",
-                "KEYWORD_ENHANCING"
+                "ES_KEYWORD_ENHANCING"
             };
 
             defList.Add(skillDefZapport);
@@ -248,7 +211,7 @@ namespace EggsSkills
             ContentAddition.AddEntityState<ZapportChargeEntity>(out _);
         }
 
-        private void RegisterBanditSkills()
+        private static void RegisterBanditSkills()
         {
             //Nab the skillocator and skillfamilies
             SkillLocator banditSkillLocator = banditRef.GetComponent<SkillLocator>();
@@ -267,9 +230,9 @@ namespace EggsSkills
             skillDefInvisSprint.requiredStock = 1;
             skillDefInvisSprint.stockToConsume = 1;
             skillDefInvisSprint.icon = Sprites.invisSprintIconS;
-            skillDefInvisSprint.skillDescriptionToken = LanguageTokens.prefix + banditName.ToUpper() + "_" + "UTILITY_INVISSPRINT" + LanguageTokens.dSuffix;
-            skillDefInvisSprint.skillName = "ESInvisSprint";
-            skillDefInvisSprint.skillNameToken = LanguageTokens.prefix + banditName.ToUpper() + "_" + "UTILITY_INVISSPRINT" + LanguageTokens.nSuffix;
+            skillDefInvisSprint.skillDescriptionToken = "ES_BANDIT2_UTILITY_INVISSPRINT_DESCRIPTION";
+            skillDefInvisSprint.skillName = ((ScriptableObject)skillDefInvisSprint).name = "ESInvisSprint";
+            skillDefInvisSprint.skillNameToken = "ES_BANDIT2_UTILITY_INVISSPRINT_NAME";
 
             defList.Add(skillDefInvisSprint);
             Array.Resize(ref banditSkillFamilyUtility.variants, banditSkillFamilyUtility.variants.Length + 1);
@@ -300,9 +263,9 @@ namespace EggsSkills
             skillDefMagicBullet.requiredStock = 1;
             skillDefMagicBullet.stockToConsume = 1;
             skillDefMagicBullet.icon = Sprites.magicBulletIconS;
-            skillDefMagicBullet.skillDescriptionToken = LanguageTokens.prefix + banditName.ToUpper() + "_" + "PRIMARY_MAGICBULLET" + LanguageTokens.dSuffix;
-            skillDefMagicBullet.skillName = "ESMagicBullet";
-            skillDefMagicBullet.skillNameToken = LanguageTokens.prefix + banditName.ToUpper() + "_" + "PRIMARY_MAGICBULLET" + LanguageTokens.nSuffix;
+            skillDefMagicBullet.skillDescriptionToken = "ES_BANDIT2_PRIMARY_MAGICBULLET_DESCRIPTION";
+            skillDefMagicBullet.skillName = ((ScriptableObject)skillDefMagicBullet).name = "ESMagicBullet";
+            skillDefMagicBullet.skillNameToken = "ES_BANDIT2_PRIMARY_MAGICBULLET_NAME";
 
             defList.Add(skillDefMagicBullet);
             Array.Resize(ref banditSkillFamilyPrimary.variants, banditSkillFamilyPrimary.variants.Length + 1);
@@ -315,11 +278,12 @@ namespace EggsSkills
             ContentAddition.AddEntityState<MagicBulletEntity>(out _);
         }
 
-        private void RegisterCaptainSkills()
+        private static void RegisterCaptainSkills()
         {
             //Nab the skillocator and skillfamilies
             SkillLocator captainSkillLocator = captainRef.GetComponent<SkillLocator>();
             SkillFamily captainSkillFamilySecondary = captainSkillLocator.secondary.skillFamily;
+            SkillFamily captainSkillFamilyPrimary = captainSkillLocator.primary.skillFamily;
 
             //DebuffGrenade
             SkillDef skillDefDebuffnade = ScriptableObject.CreateInstance<SkillDef>();
@@ -339,12 +303,12 @@ namespace EggsSkills
             skillDefDebuffnade.requiredStock = 1;
             skillDefDebuffnade.stockToConsume = 1;
             skillDefDebuffnade.icon = Sprites.debuffNadeIconS;
-            skillDefDebuffnade.skillDescriptionToken = LanguageTokens.prefix + captainName.ToUpper() + "_" + "SECONDARY_DEBUFFNADE" + LanguageTokens.dSuffix;
-            skillDefDebuffnade.skillName = "ESDebuffNade";
-            skillDefDebuffnade.skillNameToken = LanguageTokens.prefix + captainName.ToUpper() + "_" + "SECONDARY_DEBUFFNADE" + LanguageTokens.nSuffix;
+            skillDefDebuffnade.skillDescriptionToken = "ES_CAPTAIN_SECONDARY_DEBUFFNADE_DESCRIPTION";
+            skillDefDebuffnade.skillName = ((ScriptableObject)skillDefDebuffnade).name = "ESDebuffNade";
+            skillDefDebuffnade.skillNameToken = "ES_CAPTAIN_SECONDARY_DEBUFFNADE_NAME";
             skillDefDebuffnade.keywordTokens = new string[]
             {
-                "KEYWORD_MARKING",
+                "ES_KEYWORD_MARKING",
             };
 
             defList.Add(skillDefDebuffnade);
@@ -356,9 +320,12 @@ namespace EggsSkills
                 viewableNode = new ViewablesCatalog.Node(skillDefDebuffnade.skillNameToken, false, null)
             };
             ContentAddition.AddEntityState<DebuffGrenadeEntity>(out _);
+
+            //Autoshotgun
+            
         }
 
-        private void RegisterCommandoSkills()
+        private static void RegisterCommandoSkills()
         {
             //Nab the skillocator and skillfamilies
             SkillLocator commandoSkillLocator = commandoRef.GetComponent<SkillLocator>();
@@ -379,9 +346,9 @@ namespace EggsSkills
             skillDefCombatshotgun.forceSprintDuringState = false;
             skillDefCombatshotgun.stockToConsume = 0;
             skillDefCombatshotgun.icon = Sprites.shotgunIconS;
-            skillDefCombatshotgun.skillDescriptionToken = LanguageTokens.prefix + commandoName.ToUpper() + "_" + "PRIMARY_COMBATSHOTGUN" + LanguageTokens.dSuffix;
-            skillDefCombatshotgun.skillName = "ESCombatShotgun";
-            skillDefCombatshotgun.skillNameToken = LanguageTokens.prefix + commandoName.ToUpper() + "_" + "PRIMARY_COMBATSHOTGUN" + LanguageTokens.nSuffix;
+            skillDefCombatshotgun.skillDescriptionToken = "ES_COMMANDO_PRIMARY_COMBATSHOTGUN_DESCRIPTION";
+            skillDefCombatshotgun.skillName = ((ScriptableObject)skillDefCombatshotgun).name = "ESCombatShotgun";
+            skillDefCombatshotgun.skillNameToken = "ES_COMMANDO_PRIMARY_COMBATSHOTGUN_NAME";
 
             defList.Add(skillDefCombatshotgun);
             Array.Resize(ref commandoSkillFamilyPrimary.variants, commandoSkillFamilyPrimary.variants.Length + 1);
@@ -411,12 +378,12 @@ namespace EggsSkills
             skillDefDash.requiredStock = 1;
             skillDefDash.rechargeStock = 1;
             skillDefDash.icon = Sprites.dashIconS;
-            skillDefDash.skillDescriptionToken = LanguageTokens.prefix + commandoName.ToUpper() + "_" + "UTILITY_DASH" + LanguageTokens.dSuffix;
-            skillDefDash.skillName = "ESDash";
-            skillDefDash.skillNameToken = LanguageTokens.prefix + commandoName.ToUpper() + "_" + "UTILITY_DASH" + LanguageTokens.nSuffix;
+            skillDefDash.skillDescriptionToken = "ES_COMMANDO_UTILITY_DASH_DESCRIPTION";
+            skillDefDash.skillName = ((ScriptableObject)skillDefDash).name = "ESDash";
+            skillDefDash.skillNameToken = "ES_COMMANDO_UTILITY_DASH_NAME";
             skillDefDash.keywordTokens = new string[]
             {
-                 "KEYWORD_PREPARE"
+                 "ES_KEYWORD_PREPARE"
             };
 
             defList.Add(skillDefDash);
@@ -430,17 +397,18 @@ namespace EggsSkills
             ContentAddition.AddEntityState<CommandoDashEntity>(out _);
         }
 
-        private void RegisterEngiSkills()
+        private static void RegisterEngiSkills()
         {
             //Nab the skillocator and skillfamilies
             SkillLocator engiSkillLocator = engineerRef.GetComponent<SkillLocator>();
             SkillFamily engiSkillFamilySecondary = engiSkillLocator.secondary.skillFamily;
+            SkillFamily engiSkillFamilyPrimary = engiSkillLocator.primary.skillFamily;
 
             SkillDef skillDefTeslamine = ScriptableObject.CreateInstance<SkillDef>();
             skillDefTeslamine.activationState = new SerializableEntityStateType(typeof(TeslaMineFireState));
             skillDefTeslamine.activationStateMachineName = "Weapon";
             skillDefTeslamine.baseMaxStock = 4;
-            skillDefTeslamine.baseRechargeInterval = 10f;
+            skillDefTeslamine.baseRechargeInterval = 8f;
             skillDefTeslamine.beginSkillCooldownOnSkillEnd = false;
             skillDefTeslamine.fullRestockOnAssign = false;
             skillDefTeslamine.interruptPriority = InterruptPriority.Skill;
@@ -453,9 +421,9 @@ namespace EggsSkills
             skillDefTeslamine.requiredStock = 1;
             skillDefTeslamine.stockToConsume = 1;
             skillDefTeslamine.icon = Sprites.teslaMineIconS;
-            skillDefTeslamine.skillDescriptionToken = LanguageTokens.prefix + engineerName.ToUpper() + "_" + "SECONDARY_TESLAMINE" + LanguageTokens.dSuffix;
-            skillDefTeslamine.skillName = "ESTeslaMine";
-            skillDefTeslamine.skillNameToken = LanguageTokens.prefix + engineerName.ToUpper() + "_" + "SECONDARY_TESLAMINE" + LanguageTokens.nSuffix;
+            skillDefTeslamine.skillDescriptionToken = "ES_ENGI_SECONDARY_TESLAMINE_DESCRIPTION";
+            skillDefTeslamine.skillName = ((ScriptableObject)skillDefTeslamine).name = "ESTeslaMine";
+            skillDefTeslamine.skillNameToken = "ES_ENGI_SECONDARY_TESLAMINE_NAME";
             skillDefTeslamine.keywordTokens = new string[]
             {
                 "KEYWORD_STUNNING"
@@ -472,7 +440,7 @@ namespace EggsSkills
             ContentAddition.AddEntityState<TeslaMineFireState>(out _);
         }
 
-        private void RegisterHuntressSkills()
+        private static void RegisterHuntressSkills()
         {
             //Nab the skillocator and skillfamilies
             SkillLocator huntressSkillLocator = huntressRef.GetComponent<SkillLocator>();
@@ -496,9 +464,9 @@ namespace EggsSkills
             skillDefClusterArrow.requiredStock = 1;
             skillDefClusterArrow.stockToConsume = 1;
             skillDefClusterArrow.icon = Sprites.clusterArrowIconS;
-            skillDefClusterArrow.skillDescriptionToken = LanguageTokens.prefix + huntressName.ToUpper() + "_" + "SECONDARY_CLUSTERARROW" + LanguageTokens.dSuffix;
-            skillDefClusterArrow.skillName = "ESClusterArrow";
-            skillDefClusterArrow.skillNameToken = LanguageTokens.prefix + huntressName.ToUpper() + "_" + "SECONDARY_CLUSTERARROW" + LanguageTokens.nSuffix;
+            skillDefClusterArrow.skillDescriptionToken = "ES_HUNTRESS_SECONDARY_CLUSTERARROW_DESCRIPTION";
+            skillDefClusterArrow.skillName = ((ScriptableObject)skillDefClusterArrow).name = "ESClusterArrow";
+            skillDefClusterArrow.skillNameToken = "ES_HUNTRESS_SECONDARY_CLUSTERARROW_NAME";
             skillDefClusterArrow.keywordTokens = new string[]
             {
                 "KEYWORD_AGILE"
@@ -515,7 +483,7 @@ namespace EggsSkills
             ContentAddition.AddEntityState<ClusterBombArrow>(out _);
         }
 
-        private void RegisterLoaderSkills()
+        private static void RegisterLoaderSkills()
         {
             //Nab the skillocator and skillfamilies
             SkillLocator loaderSkillLocator = loaderRef.GetComponent<SkillLocator>();
@@ -539,9 +507,9 @@ namespace EggsSkills
             skillDefShieldsplode.requiredStock = 1;
             skillDefShieldsplode.stockToConsume = 1;
             skillDefShieldsplode.icon = Sprites.shieldsplosionIconS;
-            skillDefShieldsplode.skillDescriptionToken = LanguageTokens.prefix + loaderName.ToUpper() + "_" + "SPECIAL_SHIELDSPLOSION" + LanguageTokens.dSuffix;
-            skillDefShieldsplode.skillName = "ESShieldSplosion";
-            skillDefShieldsplode.skillNameToken = LanguageTokens.prefix + loaderName.ToUpper() + "_" + "SPECIAL_SHIELDSPLOSION" + LanguageTokens.nSuffix;
+            skillDefShieldsplode.skillDescriptionToken = "ES_LOADER_SPECIAL_SHIELDSPLOSION_DESCRIPTION";
+            skillDefShieldsplode.skillName = ((ScriptableObject)skillDefShieldsplode).name = "ESShieldSplosion";
+            skillDefShieldsplode.skillNameToken = "ES_LOADER_SPECIAL_SHIELDSPLOSION_NAME";
 
             defList.Add(skillDefShieldsplode);
             Array.Resize(ref loaderSkillFamilySpecial.variants, loaderSkillFamilySpecial.variants.Length + 1);
@@ -554,7 +522,7 @@ namespace EggsSkills
             ContentAddition.AddEntityState<ShieldSplosionEntity>(out _);
         }
 
-        private void RegisterMercenarySkills()
+        private static void RegisterMercenarySkills()
         {
             SkillLocator mercSkillLocator = mercenaryRef.GetComponent<SkillLocator>();
             SkillFamily mercSkillFamilySpecial = mercSkillLocator.special.skillFamily;
@@ -577,9 +545,9 @@ namespace EggsSkills
             skillDefSlashport.requiredStock = 1;
             skillDefSlashport.stockToConsume = 1;
             skillDefSlashport.icon = Sprites.slashportIconS;
-            skillDefSlashport.skillDescriptionToken = LanguageTokens.prefix + mercenaryName.ToUpper() + "_" + "SPECIAL_SLASHPORT" + LanguageTokens.dSuffix;
-            skillDefSlashport.skillName = "ESSlashport";
-            skillDefSlashport.skillNameToken = LanguageTokens.prefix + mercenaryName.ToUpper() + "_" + "SPECIAL_SLASHPORT" + LanguageTokens.nSuffix;
+            skillDefSlashport.skillDescriptionToken = "ES_MERC_SPECIAL_SLASHPORT_DESCRIPTION";
+            skillDefSlashport.skillName = ((ScriptableObject)skillDefSlashport).name = "ESSlashport";
+            skillDefSlashport.skillNameToken = "ES_MERC_SPECIAL_SLASHPORT_NAME";
             skillDefSlashport.keywordTokens = new string[]
             {
                 "KEYWORD_EXPOSE",
@@ -596,9 +564,11 @@ namespace EggsSkills
                 viewableNode = new ViewablesCatalog.Node(skillDefSlashport.skillNameToken, false, null)
             };
             ContentAddition.AddEntityState<SlashportEntity>(out _);
+
+            if (classicItemsLoaded) skillsToHandle.Add(skillDefSlashport.skillName, new SkillUpgradeContainer { normalSkillDef = skillDefSlashport, body = "Merc", slot = SkillSlot.Special, index = mercSkillFamilySpecial.variants.Length - 1 });
         }
 
-        private void RegisterMultSkills()
+        private static void RegisterMultSkills()
         {
             //Nab the skillocator and skillfamilies
             SkillLocator multSkillLocator = multRef.GetComponent<SkillLocator>();
@@ -622,12 +592,12 @@ namespace EggsSkills
             skillDefNanoSwarm.requiredStock = 1;
             skillDefNanoSwarm.stockToConsume = 1;
             skillDefNanoSwarm.icon = Sprites.nanoBotsIconS;
-            skillDefNanoSwarm.skillDescriptionToken = LanguageTokens.prefix + multName.ToUpper() + "_" + "SECONDARY_NANOBOTS" + LanguageTokens.dSuffix;
-            skillDefNanoSwarm.skillName = "ESNanobots";
-            skillDefNanoSwarm.skillNameToken = LanguageTokens.prefix + multName.ToUpper() + "_" + "SECONDARY_NANOBOTS" + LanguageTokens.nSuffix;
+            skillDefNanoSwarm.skillDescriptionToken = "ES_TOOLBOT_SECONDARY_NANOBOTS_DESCRIPTION";
+            skillDefNanoSwarm.skillName = ((ScriptableObject)skillDefNanoSwarm).name = "ESNanobots";
+            skillDefNanoSwarm.skillNameToken = "ES_TOOLBOT_SECONDARY_NANOBOTS_NAME";
             skillDefNanoSwarm.keywordTokens = new string[]
             {
-                "KEYWORD_MARKING"
+                "ES_KEYWORD_MARKING"
             };
 
             defList.Add(skillDefNanoSwarm);
@@ -641,7 +611,40 @@ namespace EggsSkills
             ContentAddition.AddEntityState<NanobotEntity>(out _);
         }
 
-        private void RegisterRexSkills()
+        private static void RegisterRailgunnerSkills()
+        {
+            SkillLocator railgunnerSkillLocator = railgunnerRef.GetComponent<SkillLocator>();
+            SkillFamily railgunnerSkillFamilyPrimary = railgunnerSkillLocator.primary.skillFamily;
+
+            //Lance rounds
+            SteppedSkillDef skillDefLanceRounds = ScriptableObject.CreateInstance<SteppedSkillDef>();
+            skillDefLanceRounds.activationState = new SerializableEntityStateType(typeof(LancerRoundsEntity));
+            skillDefLanceRounds.activationStateMachineName = "Weapon";
+            skillDefLanceRounds.beginSkillCooldownOnSkillEnd = true;
+            skillDefLanceRounds.fullRestockOnAssign = true;
+            skillDefLanceRounds.interruptPriority = InterruptPriority.Any;
+            skillDefLanceRounds.isCombatSkill = true;
+            skillDefLanceRounds.mustKeyPress = false;
+            skillDefLanceRounds.canceledFromSprinting = false;
+            skillDefLanceRounds.forceSprintDuringState = false;
+            skillDefLanceRounds.stockToConsume = 0;
+            skillDefLanceRounds.icon = Sprites.placeholderIconS;
+            skillDefLanceRounds.skillDescriptionToken = "ES_RAILGUNNER_PRIMARY_LANCEROUNDS_DESCRIPTION";
+            skillDefLanceRounds.skillName = ((ScriptableObject)skillDefLanceRounds).name = "ESLanceRounds";
+            skillDefLanceRounds.skillNameToken = "ES_RAILGUNNER_PRIMARY_LANCEROUNDS_NAME";
+
+            defList.Add(skillDefLanceRounds);
+            Array.Resize(ref railgunnerSkillFamilyPrimary.variants, railgunnerSkillFamilyPrimary.variants.Length + 1);
+            railgunnerSkillFamilyPrimary.variants[railgunnerSkillFamilyPrimary.variants.Length - 1] = new SkillFamily.Variant
+            {
+                skillDef = skillDefLanceRounds,
+                unlockableDef = UnlocksRegistering.railgunnerLanceroundsUnlockDef,
+                viewableNode = new ViewablesCatalog.Node(skillDefLanceRounds.skillNameToken, false, null)
+            };
+            ContentAddition.AddEntityState<LancerRoundsEntity>(out _);
+        }
+
+        private static void RegisterRexSkills()
         {
             //Nab the skillocator and skillfamilies
             SkillLocator rexSkillLocator = rexRef.GetComponent<SkillLocator>();
@@ -665,13 +668,13 @@ namespace EggsSkills
             skillDefRoot.requiredStock = 1;
             skillDefRoot.stockToConsume = 1;
             skillDefRoot.icon = Sprites.rexrootIconS;
-            skillDefRoot.skillDescriptionToken = LanguageTokens.prefix + rexName.ToUpper() + "_" + "SPECIAL_ROOT" + LanguageTokens.dSuffix;
-            skillDefRoot.skillName = "ESRoot";
-            skillDefRoot.skillNameToken = LanguageTokens.prefix + rexName.ToUpper() + "_" + "SPECIAL_ROOT" + LanguageTokens.nSuffix;
+            skillDefRoot.skillDescriptionToken = "ES_TREEBOT_SPECIAL_ROOT_DESCRIPTION";
+            skillDefRoot.skillName = ((ScriptableObject)skillDefRoot).name = "ESRoot";
+            skillDefRoot.skillNameToken = "ES_TREEBOT_SPECIAL_ROOT_NAME";
             skillDefRoot.keywordTokens = new string[]
             {
                 "KEYWORD_STUNNING",
-                "KEYWORD_ADAPTIVE"
+                "ES_KEYWORD_ADAPTIVE"
             };
 
             defList.Add(skillDefRoot);
@@ -683,17 +686,25 @@ namespace EggsSkills
                 viewableNode = new ViewablesCatalog.Node(skillDefRoot.skillNameToken, false, null)
             };
             ContentAddition.AddEntityState<DirectiveRoot>(out _);
+
+            if (classicItemsLoaded) skillsToHandle.Add(skillDefRoot.skillName, new SkillUpgradeContainer { normalSkillDef = skillDefRoot, body = "Treebot", slot = SkillSlot.Special, index = rexSkillFamilySpecial.variants.Length - 1 });
+        }
+
+        private static void RegisterVoidfiendSkills()
+        {
+            SkillLocator voidFiendSkillLocator = voidFiendRef.GetComponent<SkillLocator>();
+            SkillFamily voidFiendSkillFamilySpecial = voidFiendSkillLocator.special.skillFamily;
         }
         #endregion
 
-        private void RegisterExtraStates()
+        private static void RegisterExtraStates()
         {
             //Artificer extra states
             if (GetConfigValue(EnableMageSkills))
             {
                 //Artificer Zappot Fire State
                 ContentAddition.AddEntityState<ZapportFireEntity>(out _);
-                LogToConsole("Zapport fire state loaded!");
+                Log.LogMessage("Zapport fire state loaded!");
             }
 
             //Engi extra states
@@ -709,25 +720,114 @@ namespace EggsSkills
                 ContentAddition.AddEntityState<TeslaWaitForTargetState>(out _);
                 ContentAddition.AddEntityState<TeslaPreDetState>(out _);
                 ContentAddition.AddEntityState<TeslaDetonateState>(out _);
-                LogToConsole("Tesla mine states loaded!");
+                Log.LogMessage("Tesla mine states loaded!");
             }
         }
 
-        private void AutosprintAgonyEngage()
+        private static void RegisterScepterSkills()
         {
-            if (Chainloader.PluginInfos.ContainsKey("com.johnedwa.RTAutoSprintEx"))
+            //Upgraded AcridPurge
+            AcridPurgeDef skillDefPurge = ScriptableObject.CreateInstance<AcridPurgeDef>();
+            skillDefPurge.activationState = new SerializableEntityStateType(typeof(AcridPurgeEntityUpgrade));
+            skillDefPurge.activationStateMachineName = "Body";
+            skillDefPurge.baseMaxStock = 1;
+            skillDefPurge.baseRechargeInterval = 12f;
+            skillDefPurge.beginSkillCooldownOnSkillEnd = false;
+            skillDefPurge.fullRestockOnAssign = false;
+            skillDefPurge.interruptPriority = InterruptPriority.Skill;
+            skillDefPurge.isCombatSkill = true;
+            skillDefPurge.mustKeyPress = true;
+            skillDefPurge.canceledFromSprinting = false;
+            skillDefPurge.cancelSprintingOnActivation = false;
+            skillDefPurge.forceSprintDuringState = false;
+            skillDefPurge.rechargeStock = 1;
+            skillDefPurge.requiredStock = 1;
+            skillDefPurge.stockToConsume = 1;
+            skillDefPurge.icon = Sprites.acridpurgeUpgradedIconS;
+            skillDefPurge.skillDescriptionToken = "ES_CROCO_SPECIAL_PURGE_UGPRADED_DESCRIPTION";
+            skillDefPurge.skillName = ((ScriptableObject)skillDefPurge).name = "ESPurge_UG";
+            skillDefPurge.skillNameToken = "ES_CROCO_SPECIAL_PURGE_UGPRADED_NAME";
+            defList.Add(skillDefPurge);
+            SkillUpgradeContainer container = skillsToHandle["ESPurge"];
+            container.upgradedSkillDef = skillDefPurge;
+            skillsToHandle["ESPurge"] = container;
+            ContentAddition.AddEntityState<AcridPurgeEntityUpgrade>(out _);
+
+            //Upgraded Slashport
+            MercSlashportDef skillDefSlashport = ScriptableObject.CreateInstance<MercSlashportDef>();
+            skillDefSlashport.activationState = new SerializableEntityStateType(typeof(SlashportEntityUpgrade));
+            skillDefSlashport.activationStateMachineName = "Weapon";
+            skillDefSlashport.baseMaxStock = 1;
+            skillDefSlashport.baseRechargeInterval = 8f;
+            skillDefSlashport.beginSkillCooldownOnSkillEnd = true;
+            skillDefSlashport.fullRestockOnAssign = false;
+            skillDefSlashport.interruptPriority = InterruptPriority.PrioritySkill;
+            skillDefSlashport.isCombatSkill = true;
+            skillDefSlashport.mustKeyPress = false;
+            skillDefSlashport.canceledFromSprinting = false;
+            skillDefSlashport.cancelSprintingOnActivation = false;
+            skillDefSlashport.forceSprintDuringState = false;
+            skillDefSlashport.rechargeStock = 1;
+            skillDefSlashport.requiredStock = 1;
+            skillDefSlashport.stockToConsume = 1;
+            skillDefSlashport.icon = Sprites.slashportUpgradedIconS;
+            skillDefSlashport.skillDescriptionToken = "ES_MERC_SPECIAL_SLASHPORT_UPGRADED_DESCRIPTION";
+            skillDefSlashport.skillName = ((ScriptableObject)skillDefSlashport).name = "ESSlashport_UG";
+            skillDefSlashport.skillNameToken = "ES_MERC_SPECIAL_SLASHPORT_UPGRADED_NAME";
+            defList.Add(skillDefSlashport);
+            container = skillsToHandle["ESSlashport"];
+            container.upgradedSkillDef = skillDefSlashport;
+            skillsToHandle["ESSlashport"] = container;
+            ContentAddition.AddEntityState<SlashportEntityUpgrade>(out _);
+
+            //Upgraded Directive Root
+            GroundedSkillDef skillDefRoot = ScriptableObject.CreateInstance<GroundedSkillDef>();
+            skillDefRoot.activationState = new SerializableEntityStateType(typeof(DirectiveRootUpgraded));
+            skillDefRoot.activationStateMachineName = "Weapon";
+            skillDefRoot.baseMaxStock = 1;
+            skillDefRoot.baseRechargeInterval = 12f;
+            skillDefRoot.beginSkillCooldownOnSkillEnd = true;
+            skillDefRoot.fullRestockOnAssign = false;
+            skillDefRoot.interruptPriority = InterruptPriority.Skill;
+            skillDefRoot.isCombatSkill = true;
+            skillDefRoot.mustKeyPress = true;
+            skillDefRoot.canceledFromSprinting = true;
+            skillDefRoot.cancelSprintingOnActivation = true;
+            skillDefRoot.forceSprintDuringState = false;
+            skillDefRoot.rechargeStock = 1;
+            skillDefRoot.requiredStock = 1;
+            skillDefRoot.stockToConsume = 1;
+            skillDefRoot.icon = Sprites.rexrootUpgradedIconS;
+            skillDefRoot.skillDescriptionToken = "ES_TREEBOT_SPECIAL_ROOT_UPGRADED_DESCRIPTION";
+            skillDefRoot.skillName = ((ScriptableObject)skillDefRoot).name = "ESRoot_UG";
+            skillDefRoot.skillNameToken = "ES_TREEBOT_SPECIAL_ROOT_UPGRADED_NAME";
+            defList.Add(skillDefRoot);
+            container = skillsToHandle["ESRoot"];
+            container.upgradedSkillDef = skillDefRoot;
+            skillsToHandle["ESRoot"] = container;
+            ContentAddition.AddEntityState<DirectiveRootUpgraded>(out _);
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
+        internal static void SetScepterReplacements()
+        {
+            //Loop through and register all the scepter skills
+            foreach(KeyValuePair<string, SkillUpgradeContainer> skillEntry in skillsToHandle)
             {
-                SendMessage("RT_SprintDisableMessage", "EggsSkills.EntityStates.DirectiveRoot");
-                SendMessage("RT_AnimationDelayMessage", "EggsSkills.EntityStates.CombatShotgunEntity");
-                SendMessage("RT_AnimationDelayMessage", "EggsSkills.EntityStates.TeslaMineFireState");
+                SkillUpgradeContainer skillUpgrade = skillEntry.Value;
+                ThinkInvisible.ClassicItems.Scepter.instance.RegisterScepterSkill(skillUpgrade.upgradedSkillDef, skillUpgrade.body + "Body", skillUpgrade.slot, skillUpgrade.normalSkillDef);
             }
         }
 
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
-        private void SkillsPlusPlusCompatibility()
+        internal static void SetStandaloneScepterReplacements()
         {
-            skillsPlusLoaded = true;
-            SkillsPlusPlus.SkillModifierManager.LoadSkillModifiers();
+            //Same thing above, just using the standalone methods
+            foreach (KeyValuePair<string, SkillUpgradeContainer> skillEntry in skillsToHandle)
+            {
+                SkillUpgradeContainer skillUpgrade = skillEntry.Value;
+                AncientScepter.AncientScepterItem.instance.RegisterScepterSkill(skillUpgrade.upgradedSkillDef, skillUpgrade.body + "Body", skillUpgrade.slot, skillUpgrade.index);
+            }
         }
     }
 }

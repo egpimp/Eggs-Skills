@@ -22,10 +22,7 @@ namespace EggsSkills.Achievements
         {
             base.OnInstall();
             TeleporterInteraction.onTeleporterChargedGlobal += CheckAchievement;
-            if (Configuration.UnlockAll.Value)
-            {
-                base.Grant();
-            }
+            if (Configuration.UnlockAll.Value) base.Grant();
         }
 
         public override void OnUninstall()

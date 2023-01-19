@@ -4,9 +4,6 @@ using EggsSkills.Achievements;
 using R2API;
 using UnityEngine;
 using static EggsSkills.Resources.Sprites;
-using static EggsSkills.Resources.LanguageTokens;
-using static EggsSkills.SkillsLoader;
-using static EggsUtils.EggsUtils;
 using System.Collections.Generic;
 
 namespace EggsSkills.Unlocks
@@ -20,6 +17,7 @@ namespace EggsSkills.Unlocks
         internal static UnlockableDef banditInvisSprintUnlockDef;
         internal static UnlockableDef banditMagicBulletUnlockDef;
         internal static UnlockableDef captainDebuffnadeUnlockDef;
+        internal static UnlockableDef captainAutoshotgunUnlockDef;
         internal static UnlockableDef commandoDashUnlockDef;
         internal static UnlockableDef commandoShotgunUnlockDef;
         internal static UnlockableDef engiTeslaUnlockDef;
@@ -27,44 +25,47 @@ namespace EggsSkills.Unlocks
         internal static UnlockableDef loaderShieldsplosionUnlockDef;
         internal static UnlockableDef mercSlashportUnlockDef;
         internal static UnlockableDef multNanobeaconUnlockDef;
+        internal static UnlockableDef railgunnerLanceroundsUnlockDef;
         internal static UnlockableDef rexRootUnlockDef;
 
         internal static void RegisterUnlockables()
         {
             //Acrid
-            if (Configuration.GetConfigValue(Configuration.EnableCrocoSkills)) AcridUnlockables();
+            try { if (Configuration.GetConfigValue(Configuration.EnableCrocoSkills)) AcridUnlockables(); } catch { Log.LogError("Failed to load Acrid achivements"); }
             //Artificer
-            if (Configuration.GetConfigValue(Configuration.EnableMageSkills)) ArtificerUnlockables();
+            try { if (Configuration.GetConfigValue(Configuration.EnableMageSkills)) ArtificerUnlockables(); } catch { Log.LogError("Failed to load Artificer achievements"); }
             //Bandit
-            if (Configuration.GetConfigValue(Configuration.EnableBanditSkills)) BanditUnlockables();
+            try { if (Configuration.GetConfigValue(Configuration.EnableBanditSkills)) BanditUnlockables(); } catch { Log.LogError("Failed to load Bandit achievements"); }
             //Captain
-            if (Configuration.GetConfigValue(Configuration.EnableCaptainSkills)) CaptainUnlockables();
+            try { if (Configuration.GetConfigValue(Configuration.EnableCaptainSkills)) CaptainUnlockables(); } catch { Log.LogError("Failed to load Captain achivements"); }
             //Commando
-            if (Configuration.GetConfigValue(Configuration.EnableCommandoSkills)) CommandoUnlockables();
+            try { if (Configuration.GetConfigValue(Configuration.EnableCommandoSkills)) CommandoUnlockables(); } catch { Log.LogError("Failed to load Commando achievements"); }
             //Engineer
-            if (Configuration.GetConfigValue(Configuration.EnableEngiSkills)) EngiUnlockables();
+            try { if (Configuration.GetConfigValue(Configuration.EnableEngiSkills)) EngiUnlockables(); } catch { Log.LogError("Failed to load Engineer achievements"); }
             //Huntress
-            if (Configuration.GetConfigValue(Configuration.EnableHuntressSkills)) HuntressUnlockables();
+            try { if (Configuration.GetConfigValue(Configuration.EnableHuntressSkills)) HuntressUnlockables(); } catch { Log.LogError("Failed to load Huntress achievements"); }
             //Loader
-            if (Configuration.GetConfigValue(Configuration.EnableLoaderSkills)) LoaderUnlockables();
+            try { if (Configuration.GetConfigValue(Configuration.EnableLoaderSkills)) LoaderUnlockables(); } catch { Log.LogError("Failed to load Loader achievements"); }
             //Mercenary
-            if (Configuration.GetConfigValue(Configuration.EnableMercSkills)) MercUnlockables();
+            try { if (Configuration.GetConfigValue(Configuration.EnableMercSkills)) MercUnlockables(); } catch { Log.LogError("Failed to load Mercenary achievements"); }
             //Mult
-            if (Configuration.GetConfigValue(Configuration.EnableToolbotSkills)) MulTUnlockables();
+            try { if (Configuration.GetConfigValue(Configuration.EnableToolbotSkills)) MulTUnlockables(); } catch { Log.LogError("Failed to load MUL-T achievements"); }
+            //Railgunner
+            try { if (Configuration.GetConfigValue(Configuration.EnableRailgunnerSkills)) RailgunnerUnlockables(); } catch { Log.LogError("Failed to load Railgunner achievements"); }
             //Rex
-            if (Configuration.GetConfigValue(Configuration.EnableTreebotSkills)) RexUnlockables();
+            try { if (Configuration.GetConfigValue(Configuration.EnableTreebotSkills)) RexUnlockables(); } catch { Log.LogError("Failed to load REX achievements"); }
 
             //Again, do this in case things change saves pain and agony
             foreach(UnlockableDef def in unlockList)
             {
                 ContentAddition.AddUnlockableDef(def);
-                LogToConsole("Unlockdef: " + def.cachedName + " registered!");
+                Log.LogMessage("Unlockdef: " + def.cachedName + " registered!");
             }
 
-            LogToConsole("Achievements registered");
+            Log.LogMessage("Achievements registered");
         }
 
-
+         
 
         internal static void AcridUnlockables()
         {
@@ -73,19 +74,19 @@ namespace EggsSkills.Unlocks
 
             acridPurgeUnlockDef.achievementIcon = acridpurgeIconS;
 
-            acridPurgeUnlockDef.nameToken = prefix + acridName.ToUpper() + "_" + "SPECIAL_PURGE" + nSuffix;
+            acridPurgeUnlockDef.nameToken = "ES_CROCO_SPECIAL_PURGE_NAME";
             acridPurgeUnlockDef.cachedName = PurgeAchievement.REWARDNAME;
 
             acridPurgeUnlockDef.getHowToUnlockString = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + PurgeAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + PurgeAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + PurgeAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + PurgeAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             acridPurgeUnlockDef.getUnlockedString = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + PurgeAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + PurgeAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + PurgeAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + PurgeAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             acridPurgeUnlockDef.sortScore = 200;
@@ -100,19 +101,19 @@ namespace EggsSkills.Unlocks
 
             artificerZapportUnlockDef.achievementIcon = zapportIconS;
 
-            artificerZapportUnlockDef.nameToken = prefix + artificerName.ToUpper() + "_" + "UTILITY_ZAPPORT" + nSuffix;
+            artificerZapportUnlockDef.nameToken = "ES_MAGE_UTILITY_ZAPPORT_NAME";
             artificerZapportUnlockDef.cachedName = ZapportAchievement.REWARDNAME;
 
             artificerZapportUnlockDef.getHowToUnlockString = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + ZapportAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + ZapportAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + ZapportAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + ZapportAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             artificerZapportUnlockDef.getUnlockedString = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + ZapportAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + ZapportAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + ZapportAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + ZapportAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             artificerZapportUnlockDef.sortScore = 200;
@@ -127,19 +128,19 @@ namespace EggsSkills.Unlocks
 
             banditInvisSprintUnlockDef.achievementIcon = invisSprintIconS;
 
-            banditInvisSprintUnlockDef.nameToken = prefix + banditName.ToUpper() + "_" + "UTILITY_INVISSPRINT" + nSuffix;
+            banditInvisSprintUnlockDef.nameToken = "ES_BANDIT2_UTILITY_INVISSPRINT_NAME";
             banditInvisSprintUnlockDef.cachedName = InvisSprintAchievement.REWARDNAME;
 
             banditInvisSprintUnlockDef.getHowToUnlockString = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + InvisSprintAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + InvisSprintAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + InvisSprintAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + InvisSprintAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             banditInvisSprintUnlockDef.getUnlockedString = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + InvisSprintAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + InvisSprintAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + InvisSprintAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + InvisSprintAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             banditInvisSprintUnlockDef.sortScore = 200;
@@ -151,19 +152,19 @@ namespace EggsSkills.Unlocks
 
             banditMagicBulletUnlockDef.achievementIcon = magicBulletIconS;
 
-            banditMagicBulletUnlockDef.nameToken = prefix + banditName.ToUpper() + "_" + "PRIMARY_MAGICBULLET" + nSuffix;
+            banditMagicBulletUnlockDef.nameToken = "ES_BANDIT2_PRIMARY_MAGICBULLET_NAME";
             banditMagicBulletUnlockDef.cachedName = MagicBulletAchievement.REWARDNAME;
 
             banditMagicBulletUnlockDef.getHowToUnlockString = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + MagicBulletAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + MagicBulletAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + MagicBulletAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + MagicBulletAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             banditMagicBulletUnlockDef.getUnlockedString = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + MagicBulletAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + MagicBulletAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + MagicBulletAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + MagicBulletAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             banditMagicBulletUnlockDef.sortScore = 200;
@@ -178,24 +179,48 @@ namespace EggsSkills.Unlocks
 
             captainDebuffnadeUnlockDef.achievementIcon = debuffNadeIconS;
 
-            captainDebuffnadeUnlockDef.nameToken = prefix + captainName.ToUpper() + "_" + "SECONDARY_DEBUFFNADE" + nSuffix;
+            captainDebuffnadeUnlockDef.nameToken = "ES_CAPTAIN_SECONDARY_DEBUFFNADE_NAME";
             captainDebuffnadeUnlockDef.cachedName = DebuffnadeAchievement.REWARDNAME;
 
             captainDebuffnadeUnlockDef.getHowToUnlockString = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + DebuffnadeAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + DebuffnadeAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + DebuffnadeAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + DebuffnadeAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             captainDebuffnadeUnlockDef.getUnlockedString = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + DebuffnadeAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + DebuffnadeAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + DebuffnadeAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + DebuffnadeAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             captainDebuffnadeUnlockDef.sortScore = 200;
 
             unlockList.Add(captainDebuffnadeUnlockDef);
+
+            //Autoshotgun unlockdef
+            captainAutoshotgunUnlockDef = ScriptableObject.CreateInstance<UnlockableDef>();
+
+            captainAutoshotgunUnlockDef.achievementIcon = placeholderIconS;
+
+            captainAutoshotgunUnlockDef.nameToken = "ES_CAPTAIN_PRIMARY_AUTOSHOTGUN_NAME";
+            captainAutoshotgunUnlockDef.cachedName = AutoshotgunAchievement.REWARDNAME;
+
+            captainAutoshotgunUnlockDef.getHowToUnlockString = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
+{
+                Language.GetString("ACHIEVEMENT_" + AutoshotgunAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + AutoshotgunAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
+}));
+
+            captainAutoshotgunUnlockDef.getUnlockedString = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
+            {
+                Language.GetString("ACHIEVEMENT_" + AutoshotgunAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + AutoshotgunAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
+            }));
+
+            captainAutoshotgunUnlockDef.sortScore = 200;
+
+            unlockList.Add(captainAutoshotgunUnlockDef);
         }
 
         internal static void CommandoUnlockables()
@@ -205,19 +230,19 @@ namespace EggsSkills.Unlocks
 
             commandoShotgunUnlockDef.achievementIcon = shotgunIconS;
 
-            commandoShotgunUnlockDef.nameToken = prefix + commandoName.ToUpper() + "_" + "PRIMARY_COMBATSHOTGUN" + nSuffix;
+            commandoShotgunUnlockDef.nameToken = "ES_COMMANDO_PRIMARY_COMBATSHOTGUN_NAME";
             commandoShotgunUnlockDef.cachedName = ShotgunAchievement.REWARDNAME;
 
             commandoShotgunUnlockDef.getHowToUnlockString = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + ShotgunAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + ShotgunAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + ShotgunAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + ShotgunAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             commandoShotgunUnlockDef.getUnlockedString = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + ShotgunAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + ShotgunAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + ShotgunAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + ShotgunAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             commandoShotgunUnlockDef.sortScore = 200;
@@ -229,19 +254,19 @@ namespace EggsSkills.Unlocks
 
             commandoDashUnlockDef.achievementIcon = dashIconS;
 
-            commandoDashUnlockDef.nameToken = prefix + commandoName.ToUpper() + "_" + "UTILITY_DASH" + nSuffix;
+            commandoDashUnlockDef.nameToken = "ES_COMMANDO_UTILITY_DASH_NAME";
             commandoDashUnlockDef.cachedName = DashAchievement.REWARDNAME;
 
             commandoDashUnlockDef.getHowToUnlockString = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + DashAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + DashAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + DashAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + DashAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             commandoDashUnlockDef.getUnlockedString = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + DashAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + DashAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + DashAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + DashAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             commandoDashUnlockDef.sortScore = 200;
@@ -256,19 +281,19 @@ namespace EggsSkills.Unlocks
 
             engiTeslaUnlockDef.achievementIcon = teslaMineIconS;
 
-            engiTeslaUnlockDef.nameToken = prefix + engineerName.ToUpper() + "_" + "SECONDARY_TESLAMINE" + nSuffix;
+            engiTeslaUnlockDef.nameToken = "ES_ENGI_SECONDARY_TESLAMINE_NAME";
             engiTeslaUnlockDef.cachedName = TeslaMineAchievement.REWARDNAME;
 
             engiTeslaUnlockDef.getHowToUnlockString = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + TeslaMineAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + TeslaMineAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + TeslaMineAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + TeslaMineAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             engiTeslaUnlockDef.getUnlockedString = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + TeslaMineAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + TeslaMineAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + TeslaMineAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + TeslaMineAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             engiTeslaUnlockDef.sortScore = 200;
@@ -282,19 +307,19 @@ namespace EggsSkills.Unlocks
 
             huntressClusterarrowUnlockDef.achievementIcon = clusterArrowIconS;
 
-            huntressClusterarrowUnlockDef.nameToken = prefix + huntressName.ToUpper() + "_" + "SECONDARY_CLUSTERARROW" + nSuffix;
+            huntressClusterarrowUnlockDef.nameToken = "ES_HUNTRESS_SECONDARY_CLUSTERARROW_NAME";
             huntressClusterarrowUnlockDef.cachedName = BombArrowAchievement.REWARDNAME;
 
             huntressClusterarrowUnlockDef.getHowToUnlockString = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + BombArrowAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + BombArrowAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + BombArrowAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + BombArrowAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             huntressClusterarrowUnlockDef.getUnlockedString = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + BombArrowAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + BombArrowAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + BombArrowAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + BombArrowAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             huntressClusterarrowUnlockDef.sortScore = 200;
@@ -308,19 +333,19 @@ namespace EggsSkills.Unlocks
 
             loaderShieldsplosionUnlockDef.achievementIcon = shieldsplosionIconS;
 
-            loaderShieldsplosionUnlockDef.nameToken = prefix + loaderName.ToUpper() + "_" + "SPECIAL_SHIELDSPLOSION" + nSuffix;
+            loaderShieldsplosionUnlockDef.nameToken = "ES_LOADER_SPECIAL_SHIELDSPLOSION_NAME";
             loaderShieldsplosionUnlockDef.cachedName = BarrierAchievement.REWARDNAME;
 
             loaderShieldsplosionUnlockDef.getHowToUnlockString = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + BarrierAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + BarrierAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + BarrierAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + BarrierAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             loaderShieldsplosionUnlockDef.getUnlockedString = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + BarrierAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + BarrierAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + BarrierAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + BarrierAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             loaderShieldsplosionUnlockDef.sortScore = 200;
@@ -334,19 +359,19 @@ namespace EggsSkills.Unlocks
 
             mercSlashportUnlockDef.achievementIcon = slashportIconS;
 
-            mercSlashportUnlockDef.nameToken = prefix + mercenaryName.ToUpper() + "_" + "SPECIAL_SLASHPORT" + nSuffix;
+            mercSlashportUnlockDef.nameToken = "ES_MERC_SPECIAL_SLASHPORT_NAME";
             mercSlashportUnlockDef.cachedName = SlashportAchievement.REWARDNAME;
 
             mercSlashportUnlockDef.getHowToUnlockString = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + SlashportAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + SlashportAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + SlashportAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + SlashportAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             mercSlashportUnlockDef.getUnlockedString = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + SlashportAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + SlashportAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + SlashportAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + SlashportAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             mercSlashportUnlockDef.sortScore = 200;
@@ -360,24 +385,50 @@ namespace EggsSkills.Unlocks
 
             multNanobeaconUnlockDef.achievementIcon = nanoBotsIconS;
 
-            multNanobeaconUnlockDef.nameToken = prefix + multName.ToUpper() + "_" + "SECONDARY_NANOBOT" + nSuffix;
+            multNanobeaconUnlockDef.nameToken = "ES_TOOLBOT_SECONDARY_NANOBOT_NAME";
             multNanobeaconUnlockDef.cachedName = NanoBotAchievement.REWARDNAME;
 
             multNanobeaconUnlockDef.getHowToUnlockString = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + NanoBotAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + NanoBotAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + NanoBotAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + NanoBotAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             multNanobeaconUnlockDef.getUnlockedString = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + NanoBotAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + NanoBotAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + NanoBotAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + NanoBotAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             multNanobeaconUnlockDef.sortScore = 200;
 
             unlockList.Add(multNanobeaconUnlockDef);
+        }
+        
+        internal static void RailgunnerUnlockables()
+        {
+            railgunnerLanceroundsUnlockDef = ScriptableObject.CreateInstance<UnlockableDef>();
+
+            railgunnerLanceroundsUnlockDef.achievementIcon = placeholderIconS;
+
+            railgunnerLanceroundsUnlockDef.nameToken = "ES_RAILGUNNER_PRIMARY_LANCEROUNDS_NAME";
+            railgunnerLanceroundsUnlockDef.cachedName = LanceRoundsAchievement.REWARDNAME;
+
+            railgunnerLanceroundsUnlockDef.getHowToUnlockString = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
+            {
+                Language.GetString("ACHIEVEMENT_" + LanceRoundsAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + LanceRoundsAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
+            }));
+
+            railgunnerLanceroundsUnlockDef.getUnlockedString = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
+            {
+                Language.GetString("ACHIEVEMENT_" + LanceRoundsAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + LanceRoundsAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
+            }));
+
+            railgunnerLanceroundsUnlockDef.sortScore = 200;
+
+            unlockList.Add(railgunnerLanceroundsUnlockDef);
         }
 
         internal static void RexUnlockables()
@@ -386,19 +437,19 @@ namespace EggsSkills.Unlocks
 
             rexRootUnlockDef.achievementIcon = rexrootIconS;
 
-            rexRootUnlockDef.nameToken = prefix + rexName.ToUpper() + "_" + "SPECIAL_ROOT" + nSuffix;
+            rexRootUnlockDef.nameToken = "ES_TREEBOT_SPECIAL_ROOT_NAME";
             rexRootUnlockDef.cachedName = RootAchievement.REWARDNAME;
 
             rexRootUnlockDef.getHowToUnlockString = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + RootAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + RootAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + RootAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + RootAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             rexRootUnlockDef.getUnlockedString = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
             {
-                Language.GetString(ach_prefix + RootAchievement.ACHNAME.ToUpper() + nSuffix),
-                Language.GetString(ach_prefix + RootAchievement.ACHNAME.ToUpper() + dSuffix)
+                Language.GetString("ACHIEVEMENT_" + RootAchievement.ACHNAME.ToUpper() + "_NAME"),
+                Language.GetString("ACHIEVEMENT_" + RootAchievement.ACHNAME.ToUpper() + "_DESCRIPTION")
             }));
 
             rexRootUnlockDef.sortScore = 200;

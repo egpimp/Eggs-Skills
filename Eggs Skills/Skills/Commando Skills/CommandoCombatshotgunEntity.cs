@@ -1,9 +1,9 @@
 ﻿using RoR2;
 using EntityStates;
 using UnityEngine;
-using EntityStates.Commando.CommandoWeapon;
 using RoR2.Skills;
 using EggsSkills.Config;
+using UnityEngine.AddressableAssets;
 
 namespace EggsSkills.EntityStates
 {
@@ -15,26 +15,26 @@ namespace EggsSkills.EntityStates
         public static uint spp_bulletMod = 0;
 
         //Cast time pre-attack speed
-        private readonly float baseDuration = 0.4f;
+        private static readonly float baseDuration = 0.4f;
         //Force
-        private readonly float baseForce = 10f;
+        private static readonly float baseForce = 10f;
         //Recoil factor
-        private readonly float baseRecoil = 0.6f;
+        private static readonly float baseRecoil = 0.6f;
         //Damage coefficient
-        private readonly float damageCoefficient = 0.6f;
+        private static readonly float damageCoefficient = 0.6f;
         //Cast time post-attack speed
         private float duration;
         //Max firing range
-        private readonly float maxDist = 200f;
+        private static readonly float maxDist = 200f;
         //Proc coefficient
-        private readonly float procCoefficient = 0.6f + spp_procMod;
+        private static readonly float procCoefficient = 0.6f + spp_procMod;
 
         //Hit fx
-        private GameObject hitEffectPrefab = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/Hitspark1");
+        private GameObject hitEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/Hitspark1.prefab").WaitForCompletion();
         //Muzzle fx
-        private GameObject muzzleEffectPrefab = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/muzzleflashes/Muzzleflash1");
+        private GameObject muzzleEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/Muzzleflash1.prefab").WaitForCompletion();
         //Tracer fx
-        private GameObject tracerEffectPrefab = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/tracers/TracerCommandoDefault");
+        private GameObject tracerEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/TracerCommandoDefault.prefab").WaitForCompletion();
 
         //Modifier for crit spread shrink
         private int critMod;
@@ -118,7 +118,7 @@ namespace EggsSkills.EntityStates
             //Execute muzzle flash
             EffectManager.SimpleMuzzleFlash(muzzleEffectPrefab, base.gameObject, muzzleName, false);
             //Play the sound
-            Util.PlaySound(FireShotgun.attackSoundString, base.gameObject);
+            Util.PlaySound("Play_bandit2_m1_shotgun", base.gameObject);
             //Apply recoil, shifted towards side the bullet shot from
             base.AddRecoil(-baseRecoil, baseRecoil, -2 * baseRecoil * (1 - (step % 2)), 2 * baseRecoil * (step % 2));
         }

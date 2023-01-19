@@ -14,6 +14,10 @@ namespace EggsSkills.Achievements
 
         //How many exposed enemies hit required
         private static readonly int exposeReq = 10;
+        //Time between hits
+        private static readonly float baseTimer = 5f;
+        private float timer;
+
 
         public override BodyIndex LookUpRequiredBodyIndex()
         {
@@ -25,10 +29,7 @@ namespace EggsSkills.Achievements
             base.OnInstall();
             RoR2Application.onFixedUpdate += Timer;
             On.RoR2.HealthComponent.TakeDamage += DamageChecker;
-            if (Configuration.UnlockAll.Value)
-            {
-                base.Grant();
-            }
+            if (Configuration.UnlockAll.Value) base.Grant();
         }
 
         public override void OnUninstall()
@@ -40,7 +41,8 @@ namespace EggsSkills.Achievements
 
         private void Timer()
         {
-            
+            if (timer > 0f) timer -= Time.fixedDeltaTime;
+            else enemyList.Clear();
         }
 
         private List<CharacterBody> enemyList = new List<CharacterBody>();
@@ -61,6 +63,8 @@ namespace EggsSkills.Achievements
                             {
                                 //Add them to the list
                                 enemyList.Add(self.body);
+                                //Reset timer
+                                timer = baseTimer;
                                 //If we have enough in list grant achievement
                                 if (enemyList.Count >= exposeReq) base.Grant();
                             }

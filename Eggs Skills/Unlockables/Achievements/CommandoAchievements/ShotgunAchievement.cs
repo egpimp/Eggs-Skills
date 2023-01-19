@@ -24,10 +24,7 @@ namespace EggsSkills.Achievements
             base.OnInstall();
             On.RoR2.GlobalEventManager.OnCharacterDeath += BulletAchievementComponentHandler;
             RoR2Application.onUpdate += CheckInputs;
-            if (Configuration.UnlockAll.Value)
-            {
-                base.Grant();
-            }
+            if (Configuration.UnlockAll.Value) base.Grant();
         }
         public override void OnUninstall()
         {

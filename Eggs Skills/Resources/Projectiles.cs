@@ -31,25 +31,25 @@ namespace EggsSkills.Resources
         internal static void RegisterProjectiles()
         {
             //Check if config allows skill so we don't load unused projectiles
-            if (Configuration.GetConfigValue<bool>(Configuration.EnableEngiSkills))
+            if (Configuration.GetConfigValue(Configuration.EnableEngiSkills))
             {
                 //Register the tesla mine
-                RegisterTeslaMine();
+                try { RegisterTeslaMine(); } catch { Log.LogError("Error loading Tesla Mine projectile"); }
             }
-            if (Configuration.GetConfigValue<bool>(Configuration.EnableCaptainSkills))
+            if (Configuration.GetConfigValue(Configuration.EnableCaptainSkills))
             {
                 //Register the tracking grenade
-                RegisterDebuffNade();
+                try { RegisterDebuffNade(); } catch { Log.LogError("Error loading Debuff Grenade projectile"); }
             }
-            if (Configuration.GetConfigValue<bool>(Configuration.EnableHuntressSkills))
+            if (Configuration.GetConfigValue(Configuration.EnableHuntressSkills))
             {
                 //Register the cluster bomblet
-                RegisterArrowBomblet();
+                try { RegisterArrowBomblet(); } catch { Log.LogError("Error loading Arrow Bomblet projectile"); }
             }
-            if (Configuration.GetConfigValue<bool>(Configuration.EnableToolbotSkills))
+            if (Configuration.GetConfigValue(Configuration.EnableToolbotSkills))
             {
                 //Register the nanomachines son
-                RegisterNanoBeacon();
+                try { RegisterNanoBeacon(); } catch { Log.LogError("Error loading Nano Beacon projectile"); }
             }
             //If any projectile are queued for loading
             if (projList.Count > 0)
@@ -65,12 +65,12 @@ namespace EggsSkills.Resources
                         //Add it to the game via projectileapi
                         AddProjectile(proj);
                         //Tell the console (for debugging) that we registered the projectile
-                        EggsUtils.EggsUtils.LogToConsole("Projectile: " + proj.name + " Registered");
+                        Log.LogMessage("Projectile: " + proj.name + " Registered");
                     }
                 }
             }
             //If all projectile skills are disabled also inform console of that
-            else EggsUtils.EggsUtils.LogToConsole("No projectiles needed to be registered");
+            else Log.LogMessage("No projectiles needed to be registered");
         }
         //Adds tesla mine to projectile register list
         internal static void RegisterTeslaMine()

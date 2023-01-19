@@ -23,10 +23,7 @@ namespace EggsSkills.Achievements
         {
             base.OnInstall();
             RoR2Application.onUpdate += ClearCheck;
-            if (Configuration.UnlockAll.Value)
-            {
-                base.Grant();
-            }
+            if (Configuration.UnlockAll.Value) base.Grant();
         }
 
         public override void OnUninstall()

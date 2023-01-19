@@ -13,7 +13,7 @@ namespace EggsSkills.EntityStates
         //Basic cast time
         private readonly float baseDelay = 0.4f;
         //Damage coefficient
-        private readonly float damageCoefficient = 2f;
+        private readonly float damageCoefficient = 1.25f;
         //Cast time
         private float delay;
 

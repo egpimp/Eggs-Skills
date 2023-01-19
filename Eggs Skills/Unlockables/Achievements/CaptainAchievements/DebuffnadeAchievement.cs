@@ -8,7 +8,7 @@ using RoR2.Achievements;
 namespace EggsSkills.Achievements
 {
     [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, null)]
-    internal class DebuffnadeAchievement : BaseAchievement
+    class DebuffnadeAchievement : BaseAchievement
     {
         internal const string ACHNAME = "CaptainStageNoBeacon";
         internal const string REWARDNAME = "EggsSkills.DebuffNade";
@@ -24,10 +24,7 @@ namespace EggsSkills.Achievements
             Stage.onStageStartGlobal += ResetCaptainComponent;
             TeleporterInteraction.onTeleporterChargedGlobal += CheckCaptainComponent;
             On.EntityStates.Captain.Weapon.CallSupplyDropBase.OnEnter += InvalidateAchievement;
-            if (Configuration.UnlockAll.Value)
-            {
-                base.Grant();
-            }
+            if (Configuration.UnlockAll.Value) base.Grant();
         }
 
         public override void OnUninstall()

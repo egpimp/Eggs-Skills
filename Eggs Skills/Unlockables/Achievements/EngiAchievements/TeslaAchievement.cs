@@ -20,10 +20,7 @@ namespace EggsSkills.Achievements
         {
             base.OnInstall();
             On.RoR2.CharacterMaster.OnInventoryChanged += ClearCheck;
-            if (Configuration.UnlockAll.Value)
-            {
-                base.Grant();
-            }
+            if (Configuration.UnlockAll.Value) base.Grant();
         }
 
         public override void OnUninstall()

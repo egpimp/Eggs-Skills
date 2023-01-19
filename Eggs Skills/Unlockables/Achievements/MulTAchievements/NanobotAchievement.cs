@@ -38,6 +38,7 @@ namespace EggsSkills.Achievements
         private string[] validDroneNames = new string[] {"Drone1", "Drone2", "DroneBackup", "DroneMissile", "EmergencyDrone", "FlameDrone", "EquipmentDrone"};
         private void CheckMinions(MinionOwnership minion)
         {
+            //This looks really ugly, but bear in mind that while trying to get this to work there was bountiful errors and it works so
             if (base.isUserAlive && base.meetsBodyRequirement)
             {
                 if (minion != null)

@@ -26,10 +26,7 @@ namespace EggsSkills.Achievements
             base.OnInstall();
             On.RoR2.GlobalEventManager.OnCharacterDeath += HatTrickAchievementComponentHandler;
             RoR2Application.onFixedUpdate += RunCountDown;
-            if (Configuration.UnlockAll.Value)
-            {
-                base.Grant();
-            }
+            if (Configuration.UnlockAll.Value) base.Grant();
         }
 
         public override void OnUninstall()
@@ -66,7 +63,7 @@ namespace EggsSkills.Achievements
         private void RunCountDown()
         {
             //If counter is active, tick it down
-            if (killCountdown >= 0f) killCountdown -= Time.fixedDeltaTime;
+            if (killCountdown > 0f) killCountdown -= Time.fixedDeltaTime;
             //Otherwise, reset killcount
             else killCount = 0;
         }

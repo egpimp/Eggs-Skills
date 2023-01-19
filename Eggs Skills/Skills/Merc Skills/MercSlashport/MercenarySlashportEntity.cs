@@ -80,7 +80,7 @@ namespace EggsSkills.EntityStates
                             crit = false,
                             procCoefficient = 0f,
                             falloffModel = BlastAttack.FalloffModel.None,
-                            damageType = DamageType.Stun1s,
+                            damageType = DamageType.Stun1s
                         }.Fire();
                     }
                     //Expose them
@@ -107,7 +107,7 @@ namespace EggsSkills.EntityStates
                         //Actual damage + % missing hp
                         baseDamage = base.damageStat * damageCoefficient * spp_damagemult,
                         baseForce = 0,
-                        radius = 3f,
+                        radius = 0.1f,
                         attacker = base.gameObject,
                         inflictor = base.gameObject,
                         teamIndex = base.teamComponent.teamIndex,

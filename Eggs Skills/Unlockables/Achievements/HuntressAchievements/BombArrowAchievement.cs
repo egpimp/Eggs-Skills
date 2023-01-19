@@ -21,10 +21,7 @@ namespace EggsSkills.Achievements
             TeleporterInteraction.onTeleporterBeginChargingGlobal += GiveComponent;
             TeleporterInteraction.onTeleporterChargedGlobal += CheckComponent;
             RoR2Application.onUpdate += CheckInputs;
-            if (Configuration.UnlockAll.Value)
-            {
-                base.Grant();
-            }
+            if (Configuration.UnlockAll.Value) base.Grant();
         }
 
         public override void OnUninstall()
