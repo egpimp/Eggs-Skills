@@ -1,13 +1,12 @@
 {
-	"strings":
-	{
-		"ES_CROCO_SPECIAL_PURGE_UGPRADED_NAME":"Liquify",
-		"ES_CROCO_SPECIAL_PURGE_UGPRADED_DESCRIPTION":"<style=cIsHealing>Poisonous.</style> Inflict damage on all <style=cIsHealing>poisoned</style> or <style=cIsDamage>blighted</style> enemies in range, dealing either <style=cIsHealing>300% + 15% of their max health</style> or <style=cIsDamage>450% per stack</style>, depending on <style=cIsUtility>passive selection</style>.",
-		
-		"ES_TREEBOT_SPECIAL_ROOT_UPGRADED_NAME":"DIRECTIVE: Bloom",
-		"ES_TREEBOT_SPECIAL_ROOT_UPGRADED_DESCRIPTION":"<style=cIsDamage>Stunning.</style> <style=cIsUtility>Slow</style> yourself, but gain <style=cIsUtility>adaptive</style> for up to 8 seconds.  While active, deal <style=cIsDamage>250% damage</style> per second to nearby enemies, gaining <style=cIsHealing>barrier</style> per enemy hit and <style=cIsDamage>pulling them towards you</style>.  Afterwards, release a blast that deals <style=cIsDamage>75% damage</style> for every pulse that hit an enemy.",
-		
-		"ES_MERC_SPECIAL_SLASHPORT_UPGRADED_NAME":"Terminus",
-		"ES_MERC_SPECIAL_SLASHPORT_UPGRADED_DESCRIPTION":"<style=cIsDamage>Slayer</style>. Target an enemy to <style=cIsUtility>expose, teleport to</style> and <style=cIsDamage>strike</style> them for <style=cIsDamage>1400% damage</style>, <style=cIsUtility>stunning</style> nearby enemies."
+	"strings": {
+		"ES_CROCO_SPECIAL_PURGE_UGPRADED_NAME": "Liquify",
+		"ES_CROCO_SPECIAL_PURGE_UGPRADED_DESCRIPTION": "<style=cIsHealing>Poisonous</style>. Inflict damage on all <style=cIsHealing>poisoned</style> or <style=cIsDamage>blighted</style> enemies in range, dealing either <style=cIsHealing>300% + 15% of their max health</style> or <style=cIsDamage>450% per stack</style>, depending on <style=cIsUtility>passive selection</style>.",
+
+		"ES_TREEBOT_SPECIAL_ROOT_UPGRADED_NAME": "DIRECTIVE: Bloom",
+		"ES_TREEBOT_SPECIAL_ROOT_UPGRADED_DESCRIPTION": "<style=cIsDamage>Stunning</style>. <style=cIsUtility>Slow</style> yourself, but gain <style=cIsUtility>adaptive</style> for up to 8 seconds.  While active, deal <style=cIsDamage>250% damage</style> per second to nearby enemies, gaining <style=cIsHealing>barrier</style> per enemy hit and <style=cIsDamage>pulling them towards you</style>. Afterwards, release a blast that deals <style=cIsDamage>75% damage</style> for every pulse that hit an enemy.",
+
+		"ES_MERC_SPECIAL_SLASHPORT_UPGRADED_NAME": "Terminus",
+		"ES_MERC_SPECIAL_SLASHPORT_UPGRADED_DESCRIPTION": "<style=cIsDamage>Slayer</style>. Target an enemy to <style=cIsUtility>expose, teleport to</style> and <style=cIsDamage>strike</style> them for <style=cIsDamage>1400% damage</style>, <style=cIsUtility>stunning</style> nearby enemies."
 	}
 }

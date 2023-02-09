@@ -1,46 +1,45 @@
 {
-	"strings":
-	{
-		"ES_CROCO_SPECIAL_PURGE_NAME":"Expunge",
-		"ES_CROCO_SPECIAL_PURGE_DESCRIPTION":"Inflict damage on all <style=cIsHealing>poisoned</style> or <style=cIsDamage>blighted</style> enemies in range, dealing either <style=cIsHealing>200% + 10% of their max health</style> or <style=cIsDamage>300% per stack</style> in an area around them, depending on <style=cIsUtility>passive selection</style>.",
-		
-		"ES_MAGE_UTILITY_ZAPPORT_NAME":"Quantum Transposition",
-		"ES_MAGE_UTILITY_ZAPPORT_DESCRIPTION":"<style=cIsDamage>Stunning. Overloading.</style> Charge to <style=cIsUtility>teleport</style> forward, dealing <style=cIsDamage>250%-1000% damage</style> to enemies near target location.",
-		
-		"ES_BANDIT2_UTILITY_INVISSPRINT_NAME":"Kinetic Refractor",
-		"ES_BANDIT2_UTILITY_INVISSPRINT_DESCRIPTION":"Passively become <style=cIsUtility>invisible while sprinting</style>.  Gain a burst of <style=cIsUtility>movement speed and increased damage</style> upon leaving <style=cIsUtility>invisibility</style>.",
-		
-		"ES_BANDIT2_PRIMARY_MAGICBULLET_NAME":"Bounce",
-		"ES_BANDIT2_PRIMARY_MAGICBULLET_DESCRIPTION":"Fire a bullet that deals <style=cIsDamage>200% damage</style>, and <style=cIsUtility>ricochets</style> to a nearby enemy for <style=cIsDamage>60% of the previous hit's damage</style>.",
-		
-		"ES_CAPTAIN_SECONDARY_DEBUFFNADE_NAME":"MK-4 Tracking Grenade",
-		"ES_CAPTAIN_SECONDARY_DEBUFFNADE_DESCRIPTION":"Launch a grenade that deals <style=cIsDamage>250% damage</style> and inflicts <style=cArtifact>tracking</style> on enemies in a wide area for <style=cIsDamage>5 seconds</style>.",
-		
-		"ES_COMMANDO_PRIMARY_COMBATSHOTGUN_NAME":"Flechette Rounds",
-		"ES_COMMANDO_PRIMARY_COMBATSHOTGUN_DESCRIPTION":"Fire flechette rounds, dealing <style=cIsDamage> 6x60% damage</style> in a wider but shorter range.  <style=cIsUtility>Spread</style> decreases on <style=cIsDamage>critical strikes</style>.",
-		
-		"ES_COMMANDO_UTILITY_DASH_NAME":"Tactical Pursuit",
-		"ES_COMMANDO_UTILITY_DASH_DESCRIPTION":"<style=cIsUtility>Prepare: Secondary. Agile. Dash</style> a short distance and become <style=cIsDamage>invulnerable</style> during and for a short period afterwards.",
-		
-		"ES_ENGI_SECONDARY_TESLAMINE_NAME":"T-3514 Shock Mines",
-		"ES_ENGI_SECONDARY_TESLAMINE_DESCRIPTION":"<style=cIsDamage>Stunning.</style> Place a shock mine, that upon detonation deals <style=cIsDamage>125% damage</style> and leaves a lingering zone for 5 <style=cIsDamage>seconds</style> that deals <style=cIsDamage>125% damage each second</style>.  Can place up to <style=cIsDamage>4</style>.",
-		
-		"ES_HUNTRESS_SECONDARY_CLUSTERARROW_NAME":"Explosive Arrow",
-		"ES_HUNTRESS_SECONDARY_CLUSTERARROW_DESCRIPTION":"<style=cIsUtility>Agile.</style> Fire an arrow that <style=cIsDamage>explodes</style> on impact, dealing <style=cIsDamage>500% damage</style> and releasing <style=cIsDamage>8 bomblets</style> that deal <style=cIsDamage>80% damage each</style>.  Critical strikes instead release <style=cIsDamage>12</style>.",
-		
-		"ES_LOADER_SPECIAL_SHIELDSPLOSION_NAME":"Barrier Buster",
-		"ES_LOADER_SPECIAL_SHIELDSPLOSION_DESCRIPTION":"Consume all of your current <style=cIsHealing>Barrier (Minimum 10%)</style> to gain a burst of <style=cIsUtility>Movement Speed</style> and deal <style=cIsDamage>600-6000% damage</style> around you based on <style=cIsHealing>Barrier</style> consumed.",
-		
-		"ES_MERC_SPECIAL_SLASHPORT_NAME":"Execute",
-		"ES_MERC_SPECIAL_SLASHPORT_DESCRIPTION":"<style=cIsDamage>Slayer</style>. Target an enemy to <style=cIsUtility>expose, teleport to</style> and <style=cIsDamage>strike</style> them for <style=cIsDamage>700% damage</style>, <style=cIsUtility>stunning</style> nearby enemies.",
-		
-		"ES_TOOLBOT_SECONDARY_NANOBOTS_NAME":"Nanobot Swarm",
-		"ES_TOOLBOT_SECONDARY_NANOBOTS_DESCRIPTION":"Fire a <style=cIsUtility>beacon</style> that deals <style=cIsDamage>100% damage</style> and inflicts <style=cArtifact>tracking</style> on impact.  After a delay, release <style=cIsDamage>nanobot swarms</style> for each nearby enemy that deal <style=cIsDamage>3x80% damage</style> and <style=cIsHealing>heal for 1.5% max hp each</style>.",
-		
-		"ES_TREEBOT_SPECIAL_ROOT_NAME":"DIRECTIVE: Respire",
-		"ES_TREEBOT_SPECIAL_ROOT_DESCRIPTION":"<style=cIsDamage>Stunning.</style> <style=cIsUtility>Slow</style> yourself, but gain <style=cIsUtility>unyielding</style> for up to 8 seconds.  While active, deal <style=cIsDamage>250% damage</style> per second to nearby enemies, gaining <style=cIsHealing>barrier</style> per enemy hit and <style=cIsDamage>pulling them towards you</style>.",
+	"strings": {
+		"ES_CROCO_SPECIAL_PURGE_NAME": "Expunge",
+		"ES_CROCO_SPECIAL_PURGE_DESCRIPTION": "Inflict damage on all <style=cIsHealing>poisoned</style> or <style=cIsDamage>blighted</style> enemies in range, dealing either <style=cIsHealing>200% + 10% of their max health</style> or <style=cIsDamage>300% per stack</style> in an area around them, depending on <style=cIsUtility>passive selection</style>.",
+
+		"ES_MAGE_UTILITY_ZAPPORT_NAME": "Quantum Transposition",
+		"ES_MAGE_UTILITY_ZAPPORT_DESCRIPTION": "<style=cIsDamage>Stunning</style>. <style=cIsDamage>Overloading</style>. Charge to <style=cIsUtility>teleport</style> forward, dealing <style=cIsDamage>250%-1000% damage</style> to enemies near target location.",
+
+		"ES_BANDIT2_UTILITY_INVISSPRINT_NAME": "Kinetic Refractor",
+		"ES_BANDIT2_UTILITY_INVISSPRINT_DESCRIPTION": "Passively become <style=cIsUtility>invisible while sprinting</style>.  Gain a burst of <style=cIsUtility>movement speed and increased damage</style> upon leaving <style=cIsUtility>invisibility</style>.",
+
+		"ES_BANDIT2_PRIMARY_MAGICBULLET_NAME": "Bounce",
+		"ES_BANDIT2_PRIMARY_MAGICBULLET_DESCRIPTION": "Fire a bullet that deals <style=cIsDamage>200% damage</style>, and <style=cIsUtility>ricochets</style> to a nearby enemy for <style=cIsDamage>60% of the previous hit's damage</style>.",
+
+		"ES_CAPTAIN_SECONDARY_DEBUFFNADE_NAME": "MK-4 Tracking Grenade",
+		"ES_CAPTAIN_SECONDARY_DEBUFFNADE_DESCRIPTION": "Launch a grenade that deals <style=cIsDamage>250% damage</style> and inflicts <style=cArtifact>tracking</style> on enemies in a wide area for <style=cIsDamage>5 seconds</style>.",
+
+		"ES_COMMANDO_PRIMARY_COMBATSHOTGUN_NAME": "Flechette Rounds",
+		"ES_COMMANDO_PRIMARY_COMBATSHOTGUN_DESCRIPTION": "Fire flechette rounds, dealing <style=cIsDamage> 6x60% damage</style> in a wider but shorter range. <style=cIsUtility>Spread</style> decreases on <style=cIsDamage>Critical Strikes</style>.",
+
+		"ES_COMMANDO_UTILITY_DASH_NAME": "Tactical Pursuit",
+		"ES_COMMANDO_UTILITY_DASH_DESCRIPTION": "<style=cIsUtility>Prepare: Secondary</style>. <style=cIsUtility>Agile</style>. <style=cIsUtility>Dash</style> a short distance and become <style=cIsDamage>invulnerable</style> during and for a short period afterwards.",
+
+		"ES_ENGI_SECONDARY_TESLAMINE_NAME": "T-3514 Shock Mines",
+		"ES_ENGI_SECONDARY_TESLAMINE_DESCRIPTION": "<style=cIsDamage>Stunning</style>. Place a shock mine, that upon detonation deals <style=cIsDamage>125% damage</style> and leaves a lingering zone for 5 <style=cIsDamage>seconds</style> that deals <style=cIsDamage>125% damage each second</style>. Can place up to <style=cIsDamage>4</style>.",
+
+		"ES_HUNTRESS_SECONDARY_CLUSTERARROW_NAME": "Explosive Arrow",
+		"ES_HUNTRESS_SECONDARY_CLUSTERARROW_DESCRIPTION": "<style=cIsUtility>Agile</style>. Fire an arrow that <style=cIsDamage>explodes</style> on impact, dealing <style=cIsDamage>500% damage</style> and releasing <style=cIsDamage>8 bomblets</style> that deal <style=cIsDamage>80% damage each</style>. Critical Strikes instead release <style=cIsDamage>12</style>.",
+
+		"ES_LOADER_SPECIAL_SHIELDSPLOSION_NAME": "Barrier Buster",
+		"ES_LOADER_SPECIAL_SHIELDSPLOSION_DESCRIPTION": "Consume all of your current <style=cIsHealing>temporary barrier (minimum 10%)</style> to gain a burst of <style=cIsUtility>movement speed</style> and deal <style=cIsDamage>600-6000% damage</style> around you based on <style=cIsHealing>temporary barrier</style> consumed.",
+
+		"ES_MERC_SPECIAL_SLASHPORT_NAME": "Execute",
+		"ES_MERC_SPECIAL_SLASHPORT_DESCRIPTION": "<style=cIsDamage>Slayer</style>. Target an enemy to <style=cIsUtility>expose, teleport to</style> and <style=cIsDamage>strike</style> them for <style=cIsDamage>700% damage</style>, <style=cIsUtility>stunning</style> nearby enemies.",
+
+		"ES_TOOLBOT_SECONDARY_NANOBOTS_NAME": "Nanobot Swarm",
+		"ES_TOOLBOT_SECONDARY_NANOBOTS_DESCRIPTION": "Fire a <style=cIsUtility>beacon</style> that deals <style=cIsDamage>100% damage</style> and inflicts <style=cArtifact>tracking</style> on impact. After a delay, release <style=cIsDamage>nanobot swarms</style> for each nearby enemy that deal <style=cIsDamage>3x80% damage</style> and heal for <style=cIsHealing>1.5%</style> of <style=cIsHealing>maximum health</style> each.",
+
+		"ES_TREEBOT_SPECIAL_ROOT_NAME": "DIRECTIVE: Respire",
+		"ES_TREEBOT_SPECIAL_ROOT_DESCRIPTION": "<style=cIsDamage>Stunning</style>. <style=cIsUtility>Slow</style> yourself, but gain <style=cIsUtility>unyielding</style> for up to 8 seconds. While active, deal <style=cIsDamage>250% damage</style> per second to nearby enemies, gaining <style=cIsHealing>temporary barrier</style> per enemy hit and <style=cIsDamage>pulling them towards you</style>.",
 
 		"ES_RAILGUNNER_PRIMARY_LANCEROUNDS_NAME": "G2 Lancer Rounds",
-		"ES_RAILGUNNER_PRIMARY_LANCEROUNDS_DESCRIPTION": "Fire heavy piercing rounds for <style=cIsDamage>300%</style> damage.  Half of bonus attack speed is applied to damage instead."
+		"ES_RAILGUNNER_PRIMARY_LANCEROUNDS_DESCRIPTION": "Fire heavy piercing rounds for <style=cIsDamage>300% damage</style>. Half of bonus attack speed is applied to damage instead."
 	}
 }
