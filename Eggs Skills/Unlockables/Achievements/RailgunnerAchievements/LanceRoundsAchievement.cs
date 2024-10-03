@@ -4,11 +4,12 @@ using EggsSkills.Config;
 
 namespace EggsSkills.Achievements
 {
-    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, null)]
+    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, TOKENS)]
     internal class LanceRoundsAchievement : BaseAchievement
     {
         internal const string ACHNAME = "RailgunnerHighCrit";
         internal const string REWARDNAME = "EggsSkills.LanceRounds";
+        internal const uint TOKENS = 10;
 
         //How much crit damage to unlock
         //Note: 2x mult is normal crit, 3x mult is 10 glasses (For Railgunner), 4x mult is what we want
@@ -37,7 +38,7 @@ namespace EggsSkills.Achievements
 
         public void ClearCheck()
         {
-            //Make sure player is alive, and make sure they are arti
+            //Make sure player is alive, and make sure they are rg
             if (base.isUserAlive && base.meetsBodyRequirement)
             {
                 //Make sure local user exists, then make sure their body exists, then make sure their move speed meets the req

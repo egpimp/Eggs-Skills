@@ -11,11 +11,11 @@ namespace EggsSkills.SkillDefs
     class CaptainAutoshotgunSkilldef : SkillDef
     {
         //% ramp gained per fire
-        private static readonly float rampGainPerFire = 0.2f;
+        private static readonly float rampGainPerFire = 0.15f;
         //% of lost ramp per second of not firing as a float
         private static readonly float rampLossPerSecond = 0.35f;
         //How long before the de-ramping starts after not firing
-        private static readonly float gracePeriod = 2f;
+        private static readonly float gracePeriod = 0.2f;
 
         private float graceTimer;
 
@@ -44,9 +44,9 @@ namespace EggsSkills.SkillDefs
             graceTimer = gracePeriod;
         }
 
-        public override void OnFixedUpdate([NotNull] GenericSkill skillSlot)
+        public override void OnFixedUpdate([NotNull] GenericSkill skillSlot, float deltaTime)
         {
-            base.OnFixedUpdate(skillSlot);
+            base.OnFixedUpdate(skillSlot, deltaTime);
             InstanceData instanceData = (InstanceData) skillSlot.skillInstanceData;
             //If the skill can execute and the grace period hasn't ended, tickdown the grace period
             if (skillSlot.CanExecute())
@@ -56,7 +56,11 @@ namespace EggsSkills.SkillDefs
             //If skill can't execute, don't tick down the graceperiod yet
             else graceTimer = gracePeriod;
             //Ramp down per tick based on the percent rate and clamp
-            if (graceTimer <= 0f && instanceData.ramp > 0f) instanceData.ramp -= rampLossPerSecond * Time.fixedDeltaTime;
+            if (graceTimer <= 0f && instanceData.ramp > 0f)
+            {
+                instanceData.ramp -= rampLossPerSecond * Time.fixedDeltaTime;
+                
+            }
             instanceData.ramp = Mathf.Clamp(instanceData.ramp, 0f, 1f);
         }
 

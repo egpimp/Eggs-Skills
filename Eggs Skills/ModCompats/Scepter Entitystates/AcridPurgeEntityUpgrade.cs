@@ -137,7 +137,7 @@ namespace EggsSkills.EntityStates
                             crit = base.RollCrit(),
                             procCoefficient = procCoefficient,
                             falloffModel = BlastAttack.FalloffModel.None,
-                            damageType = DamageType.Freeze2s
+                            damageType = DamageType.AOE | DamageType.Freeze2s
                         }.Fire();
                     }
                     //Play sfx at enemy pos

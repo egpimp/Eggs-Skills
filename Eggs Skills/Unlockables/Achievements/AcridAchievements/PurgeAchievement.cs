@@ -5,11 +5,12 @@ using UnityEngine;
 
 namespace EggsSkills.Achievements
 {
-    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, null)]
+    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, TOKENS)]
     internal class PurgeAchievement : BaseAchievement
     {
         internal const string ACHNAME = "CrocoManyPoisoned";
         internal const string REWARDNAME = "EggsSkills.Expunge";
+        internal const uint TOKENS = 10;
 
         //Max distance to check for poisoned enemies
         private static readonly float maxTrackingDistance = 50000f;

@@ -22,18 +22,18 @@ namespace EggsSkills
         private CharacterBody ownerBody;
 
         //Damage coefficient per orb
-        private readonly float damageCoefficient = 0.8f * spp_damageMult;
+        private static readonly float damageCoefficient = 0.8f * spp_damageMult;
         //Heal coefficient per orb
-        private readonly float healCoef = 0.015f * spp_healMult;
+        private static readonly float healCoef = 0.015f * spp_healMult;
         //Time to reset the number to
-        private readonly float maxQueueTimer = 0.05f;
+        private static readonly float maxQueueTimer = 0.05f;
         //Proc coefficient
-        private readonly float nanoProcCoef = 0.4f;
+        private static readonly float nanoProcCoef = 0.4f;
         //Handles the countdown timer for releasing nanobots
         private float queueTimer;
 
         //How many nanobots per enemy
-        private readonly int nanoBotCount = Configuration.GetConfigValue(Configuration.ToolbotNanobotCountperenemy) + spp_swarmBonus;
+        private static readonly int nanoBotCount = Configuration.GetConfigValue(Configuration.ToolbotNanobotCountperenemy) + spp_swarmBonus;
         
         //List of all the hurtboxes to throw nanobots at
         private List<HurtBox> hurtBoxesList;
@@ -45,8 +45,9 @@ namespace EggsSkills
             //Establishes the list for the hurtboxes
             hurtBoxesList = new List<HurtBox>();
             //Set the queuetimer
-            queueTimer = this.maxQueueTimer;
+            queueTimer = maxQueueTimer;
         }
+
         private void CallSwarm(HurtBox hurtBox)
         {
             //Create a new orb to fire
@@ -67,6 +68,7 @@ namespace EggsSkills
             nanobotOrb.procCoefficient = nanoProcCoef;
             if (NetworkServer.active) OrbManager.instance.AddOrb(nanobotOrb);
         }
+
         internal void GetTargets(Vector3 impactPos)
         {
             //Spheresearch around the spot we hit
@@ -105,6 +107,7 @@ namespace EggsSkills
                 hurtBoxesList = tempList;
             }
         }
+
         private void FixedUpdate()
         {
             //As long as there is shit in the list

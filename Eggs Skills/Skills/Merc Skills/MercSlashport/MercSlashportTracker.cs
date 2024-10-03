@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using RoR2;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace EggsSkills
 {
@@ -22,7 +23,7 @@ namespace EggsSkills
         //Max angle to lock onto with
         public readonly float maxTrackingAngle = 15f;
         //Max distance to track from
-        public readonly float maxTrackingDistance = 60f;
+        public readonly float maxTrackingDistance = 45f;
 
         //Target the tracker spots
         public HurtBox trackingTarget;
@@ -39,7 +40,7 @@ namespace EggsSkills
         private void Start()
         {
             //Setup the indicator
-            indicator = new Indicator(base.gameObject, LegacyResourcesAPI.Load<GameObject>("Prefabs/HuntressTrackingIndicator"));
+            indicator = new Indicator(base.gameObject, Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Huntress/HuntressTrackingIndicator.prefab").WaitForCompletion());
             //Grab characterbody
             characterBody = base.GetComponent<CharacterBody>();
             //Grab inputbank
@@ -90,7 +91,7 @@ namespace EggsSkills
             //Sort by distance
             search.sortMode = BullseyeSearch.SortMode.Distance;
             //Max dist and angle, dist based on speed
-            search.maxDistanceFilter = this.maxTrackingDistance * 1;
+            search.maxDistanceFilter = this.maxTrackingDistance;
             search.maxAngleFilter = this.maxTrackingAngle;
             //Refresh the targets
             search.RefreshCandidates();

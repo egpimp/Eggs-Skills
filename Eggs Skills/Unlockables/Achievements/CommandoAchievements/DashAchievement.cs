@@ -4,11 +4,12 @@ using RoR2.Achievements;
 
 namespace EggsSkills.Achievements
 {
-    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, null)]
+    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, TOKENS)]
     internal class DashAchievement : BaseAchievement
     {
         internal const string ACHNAME = "CommandoFinishTeleporterLowHealth";
         internal const string REWARDNAME = "EggsSkills.Dash";
+        internal const uint TOKENS = 10;
 
         //What hp % for req to be met
         private static readonly float hpReq = 0.2f;

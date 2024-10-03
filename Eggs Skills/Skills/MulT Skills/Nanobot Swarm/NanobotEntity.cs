@@ -6,6 +6,7 @@ using EntityStates.Toolbot;
 using EntityStates.GolemMonster;
 using EggsUtils.Helpers;
 using UnityEngine.Networking;
+using UnityEngine.AddressableAssets;
 
 namespace EggsSkills.EntityStates
 {
@@ -15,12 +16,14 @@ namespace EggsSkills.EntityStates
         private ChildLocator muzzleLocator;
 
         //Base duration for firing, pre attack speed
-        private readonly float baseDuration = 0.5f;
+        private static readonly float baseDuration = 0.5f;
         //Duration post-attack speed
         private float duration;
         //Maximum laser-sight distance
-        private readonly float maxDist = 1000f;
+        private static readonly float maxDist = 1000f;
 
+        //Prefab for laser sight
+        private GameObject lineFXPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Golem/LaserGolem.prefab").WaitForCompletion();
         //FX for the laser sight
         private GameObject lineEffect;
 
@@ -31,7 +34,10 @@ namespace EggsSkills.EntityStates
         private Ray aimRay;
 
         //String for the mumzzle it's fired from
-        private string muzzleString = "MuzzleNailgun";
+        private static readonly string muzzleString = "MuzzleNailgun";
+        //Sound strings
+        private static readonly string startSoundString = "Play_MULT_m2_aim";
+        private static readonly string endSoundString = "Play_MULT_m2_throw";
 
         //Transform for the muzzle (Helps locate position)
         private Transform muzzleTransform;
@@ -41,29 +47,29 @@ namespace EggsSkills.EntityStates
             //Do base enter stuff
             base.OnEnter();
             //Get the aimray
-            this.aimRay = base.GetAimRay();
+            aimRay = base.GetAimRay();
             //Locate the muzzle
-            this.muzzleLocator = base.modelLocator.modelTransform.GetComponent<ChildLocator>();
+            muzzleLocator = base.modelLocator.modelTransform.GetComponent<ChildLocator>();
             //Find the exact muzzle transform we need
-            this.muzzleTransform = this.muzzleLocator.FindChild(this.muzzleString);
+            muzzleTransform = muzzleLocator.FindChild(muzzleString);
             //Generate the laser effect for our use
-            this.lineEffect = Object.Instantiate(ChargeLaser.laserPrefab);
+            lineEffect = Object.Instantiate(lineFXPrefab);
             //Set it as active
-            this.lineEffect.SetActive(true);
+            lineEffect.SetActive(true);
             //Grab the linerenderer component
-            this.lineComponent = this.lineEffect.GetComponent<LineRenderer>();
+            lineComponent = lineEffect.GetComponent<LineRenderer>();
             //Replace the origin for the aimray
-            this.aimRay.origin = this.muzzleTransform.position;
+            aimRay.origin = muzzleTransform.position;
             //Set start and end width
-            this.lineComponent.startWidth = 0.1f;
-            this.lineComponent.endWidth = 0.1f;
+            lineComponent.startWidth = 0.1f;
+            lineComponent.endWidth = 0.1f;
             //Find the duration with AS and baseduration
-            this.duration = this.baseDuration / base.attackSpeedStat;
+            duration = baseDuration / base.attackSpeedStat;
             //Play the animation for aiming
-            base.PlayAnimation("Gesture, Additive", "PrepBomb", "PrepBomb.playbackRate", this.duration);
+            base.PlayAnimation("Gesture, Additive", "PrepBomb", "PrepBomb.playbackRate", duration);
             base.PlayAnimation("Stance, Override", "PutAwayGun");
             //Play the sound for aiming
-            Util.PlaySound(AimStunDrone.enterSoundString, base.gameObject);
+            Util.PlaySound(startSoundString, base.gameObject);
         }
         public override void OnExit()
         {
@@ -72,10 +78,10 @@ namespace EggsSkills.EntityStates
             //Fire
             if (base.isAuthority) Fire();
             //If the fx still exists, unexist it
-            if(this.lineEffect)
+            if(lineEffect)
             {
-                this.lineEffect.SetActive(false);
-                Destroy(this.lineEffect);
+                lineEffect.SetActive(false);
+                Destroy(lineEffect);
             }
         }
         public override void FixedUpdate()
@@ -83,12 +89,12 @@ namespace EggsSkills.EntityStates
             //Standard fixedupdate procedure
             base.FixedUpdate();
             base.StartAimMode();
-            this.UpdateFx();
+            UpdateFx();
             //If the button is no longer held down and minimum time has passed
-            if (!base.IsKeyDownAuthority() && base.fixedAge >= this.duration && base.isAuthority)
+            if (!base.IsKeyDownAuthority() && base.fixedAge >= duration && base.isAuthority)
             {
                 //fix the state
-                this.outer.SetNextStateToMain();
+                outer.SetNextStateToMain();
                 return;
             }
         }
@@ -96,21 +102,21 @@ namespace EggsSkills.EntityStates
         private void UpdateFx()
         {
             //Otherwise keep updating the aimray
-            this.aimRay = base.GetAimRay();
+            aimRay = base.GetAimRay();
             //Grab the hit component
             RaycastHit hit;
             //Try to find the hit position, otherwise get the point at the max distance
-            Vector3 origHitPos = base.inputBank.GetAimRaycast(this.maxDist, out hit) ? hit.point : this.aimRay.GetPoint(this.maxDist);
+            Vector3 origHitPos = base.inputBank.GetAimRaycast(maxDist, out hit) ? hit.point : aimRay.GetPoint(maxDist);
             //Set the aimray origin to the muzzle position
-            this.aimRay.origin = this.muzzleTransform.position;
+            aimRay.origin = muzzleTransform.position;
             //Set the parent of the line effect to the muzzle
-            this.lineEffect.transform.parent = this.muzzleTransform;
+            lineEffect.transform.parent = muzzleTransform;
             //Get the direction from the muzzle to the position hit by the aimray
-            this.aimRay.direction = Math.GetDirection(this.aimRay.origin, origHitPos);
+            aimRay.direction = Math.GetDirection(aimRay.origin, origHitPos);
             //This gets us a new hitposition based off of the aimray coming from the muzzle
-            Vector3 newHitPos = Physics.Raycast(this.aimRay.origin, this.aimRay.direction, out hit, this.maxDist) ? hit.point : this.aimRay.GetPoint(this.maxDist);
+            Vector3 newHitPos = Physics.Raycast(aimRay.origin, aimRay.direction, out hit, maxDist) ? hit.point : aimRay.GetPoint(maxDist);
             //Set the positions of the line component based off the muzzle position and the determine hit position
-            this.lineComponent.SetPositions(new Vector3[] { this.aimRay.origin, newHitPos });
+            lineComponent.SetPositions(new Vector3[] { aimRay.origin, newHitPos });
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()
@@ -121,12 +127,12 @@ namespace EggsSkills.EntityStates
         private void Fire()
         {
             //Network check, then fire the projectile
-            ProjectileManager.instance.FireProjectile(Resources.Projectiles.nanoBeaconPrefab, this.aimRay.origin, Util.QuaternionSafeLookRotation(this.aimRay.direction), base.gameObject, base.damageStat, 50f, base.RollCrit());
+            ProjectileManager.instance.FireProjectile(Resources.Projectiles.nanoBeaconPrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, base.damageStat, 50f, base.RollCrit());
             //Handle the fire animations
             base.PlayAnimation("Gesture, Additive", "FireBomb", "FireBomb.playbackRate", duration);
             base.PlayCrossfade("Stance, Override", "Empty", 0.1f);
             //Execute the fire sound
-            Util.PlaySound(AimStunDrone.exitSoundString, base.gameObject);
+            Util.PlaySound(endSoundString, base.gameObject);
         }
     }
 }

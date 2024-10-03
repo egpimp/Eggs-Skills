@@ -2,6 +2,7 @@
 using RoR2.Projectile;
 using UnityEngine.Networking;
 using EntityStates.Huntress;
+using UnityEngine.AddressableAssets;
 
 namespace EggsSkills
 {
@@ -13,20 +14,22 @@ namespace EggsSkills
         bool flag2 = true;
 
         //Time til thing happen
-        private readonly float baseCountDown = 3f;
+        private static readonly float baseCountDown = 3f;
         //Keep track o time
         private float countDown;
         //Radius of aoe
-        private readonly float radiusMax = 25f;
+        private static readonly float radiusMax = 25f;
         //Countdown for pulse fx
         private float stopwatch;
         //How long between pulse fx
-        private readonly float stopwatchMax = 1f;
+        private static readonly float stopwatchMax = 1f;
 
         //Indicator
         private GameObject indicator;
         //Owner of the projectile
         private GameObject owner;
+        //Area prefab
+        private GameObject areaPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Huntress/HuntressArrowRainIndicator.prefab").WaitForCompletion();
 
         //Projectilecontroller component
         private ProjectileController controller;
@@ -36,19 +39,20 @@ namespace EggsSkills
         private void Start()
         {
             //Start countdown
-            countDown = this.baseCountDown;
+            countDown = baseCountDown;
             //Prep stopwatch
-            stopwatch = this.stopwatchMax;
+            stopwatch = stopwatchMax;
             //Grab components and owner
             owner = GetComponent<ProjectileController>().owner;
             stick = GetComponent<ProjectileStickOnImpact>();
             controller = GetComponent<ProjectileController>();
             //Establish indicator 
-            indicator = Object.Instantiate(ArrowRain.areaIndicatorPrefab);
+            indicator = Instantiate(areaPrefab);
             indicator.SetActive(true);
             indicator.transform.position = base.transform.position;
             indicator.transform.localScale = Vector3.zero;
         }
+
         private void FixedUpdate()
         {
             //Once it is found to be stuck, flip the flag indicating that it stuck to something
@@ -72,13 +76,13 @@ namespace EggsSkills
                     if (flag)
                     {
                         //Trip flag
-                        flag = !flag;
+                        flag = false;
                         //Kill indicator
                         indicator.transform.localScale = Vector3.zero;
                         indicator.SetActive(false);
-                        GameObject.Destroy(indicator);
+                        Destroy(indicator);
                         //Check network, then send position to owner component
-                        if (NetworkServer.active) this.owner.GetComponent<SwarmComponent>()?.GetTargets(controller.transform.position);
+                        if (NetworkServer.active) owner.GetComponent<SwarmComponent>()?.GetTargets(controller.transform.position);
                     }
                 }
             }

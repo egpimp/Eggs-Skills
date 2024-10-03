@@ -4,6 +4,7 @@ using EggsUtils.Buffs;
 using EntityStates.Bandit2;
 using EggsSkills.Config;
 using UnityEngine.Networking;
+using UnityEngine.AddressableAssets;
 
 namespace EggsSkills
 {
@@ -20,18 +21,28 @@ namespace EggsSkills
         private CharacterBody characterBody;
 
         //How long til player turns invis while sprinting
-        private readonly float baseTimeTilInvis = 0.4f;
+        private static readonly float baseTimeTilInvis = 0.4f;
         //How long does buff last after exiting invis
-        private readonly float buffDuration = Configuration.GetConfigValue(Configuration.BanditInvissprintBuffduration);
+        private static readonly float buffDuration = Configuration.GetConfigValue(Configuration.BanditInvissprintBuffduration);
         //Helps stop cd during invisibility
         private float holdTimer;
         //Counts down while sprinting before invisible
         private float timeTilInvis;
 
+        //Sound strings
+        private static readonly string enterSoundString = "Play_bandit2_shift_enter";
+        private static readonly string exitSoundString = "Play_bandit2_shift_exit";
+        //Muzzle string
+        private static readonly string muzzleString = "MuzzleSmokebomb";
+
+        //Smokebomb fx
+        private GameObject effectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Bandit2/Bandit2SmokeBomb.prefab").WaitForCompletion();
+
         //Input bank
         private InputBankTest bank;
 
         private GenericSkill utilitySlot;
+
         private void Start()
         {
             //Establish timer
@@ -45,6 +56,7 @@ namespace EggsSkills
             //nab input bank
             bank = base.GetComponent<InputBankTest>();
         }
+
         internal void MakeInvis()
         {
             //Execute server only
@@ -66,6 +78,7 @@ namespace EggsSkills
 
             characterBody.characterMotor.walkSpeedPenaltyCoefficient = spp_moveSpeedBonus;
         }
+
         internal void RemoveInvis()
         {
             if (NetworkServer.active)
@@ -128,17 +141,19 @@ namespace EggsSkills
             //Lastly, kill invis if m2 is used because they're agile I guess
             if (bank.skill2.down && isInvis) RemoveInvis();
         }
+
         internal bool IsInvis()
         {
             //Accessor for invis check
             return isInvis;
         }
+
         private void PlayEffects()
         {
             //Play smoke-bomb fx
-            EffectManager.SimpleMuzzleFlash(StealthMode.smokeBombEffectPrefab, gameObject, StealthMode.smokeBombMuzzleString, false);
+            EffectManager.SimpleMuzzleFlash(effectPrefab, gameObject, muzzleString, false);
             //Sound string establish, enter sound if in stealth, exit sound if not stealth
-            string soundString = isInvis ? StealthMode.enterStealthSound : StealthMode.exitStealthSound;
+            string soundString = isInvis ? enterSoundString : exitSoundString;
             //Play sound
             Util.PlaySound(soundString, gameObject);
         }

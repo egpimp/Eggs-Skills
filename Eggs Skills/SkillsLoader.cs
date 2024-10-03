@@ -16,6 +16,7 @@ using EggsSkills.Resources;
 using System.Runtime.CompilerServices;
 using static EggsSkills.EggsSkills;
 using UnityEngine.AddressableAssets;
+using EggsSkills.Skills.Engi_Skills.MicroMissiles;
 
 namespace EggsSkills
 {
@@ -130,7 +131,7 @@ namespace EggsSkills
             //Nab the skillocator and skillfamilies
             SkillLocator acridSkillLocator = acridRef.GetComponent<SkillLocator>();
             SkillFamily acridSkillFamilySpecial = acridSkillLocator.special.skillFamily;
-            SkillFamily acricSkillFamilyPrimary = acridSkillLocator.primary.skillFamily;
+            SkillFamily acridSkillFamilyPrimary = acridSkillLocator.primary.skillFamily;
 
             //AcridPurge
             AcridPurgeDef skillDefPurge = ScriptableObject.CreateInstance<AcridPurgeDef>();
@@ -165,6 +166,37 @@ namespace EggsSkills
             ContentAddition.AddEntityState<AcridPurgeEntityUpgrade>(out _);
 
             if(classicItemsLoaded) skillsToHandle.Add(skillDefPurge.skillName, new SkillUpgradeContainer { normalSkillDef = skillDefPurge, body = "Croco", slot = SkillSlot.Special, index = acridSkillFamilySpecial.variants.Length - 1});
+        
+            //Poison breath
+            SkillDef skillDefPoisonBreath = ScriptableObject.CreateInstance<SkillDef>();
+            skillDefPoisonBreath.activationState = new SerializableEntityStateType(typeof(PoisonBreath));
+            skillDefPoisonBreath.activationStateMachineName = "Weapon";
+            skillDefPoisonBreath.beginSkillCooldownOnSkillEnd = true;
+            skillDefPoisonBreath.interruptPriority = InterruptPriority.Any;
+            skillDefPoisonBreath.isCombatSkill = true;
+            skillDefPoisonBreath.mustKeyPress = false;
+            skillDefPoisonBreath.canceledFromSprinting = false;
+            skillDefPoisonBreath.cancelSprintingOnActivation = true;
+            skillDefPoisonBreath.forceSprintDuringState = false;
+            skillDefPoisonBreath.stockToConsume = 0;
+            skillDefPoisonBreath.icon = Sprites.acridpoisonbreathIconS;
+            skillDefPoisonBreath.skillDescriptionToken = "ES_CROCO_PRIMARY_POISONBREATH_DESCRIPTION";
+            skillDefPoisonBreath.skillName = ((ScriptableObject)skillDefPoisonBreath).name = "ESPoisonBreath";
+            skillDefPoisonBreath.skillNameToken = "ES_CROCO_PRIMARY_POISONBREATH_NAME";
+            skillDefPoisonBreath.keywordTokens = new string[]
+            {
+                "KEYWORD_POISON"
+            };
+
+            defList.Add(skillDefPoisonBreath);
+            Array.Resize(ref acridSkillFamilyPrimary.variants, acridSkillFamilyPrimary.variants.Length + 1);
+            acridSkillFamilyPrimary.variants[acridSkillFamilyPrimary.variants.Length - 1] = new SkillFamily.Variant
+            {
+                skillDef = skillDefPoisonBreath,
+                unlockableDef = UnlocksRegistering.acridPoisonbreathUnlockDef,
+                viewableNode = new ViewablesCatalog.Node(skillDefPoisonBreath.skillNameToken, false, null)
+            };
+
         }
 
         private static void RegisterArtificerSkills()
@@ -322,7 +354,31 @@ namespace EggsSkills
             ContentAddition.AddEntityState<DebuffGrenadeEntity>(out _);
 
             //Autoshotgun
-            
+            CaptainAutoshotgunSkilldef skillDefAutoShotgun = ScriptableObject.CreateInstance<CaptainAutoshotgunSkilldef>();
+            skillDefAutoShotgun.activationState = new SerializableEntityStateType(typeof(CaptainAutoShotgunEntity));
+            skillDefAutoShotgun.activationStateMachineName = "Weapon";
+            skillDefAutoShotgun.beginSkillCooldownOnSkillEnd = true;
+            skillDefAutoShotgun.interruptPriority = InterruptPriority.Any;
+            skillDefAutoShotgun.isCombatSkill = true;
+            skillDefAutoShotgun.mustKeyPress = false;
+            skillDefAutoShotgun.canceledFromSprinting = false;
+            skillDefAutoShotgun.cancelSprintingOnActivation = true;
+            skillDefAutoShotgun.forceSprintDuringState = false;
+            skillDefAutoShotgun.stockToConsume = 0;
+            skillDefAutoShotgun.icon = Sprites.autoshotgunIconS;
+            skillDefAutoShotgun.skillDescriptionToken = "ES_CAPTAIN_PRIMARY_AUTOSHOTGUN_DESCRIPTION";
+            skillDefAutoShotgun.skillName = ((ScriptableObject)skillDefAutoShotgun).name = "ESAutoShotgun";
+            skillDefAutoShotgun.skillNameToken = "ES_CAPTAIN_PRIMARY_AUTOSHOTGUN_NAME";
+
+            defList.Add(skillDefAutoShotgun);
+            Array.Resize(ref captainSkillFamilyPrimary.variants, captainSkillFamilyPrimary.variants.Length + 1);
+            captainSkillFamilyPrimary.variants[captainSkillFamilyPrimary.variants.Length - 1] = new SkillFamily.Variant
+            {
+                skillDef = skillDefAutoShotgun,
+                unlockableDef = UnlocksRegistering.captainAutoshotgunUnlockDef,
+                viewableNode = new ViewablesCatalog.Node(skillDefAutoShotgun.skillNameToken, false, null)
+            };
+            ContentAddition.AddEntityState<CombatShotgunEntity>(out _);
         }
 
         private static void RegisterCommandoSkills()
@@ -404,6 +460,33 @@ namespace EggsSkills
             SkillFamily engiSkillFamilySecondary = engiSkillLocator.secondary.skillFamily;
             SkillFamily engiSkillFamilyPrimary = engiSkillLocator.primary.skillFamily;
 
+            //Micromissiles
+            SkillDef skillDefMicromissile = ScriptableObject.CreateInstance<SteppedSkillDef>();
+            skillDefMicromissile.activationState = new SerializableEntityStateType(typeof(MicroMissileEntity));
+            skillDefMicromissile.activationStateMachineName = "Weapon";
+            skillDefMicromissile.beginSkillCooldownOnSkillEnd = true;
+            skillDefMicromissile.interruptPriority = InterruptPriority.Any;
+            skillDefMicromissile.isCombatSkill = true;
+            skillDefMicromissile.mustKeyPress = false;
+            skillDefMicromissile.canceledFromSprinting = false;
+            skillDefMicromissile.cancelSprintingOnActivation = true;
+            skillDefMicromissile.forceSprintDuringState = false;
+            skillDefMicromissile.stockToConsume = 0;
+            skillDefMicromissile.icon = Sprites.micromissileIconS;
+            skillDefMicromissile.skillDescriptionToken = "ES_ENGI_PRIMARY_MICROMISSILES_DESCRIPTION";
+            skillDefMicromissile.skillName = ((ScriptableObject)skillDefMicromissile).name = "EsMicroMissiles";
+            skillDefMicromissile.skillNameToken = "ES_ENGI_PRIMARY_MICROMISSILES_NAME";
+
+            defList.Add(skillDefMicromissile);
+            Array.Resize(ref engiSkillFamilyPrimary.variants, engiSkillFamilyPrimary.variants.Length + 1);
+            engiSkillFamilyPrimary.variants[engiSkillFamilyPrimary.variants.Length - 1] = new SkillFamily.Variant
+            {
+                skillDef = skillDefMicromissile,
+                unlockableDef = UnlocksRegistering.engiMicromissileUnlockDef,
+                viewableNode = new ViewablesCatalog.Node(skillDefMicromissile.skillNameToken, false, null)
+            };
+
+            //Tesla Mine
             SkillDef skillDefTeslamine = ScriptableObject.CreateInstance<SkillDef>();
             skillDefTeslamine.activationState = new SerializableEntityStateType(typeof(TeslaMineFireState));
             skillDefTeslamine.activationStateMachineName = "Weapon";
@@ -438,6 +521,8 @@ namespace EggsSkills
                 viewableNode = new ViewablesCatalog.Node(skillDefTeslamine.skillNameToken, false, null)
             };
             ContentAddition.AddEntityState<TeslaMineFireState>(out _);
+
+
         }
 
         private static void RegisterHuntressSkills()
@@ -463,7 +548,7 @@ namespace EggsSkills
             skillDefClusterArrow.rechargeStock = 1;
             skillDefClusterArrow.requiredStock = 1;
             skillDefClusterArrow.stockToConsume = 1;
-            skillDefClusterArrow.icon = Sprites.clusterArrowIconS;
+            skillDefClusterArrow.icon = Sprites.clusterarrowIconS;
             skillDefClusterArrow.skillDescriptionToken = "ES_HUNTRESS_SECONDARY_CLUSTERARROW_DESCRIPTION";
             skillDefClusterArrow.skillName = ((ScriptableObject)skillDefClusterArrow).name = "ESClusterArrow";
             skillDefClusterArrow.skillNameToken = "ES_HUNTRESS_SECONDARY_CLUSTERARROW_NAME";
@@ -617,7 +702,7 @@ namespace EggsSkills
             SkillFamily railgunnerSkillFamilyPrimary = railgunnerSkillLocator.primary.skillFamily;
 
             //Lance rounds
-            SteppedSkillDef skillDefLanceRounds = ScriptableObject.CreateInstance<SteppedSkillDef>();
+            RailgunSkillDef skillDefLanceRounds = ScriptableObject.CreateInstance<RailgunSkillDef>();
             skillDefLanceRounds.activationState = new SerializableEntityStateType(typeof(LancerRoundsEntity));
             skillDefLanceRounds.activationStateMachineName = "Weapon";
             skillDefLanceRounds.beginSkillCooldownOnSkillEnd = true;
@@ -628,7 +713,7 @@ namespace EggsSkills
             skillDefLanceRounds.canceledFromSprinting = false;
             skillDefLanceRounds.forceSprintDuringState = false;
             skillDefLanceRounds.stockToConsume = 0;
-            skillDefLanceRounds.icon = Sprites.placeholderIconS;
+            skillDefLanceRounds.icon = Sprites.lanceroundsIconS;
             skillDefLanceRounds.skillDescriptionToken = "ES_RAILGUNNER_PRIMARY_LANCEROUNDS_DESCRIPTION";
             skillDefLanceRounds.skillName = ((ScriptableObject)skillDefLanceRounds).name = "ESLanceRounds";
             skillDefLanceRounds.skillNameToken = "ES_RAILGUNNER_PRIMARY_LANCEROUNDS_NAME";
@@ -694,6 +779,73 @@ namespace EggsSkills
         {
             SkillLocator voidFiendSkillLocator = voidFiendRef.GetComponent<SkillLocator>();
             SkillFamily voidFiendSkillFamilySpecial = voidFiendSkillLocator.special.skillFamily;
+
+            //Inversion skill
+            VoidsurvivorSkilldefFix skillDefInversion = ScriptableObject.CreateInstance<VoidsurvivorSkilldefFix>();
+            skillDefInversion.activationState = new SerializableEntityStateType(typeof(InversionChargePure));
+            skillDefInversion.activationStateMachineName = "Weapon";
+            skillDefInversion.baseMaxStock = 1;
+            skillDefInversion.baseRechargeInterval = 4f;
+            skillDefInversion.beginSkillCooldownOnSkillEnd = true;
+            skillDefInversion.fullRestockOnAssign = true;
+            skillDefInversion.interruptPriority = InterruptPriority.Skill;
+            skillDefInversion.isCombatSkill = true;
+            skillDefInversion.mustKeyPress = true;
+            skillDefInversion.canceledFromSprinting = false;
+            skillDefInversion.cancelSprintingOnActivation = true;
+            skillDefInversion.forceSprintDuringState = false;
+            skillDefInversion.rechargeStock = 1;
+            skillDefInversion.requiredStock = 1;
+            skillDefInversion.stockToConsume = 1;
+            skillDefInversion.icon = Sprites.inversionIconS;
+            skillDefInversion.skillDescriptionToken = "ES_VOIDSURVIVOR_SPECIAL_INVERSION_DESCRIPTION";
+            skillDefInversion.skillName = ((ScriptableObject)skillDefInversion).name = "ESInversion";
+            skillDefInversion.skillNameToken = "ES_VOIDSURVIVOR_SPECIAL_INVERSION_NAME";
+            skillDefInversion.keywordTokens = new string[]
+            {
+                "ES_VOIDSURVIVOR_SPECIAL_INVERSION_KEYWORD"
+            };
+
+            SkillDef skillDefInversionAlt = ScriptableObject.CreateInstance<SkillDef>();
+            skillDefInversionAlt.activationState = new SerializableEntityStateType(typeof(InversionChargeCorrupt));
+            skillDefInversionAlt.activationStateMachineName = "Weapon";
+            skillDefInversionAlt.baseMaxStock = 1;
+            skillDefInversionAlt.baseRechargeInterval = 4f;
+            skillDefInversionAlt.beginSkillCooldownOnSkillEnd = true;
+            skillDefInversionAlt.fullRestockOnAssign = true;
+            skillDefInversionAlt.interruptPriority = InterruptPriority.Skill;
+            skillDefInversionAlt.isCombatSkill = true;
+            skillDefInversionAlt.mustKeyPress = true;
+            skillDefInversionAlt.canceledFromSprinting = false;
+            skillDefInversionAlt.cancelSprintingOnActivation = true;
+            skillDefInversionAlt.forceSprintDuringState = false;
+            skillDefInversionAlt.rechargeStock = 1;
+            skillDefInversionAlt.requiredStock = 1;
+            skillDefInversionAlt.stockToConsume = 1;
+            skillDefInversionAlt.icon = Sprites.inversionAltIconS;
+            skillDefInversionAlt.skillDescriptionToken = "ES_VOIDSURVIVOR_SPECIAL_INVERSION_DESCRIPTION_ALT";
+            skillDefInversionAlt.skillName = ((ScriptableObject)skillDefInversionAlt).name = "ESInversionAlt";
+            skillDefInversionAlt.skillNameToken = "ES_VOIDSURVIVOR_SPECIAL_INVERSION_NAME_ALT";
+
+            skillDefInversion.alt = skillDefInversionAlt;
+
+            defList.Add(skillDefInversion);
+            defList.Add(skillDefInversionAlt);
+            Array.Resize(ref voidFiendSkillFamilySpecial.variants, voidFiendSkillFamilySpecial.variants.Length + 1);
+            voidFiendSkillFamilySpecial.variants[voidFiendSkillFamilySpecial.variants.Length - 1] = new SkillFamily.Variant
+            {
+                skillDef = skillDefInversion,
+                unlockableDef = UnlocksRegistering.voidsurvivorInversionUnlockDef,
+                viewableNode = new ViewablesCatalog.Node(skillDefInversion.skillNameToken, false, null)
+            };
+            ContentAddition.AddEntityState<InversionBase>(out _);
+            ContentAddition.AddEntityState<InversionPure>(out _);
+            ContentAddition.AddEntityState<InversionCorrupt>(out _);
+            ContentAddition.AddEntityState<InversionChargeBase>(out _);
+            ContentAddition.AddEntityState<InversionChargePure>(out _);
+            ContentAddition.AddEntityState<InversionChargeCorrupt>(out _);
+
+            if (classicItemsLoaded) skillsToHandle.Add(skillDefInversion.skillName, new SkillUpgradeContainer { normalSkillDef = skillDefInversion, body = "VoidSurvivor", slot = SkillSlot.Special, index = voidFiendSkillFamilySpecial.variants.Length - 1 });
         }
         #endregion
 

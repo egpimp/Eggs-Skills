@@ -6,11 +6,12 @@ using UnityEngine;
 
 namespace EggsSkills.Achievements
 {
-    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, null)]
+    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, TOKENS)]
     internal class SlashportAchievement : BaseAchievement
     {
         internal const string ACHNAME = "MercExposeEnemies";
         internal const string REWARDNAME = "EggsSkills.Slashport";
+        internal const uint TOKENS = 10;
 
         //How many exposed enemies hit required
         private static readonly int exposeReq = 10;

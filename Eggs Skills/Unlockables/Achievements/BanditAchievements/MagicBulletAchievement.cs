@@ -5,11 +5,12 @@ using RoR2.Achievements;
 
 namespace EggsSkills.Achievements
 {
-    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, null)]
+    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, TOKENS)]
     internal class MagicBulletAchievement : BaseAchievement
     {
         internal const string ACHNAME = "Bandit2FastKills";
         internal const string REWARDNAME = "EggsSkills.MagicBullet";
+        internal const uint TOKENS = 10;
 
         //How many kills in 1s to get achievement
         private static readonly int reqKills = 3;

@@ -17,32 +17,35 @@ namespace EggsSkills.EntityStates
         internal static float spp_healMult = 1f;
 
         //Is the attack speed capped
-        private readonly bool cappedAttackspeed = Configuration.GetConfigValue(Configuration.TreebotPullSpeedcap);
+        private static readonly bool cappedAttackspeed = Configuration.GetConfigValue(Configuration.TreebotPullSpeedcap);
         //Did I crit
         private bool isCrit;
         //Handles first press of the skill
         private bool isFirstPress;
 
         //What % barrier per enemy
-        private readonly float barrierCoefficient = 0.03f * spp_healMult;
+        private static readonly float barrierCoefficient = 0.03f * spp_healMult;
         //How long between pulls normally
-        private readonly float basePullTimer = 1f;
+        private static readonly float basePullTimer = 1f;
         //Standard radius of the skill
-        private readonly float baseRadius = Configuration.GetConfigValue(Configuration.TreebotPullRange) + spp_radiusBonus;
+        private static readonly float baseRadius = Configuration.GetConfigValue(Configuration.TreebotPullRange) + spp_radiusBonus;
         //Standard damage coefficient of the skill
-        private readonly float damageCoefficient = 2.5f;
+        private static readonly float damageCoefficient = 2.5f;
         //Max attackspeed if enabled
-        private readonly float maxAttackSpeedMod = 4f;
+        private static readonly float maxAttackSpeedMod = 4f;
         //Max duration of skill
-        private readonly float maxDuration = 8f;
+        private static readonly float maxDuration = 8f;
         //Proc coef per pulse
-        private readonly float procCoef = 0.7f;
+        private static readonly float procCoef = 0.7f;
         //Modifier of the pulse speed
         private float pullTimerModifier;
         //Pulse speed handler
         private float pullTimer;
         //Speed u r set to during
-        private readonly float speedFraction = 0.8f;
+        private static readonly float speedFraction = 0.8f;
+
+        //Sound string
+        private static readonly string soundString = "Play_treeBot_m2_launch";
 
         //Skill fx
         private GameObject bodyPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Junk/Treebot/TreebotPounderExplosion.prefab").WaitForCompletion();
@@ -185,7 +188,7 @@ namespace EggsSkills.EntityStates
             //Play the fx on client only
             if(isAuthority) EffectManager.SpawnEffect(bodyPrefab, bodyEffectData, true);
             //Play sound
-            Util.PlaySound(FireMortar.fireSoundString, gameObject);
+            Util.PlaySound(soundString, gameObject);
         }
     }
 }

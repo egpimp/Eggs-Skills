@@ -5,11 +5,12 @@ using UnityEngine;
 
 namespace EggsSkills.Achievements
 {
-    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, null)]
+    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, TOKENS)]
     class InvisSprintAchievement : BaseAchievement
     {
         internal const string ACHNAME = "Bandit2LongInvis";
         internal const string REWARDNAME = "EggsSkills.InvisSprint";
+        internal const uint TOKENS = 10;
 
         //Countdown for achievement
         private static float baseCountDown = 180f;

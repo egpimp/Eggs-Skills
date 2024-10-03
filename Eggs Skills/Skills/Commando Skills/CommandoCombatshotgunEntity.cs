@@ -49,6 +49,7 @@ namespace EggsSkills.EntityStates
             //Handles determining step
             step = i;
         }
+
         public override void OnEnter()
         {
             //Standard enter procedure
@@ -121,6 +122,7 @@ namespace EggsSkills.EntityStates
             Util.PlaySound("Play_bandit2_m1_shotgun", base.gameObject);
             //Apply recoil, shifted towards side the bullet shot from
             base.AddRecoil(-baseRecoil, baseRecoil, -2 * baseRecoil * (1 - (step % 2)), 2 * baseRecoil * (step % 2));
+            base.characterBody.AddSpreadBloom(baseRecoil);
         }
         public override void FixedUpdate()
         {

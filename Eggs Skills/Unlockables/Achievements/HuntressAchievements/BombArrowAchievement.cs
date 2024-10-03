@@ -4,11 +4,12 @@ using RoR2.Achievements;
 
 namespace EggsSkills.Achievements
 {
-    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, null)]
+    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, TOKENS)]
     class BombArrowAchievement : BaseAchievement
     {
         internal const string ACHNAME = "HuntressPrimaryUtilityOnly";
         internal const string REWARDNAME = "EggsSkills.ClusterArrow";
+        internal const uint TOKENS = 10;
 
         public override BodyIndex LookUpRequiredBodyIndex()
         {

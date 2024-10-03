@@ -29,6 +29,8 @@ namespace EggsSkills.EntityStates
         //Overall proc coefficient
         private readonly float procCoefficient = 1f;
 
+        private static readonly string soundString = "Play_gup_attack1_shoot";
+
         //Effect to be played on use
         private GameObject bodyPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Croco/CrocoDiseaseImpactEffect.prefab").WaitForCompletion();
 
@@ -72,7 +74,7 @@ namespace EggsSkills.EntityStates
                         }.Fire();
                     }
                     //Play sfx at enemies
-                    EffectManager.SimpleSoundEffect(BaseLeap.landingSound.index, body.footPosition, true);
+                    Util.PlaySound(soundString, body.gameObject);
                     //Vfx data
                     EffectData bodyEffectData = new EffectData
                     {
@@ -105,7 +107,7 @@ namespace EggsSkills.EntityStates
                         }.Fire();
                     }
                     //Play sfx at enemy pos
-                    EffectManager.SimpleSoundEffect(BaseLeap.landingSound.index, body.footPosition, true);
+                    Util.PlaySound(soundString, body.gameObject);
                     //Setup vfx data
                     EffectData bodyEffectData = new EffectData
                     {
@@ -138,7 +140,7 @@ namespace EggsSkills.EntityStates
                         }.Fire();
                     }
                     //Play sfx at enemy pos
-                    EffectManager.SimpleSoundEffect(BaseLeap.landingSound.index, body.footPosition, true);
+                    Util.PlaySound(soundString, body.gameObject);
                     //Setup vfx data
                     EffectData bodyEffectData = new EffectData
                     {

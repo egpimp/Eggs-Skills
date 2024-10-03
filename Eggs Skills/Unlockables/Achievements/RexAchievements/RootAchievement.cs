@@ -9,11 +9,12 @@ using System.Collections.Generic;
 
 namespace EggsSkills.Achievements
 {
-    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, null)]
+    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, TOKENS)]
     internal class RootAchievement : BaseAchievement
     {
         internal const string ACHNAME = "TreebotManyCloseKills";
         internal const string REWARDNAME = "EggsSkills.Root";
+        internal const uint TOKENS = 10;
 
         //How many kills for achievement
         private static readonly int reqKills = 100;

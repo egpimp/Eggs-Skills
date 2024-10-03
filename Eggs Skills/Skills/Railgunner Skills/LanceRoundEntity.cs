@@ -94,6 +94,7 @@ namespace EggsSkills.EntityStates
             }
             EffectManager.SimpleMuzzleFlash(muzzleFlash, base.gameObject, muzzleName, true);
             base.AddRecoil(-recoil, recoil, -recoil, recoil);
+            base.characterBody.AddSpreadBloom(0.5f + recoil);
         }
 
         public override void FixedUpdate()

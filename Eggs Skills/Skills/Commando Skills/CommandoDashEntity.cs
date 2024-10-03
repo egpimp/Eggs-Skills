@@ -10,13 +10,16 @@ namespace EggsSkills.EntityStates
     class CommandoDashEntity : BaseSkillState
     {
         //Base speed
-        private readonly float baseDashSpeed = 4f;
+        private static readonly float baseDashSpeed = 4f;
         //Duration buff
-        private readonly float buffDuration = Configuration.GetConfigValue(Configuration.CommandoDashBuffTimer);
+        private static readonly float buffDuration = Configuration.GetConfigValue(Configuration.CommandoDashBuffTimer);
         //How long dash last
-        private readonly float dashDuration = 0.3f;
+        private static readonly float dashDuration = 0.3f;
         //Calculated dash speed
         private float dashSpeed;
+
+        //Sound string
+        private static readonly string soundString = "Play_commando_shift";
 
         //Vector3 holder for forward direction
         private Vector3 forwardDirection;
@@ -26,7 +29,7 @@ namespace EggsSkills.EntityStates
             //Execute enter procedure
             base.OnEnter();
             //Play sound
-            Util.PlaySound(DodgeState.dodgeSoundString, base.gameObject);
+            Util.PlaySound(soundString, base.gameObject);
             //Handle animation
             base.PlayAnimation("Body", "DodgeForward", "Dodge.playbackRate", dashDuration);
             //If moving, get move direction.  Otherwise, get character direction.

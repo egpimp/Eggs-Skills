@@ -6,6 +6,7 @@ using System.Linq;
 using EntityStates.VagrantMonster;
 using EggsSkills.Config;
 using static UnityEngine.Random;
+using UnityEngine.AddressableAssets;
 
 namespace EggsSkills.EntityStates
 {
@@ -16,15 +17,15 @@ namespace EggsSkills.EntityStates
         public static float spp_distanceMult = 1f;
 
         //Min uncharged damage
-        private readonly float baseDamageMult = 2.5f;
+        private static readonly float baseDamageMult = 2.5f;
         //Initial seconds to charge
-        private readonly float baseMaxCharge = 2f;
+        private static readonly float baseMaxCharge = 2f;
         //Min uncharged distance
-        private readonly float baseMinDistance = 6f;
+        private static readonly float baseMinDistance = 6f;
         //Max distance to be added to min at full charge (Total of 20f)
-        private readonly float baseMaxDistanceBonus = 20f;
+        private static readonly float baseMaxDistanceBonus = 20f;
         //Min uncharged kersplodey radius
-        private readonly float baseRadius = Configuration.GetConfigValue(Configuration.MageZapportBaseradius);
+        private static readonly float baseRadius = Configuration.GetConfigValue(Configuration.MageZapportBaseradius);
         //0-100% how charged are you
         private float chargePercent;
         //Damage multiplier
@@ -34,34 +35,38 @@ namespace EggsSkills.EntityStates
         //How long can the ability be charged for
         private float maxCharge;
         //Max amount to boost damagemult by from basedamagemult (Total of 10f)
-        private readonly float maxDamageMultBonus = 7.5f;
+        private static readonly float maxDamageMultBonus = 7.5f;
         //Move speed penalty at full charge
-        private readonly float maxMovePenalty = 0.2f;
+        private static readonly float maxMovePenalty = 0.2f;
         //What radius is multiplied by at max charge
-        private readonly float maxRadiusMult = 2.5f;
+        private static readonly float maxRadiusMult = 2.5f;
         //Minimum charge to use
-        private readonly float minChargePercent = 0.2f;
+        private static readonly float minChargePercent = 0.2f;
         //Radius of the explosion
         private float radius;
         //100% charge % chance of fx occuring
-        private readonly float ranNumMax = 1f;
+        private static readonly float ranNumMax = 1f;
         //0% charge % chance of fx occuring
-        private readonly float ranNumMin = 0.4f;
+        private static readonly float ranNumMin = 0.4f;
         //Timer between frequency checks
         private float ranStopwatch;
         //Num to reset to when timer counts down
-        private readonly float ranStopwatchMax = 0.05f;
+        private static readonly float ranStopwatchMax = 0.05f;
         //Additive multiplier per stock consumed.  Note we calc radius slightly differently because it scales waaaaay too hard otherwise
-        private readonly float stockBonusPerMultiplier = 1.5f;
-        private readonly float stockBonusRadiusPerMultiplier = 1.2f;
+        private static readonly float stockBonusPerMultiplier = 1.5f;
+        private static readonly float stockBonusRadiusPerMultiplier = 1.2f;
         //Actual multiplier once calculated
         private float stockMultiplier = 1f;
         private float stockRadiusMultiplier = 1f;
 
+        private static readonly string chargeSoundString = "Play_vagrant_attack2_charge";
+
         //Where my kersplodey go indicator
         private GameObject areaIndicator;
+        //prefab for above
+        private GameObject areaIndicatorPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Huntress/HuntressArrowRainIndicator.prefab").WaitForCompletion();
         //Cool charging fx
-        private GameObject effectPrefab = UnityEngine.Resources.Load<GameObject>("Prefabs/effects/LightningStakeNova");
+        private GameObject effectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/EliteLightning/LightningStakeNova.prefab").WaitForCompletion();
 
         //Maximum movement determined
         private Vector3 calculatedMovePos;
@@ -81,7 +86,7 @@ namespace EggsSkills.EntityStates
             //Play the wall holding animation artificer has
             base.PlayAnimation("Gesture, Additive", "PrepWall", "PrepWall.playbackRate", 1);
             //Set the area indicator
-            areaIndicator = Object.Instantiate(ArrowRain.areaIndicatorPrefab);
+            areaIndicator = Object.Instantiate(areaIndicatorPrefab);
             //Activate the area indicator
             areaIndicator.SetActive(true);
             //Calculate the stock bonus with multiplier and remaining stocks
@@ -93,7 +98,7 @@ namespace EggsSkills.EntityStates
             //Deduct the stocks
             base.skillLocator.utility.RemoveAllStocks();
             //Play the charging sound
-            Util.PlaySound(ChargeTrackingBomb.chargingSoundString, base.gameObject);
+            Util.PlaySound(chargeSoundString, base.gameObject);
         }
 
         public override void OnExit()

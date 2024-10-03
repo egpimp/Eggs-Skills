@@ -5,11 +5,12 @@ using UnityEngine;
 
 namespace EggsSkills.Achievements
 {
-    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, null)]
+    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, TOKENS)]
     internal class ZapportAchievement : BaseAchievement
     {
         internal const string ACHNAME = "MageFastMoveSpeed";
         internal const string REWARDNAME = "EggsSkills.Zapport";
+        internal const uint TOKENS = 10;
 
         //500% normal ms required
         private static readonly float moveSpeedReq = 5f;

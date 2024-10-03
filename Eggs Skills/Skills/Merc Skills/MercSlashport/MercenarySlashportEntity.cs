@@ -5,6 +5,7 @@ using System.Linq;
 using EntityStates.Merc;
 using EggsSkills.Config;
 using UnityEngine.Networking;
+using UnityEngine.AddressableAssets;
 
 namespace EggsSkills.EntityStates
 {
@@ -15,13 +16,17 @@ namespace EggsSkills.EntityStates
         internal static float spp_procbonus = 0f;
 
         //Skill damage coeffficient
-        private readonly float damageCoefficient = 7f;
+        private static readonly float damageCoefficient = 7f;
         //For handling cast time
         private float[] findMax;
         //Missing health% fraction
-        private readonly float stunRange = Configuration.GetConfigValue(Configuration.MercSlashStunrange);
+        private static readonly float stunRange = Configuration.GetConfigValue(Configuration.MercSlashStunrange);
         //Proc coeff of ability
-        private readonly float procCoefficient = 1f;
+        private static readonly float procCoefficient = 1f;
+
+        //Effect prefabs
+        private GameObject blinkPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Huntress/HuntressBlinkEffect.prefab").WaitForCompletion();
+        private GameObject swingFXPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion();
 
         //Target hurtbox
         private HurtBox targetBox;
@@ -30,7 +35,11 @@ namespace EggsSkills.EntityStates
         private MercSlashportTracker mercTracker;
 
         //String for slash fx to play
-        private readonly string slashChildName = "GroundLight3Slash";
+        private static readonly string slashChildName = "GroundLight3Slash";
+        //Sound strings
+        private static readonly string dashSoundString = "Play_merc_R_dash";
+        private static readonly string dashEndSoundString = "Play_merc_R_end";
+        private static readonly string slashSoundString = "Play_merc_m1_hard_swing";
 
         public override void OnEnter()
         {            
@@ -45,8 +54,6 @@ namespace EggsSkills.EntityStates
                 //If the target still exists
                 if (targetBox.healthComponent.alive && targetBox)
                 {
-                    //Handle overlay shit
-                    HandleOverlay();
                     //Setup fx data
                     EffectData effectData = new EffectData
                     {
@@ -54,9 +61,9 @@ namespace EggsSkills.EntityStates
                         origin = base.characterBody.corePosition
                     };
                     //Play the blink fx
-                    EffectManager.SpawnEffect(EvisDash.blinkPrefab, effectData, false);
+                    EffectManager.SpawnEffect(blinkPrefab, effectData, false);
                     //Play the sound
-                    Util.PlaySound(EvisDash.beginSoundString, base.gameObject);
+                    Util.PlaySound(dashSoundString, base.gameObject);
                     //Stop the movement during the cast
                     base.characterMotor.walkSpeedPenaltyCoefficient = 0f;
                     base.characterMotor.velocity = Vector3.zero;
@@ -118,10 +125,10 @@ namespace EggsSkills.EntityStates
                     }.Fire();
                 }
                 //Fire off the swing fx
-                EffectManager.SimpleMuzzleFlash(GroundLight.comboSwingEffectPrefab, base.gameObject, slashChildName, true);
+                EffectManager.SimpleMuzzleFlash(swingFXPrefab, base.gameObject, slashChildName, true);
                 //Fire off sounds
-                Util.PlaySound(GroundLight.finisherAttackSoundString, base.gameObject);
-                Util.PlaySound(EvisDash.endSoundString, base.gameObject);
+                Util.PlaySound(slashSoundString, base.gameObject);
+                Util.PlaySound(dashEndSoundString, base.gameObject);
             }
             //Fix the walkspeed no matter what
             base.characterMotor.walkSpeedPenaltyCoefficient = 1;
@@ -142,23 +149,6 @@ namespace EggsSkills.EntityStates
             base.characterMotor.Motor.SetPosition(telePos);
             //Set look direction towards enemy for effect
             base.characterDirection.forward = teleDir;
-        }
-
-        private void HandleOverlay()
-        {
-            //Setup the overlay
-            TemporaryOverlay temporaryOverlay = base.GetModelTransform().gameObject.AddComponent<TemporaryOverlay>();
-            //Set the duration
-            temporaryOverlay.duration = 0.1f;
-            //Animate the curve
-            temporaryOverlay.animateShaderAlpha = true;
-            temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
-            //Destroy it on end
-            temporaryOverlay.destroyComponentOnEnd = true;
-            //Set the material
-            temporaryOverlay.originalMaterial = LegacyResourcesAPI.Load<Material>("Materials/matHuntressFlashBright");
-            //Add to the character model
-            temporaryOverlay.AddToCharacerModel(base.GetModelTransform().GetComponent<CharacterModel>());
         }
 
         public override void FixedUpdate()

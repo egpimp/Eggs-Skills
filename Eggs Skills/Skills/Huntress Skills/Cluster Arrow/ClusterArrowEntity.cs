@@ -4,6 +4,7 @@ using EntityStates.Huntress.HuntressWeapon;
 using RoR2;
 using RoR2.Orbs;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 
 namespace EggsSkills.EntityStates
@@ -17,24 +18,29 @@ namespace EggsSkills.EntityStates
         //Animator
         private Animator animator;
 
-        //Was glaive throw attempted?
+        //Was arrow attempted?
         private bool wasArrowAttempted = false;
-        //Has the glaive been thrown successfully?
+        //Has the arrow been fired successfully?
         private bool wasArrowFired = false;
 
-        //Helps find assets
-        private readonly FireSeekingArrow assetRef = new FireSeekingArrow();
-
         //Base cast time
-        private readonly float baseDuration = 1f;
+        private static readonly float baseDuration = 1f;
         //Post-Attack speed cast time
         private float duration;
+
+        //Muzzle flash
+        private GameObject muzzleEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Huntress/MuzzleflashHuntress.prefab").WaitForCompletion();
 
         //Hurtbox of the target
         private HurtBox target;
 
         //Muzzle to fire from
         private Transform muzzle;
+
+        //Sound string
+        private static readonly string soundString = "Play_huntress_m1_shoot";
+        //Muzzle string
+        private static readonly string muzzleString = "Muzzle";
 
         public override void OnEnter()
         {
@@ -53,12 +59,12 @@ namespace EggsSkills.EntityStates
                 //Grab the child locator
                 ChildLocator childLocator = modelTransform.GetComponent<ChildLocator>();
                 //Find the muzzle with the given string
-                muzzle = childLocator.FindChild(assetRef.muzzleString);
+                muzzle = childLocator.FindChild(muzzleString);
                 //Nab the animator
                 animator = modelTransform.GetComponent<Animator>();
             }
             //Play the sound based on attack speed
-            Util.PlayAttackSpeedSound(this.assetRef.attackSoundString, base.gameObject, base.attackSpeedStat);
+            Util.PlayAttackSpeedSound(soundString, base.gameObject, base.attackSpeedStat);
             //Make sure body exists and do the thing where it looks towards where you aim
             if(base.characterBody) base.characterBody.SetAimTimer(duration + 1f);
             //Play the animations
@@ -99,8 +105,9 @@ namespace EggsSkills.EntityStates
             {
                 wasArrowFired = true;
                 //Apply the muzzle flash effect
-                EffectManager.SimpleMuzzleFlash(assetRef.muzzleflashEffectPrefab, base.gameObject, assetRef.muzzleString, false);
+                EffectManager.SimpleMuzzleFlash(muzzleEffect, base.gameObject, muzzleString, false);
                 //Set the origin to the muzzle position
+                Log.LogError(muzzle);
                 genericDamageOrb.origin = muzzle.position;
                 //Set the target of the orb to the target we found
                 genericDamageOrb.target = target;

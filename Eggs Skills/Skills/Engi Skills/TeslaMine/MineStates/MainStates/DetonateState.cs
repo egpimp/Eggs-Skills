@@ -5,6 +5,7 @@ using RoR2.Projectile;
 using EntityStates.JellyfishMonster;
 using UnityEngine.Networking;
 using EggsSkills.Config;
+using UnityEngine.AddressableAssets;
 
 namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
 {
@@ -21,21 +22,24 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
         public override bool shouldRevertToWaitForStickOnSurfaceLost => false;
 
         //Time between pulses
-        private readonly float fixedPulseTime = 1f;
+        private static  readonly float fixedPulseTime = 1f;
         //Proc coefficient
-        private readonly float procCoeff = 1f;
+        private static readonly float procCoeff = 1f;
         //timer for handling pulses
         private float pulseTimer;
         //Ouchies radius
-        private readonly float radius = 8f * spp_radiusMult;
+        private static readonly float radius = 8f * spp_radiusMult;
 
         //Prefab for the explode fx
-        private GameObject bodyPrefab = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/JellyfishNova");
+        private GameObject bodyPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Jellyfish/JellyfishNova.prefab").WaitForCompletion();
 
         //Max amount of electric pulses
-        private int maxPulseCount = Configuration.GetConfigValue(Configuration.EngiTeslaminePulses) + spp_pulseBonus;
+        private static readonly int maxPulseCount = Configuration.GetConfigValue(Configuration.EngiTeslaminePulses) + spp_pulseBonus;
         //Counts pulses
         private int pulseCounter;
+
+        //Sound stirng
+        private static readonly string soundString = "Play_vagrant_attack2_explode";
 
         //Projectile damage component
         private ProjectileDamage projectileDamage;
@@ -99,7 +103,7 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
             //Spawn the vfx
             EffectManager.SpawnEffect(bodyPrefab, effectData, true);
             //Play the zappy sound
-            Util.PlaySound(JellyNova.novaSoundString, gameObject);
+            Util.PlaySound(soundString, gameObject);
             //Track that as a pulse
             pulseCounter += 1;
         }

@@ -3,7 +3,6 @@ using EntityStates;
 using UnityEngine;
 using RoR2.Projectile;
 using EggsSkills.Resources;
-using EntityStates.Engi.EngiWeapon;
 
 namespace EggsSkills.EntityStates
 {
@@ -11,11 +10,14 @@ namespace EggsSkills.EntityStates
     
     {
         //Basic cast time
-        private readonly float baseDelay = 0.4f;
+        private static readonly float baseDelay = 0.4f;
         //Damage coefficient
-        private readonly float damageCoefficient = 1.25f;
+        private static readonly float damageCoefficient = 1.25f;
         //Cast time
         private float delay;
+
+        //Sound string
+        private static readonly string soundString = "Play_engi_M2_throw";
 
         public override void OnEnter()
         {
@@ -27,7 +29,7 @@ namespace EggsSkills.EntityStates
             //Start aim mode
             base.StartAimMode(aimRay);
             //Play sound
-            Util.PlaySound(FireMines.throwMineSoundString, base.gameObject);
+            Util.PlaySound(soundString, base.gameObject);
             //If animator exists play the animation
             if(base.GetModelAnimator()) base.PlayCrossfade("Esture, Additive","FireMineRight","FireMine.playbackRate", delay , 0.05f);
             //And if network check, fire the projectile

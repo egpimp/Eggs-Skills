@@ -3,6 +3,7 @@ using EntityStates.Bandit2.Weapon;
 using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace EggsSkills.EntityStates
 {
@@ -12,25 +13,31 @@ namespace EggsSkills.EntityStates
         public static int spp_richochetMod = 0;
         public static float spp_bounceMod = 0f;
 
-        //We use this for referencing assets
-        private Bandit2FireRifle assetRef = new Bandit2FireRifle();
+        //sound string
+        private static readonly string soundString = "Play_bandit2_m1_rifle";
+        private static readonly string muzzleString = "MuzzleShotgun";
 
         //Whether or not it crit
         private bool isCrit;
 
         //Damage coefficient of the skill
-        private readonly float baseDamageCoef = 2f;
+        private static readonly float baseDamageCoef = 2f;
         //End damage of the ability
         private float damage;
         //Proc coefficient of the skill
-        private readonly float procCoef = 1f;
+        private static readonly float procCoef = 1f;
         //What is damage multiplied by per richochet
-        private readonly float richochetMod = 0.6f + spp_bounceMod;
+        private static readonly float richochetMod = 0.6f + spp_bounceMod;
 
         //How many richochets
-        private readonly int maxRecursion = Configuration.GetConfigValue(Configuration.BanditMagicbulletRicochets) + spp_richochetMod;
+        private static readonly int maxRecursion = Configuration.GetConfigValue(Configuration.BanditMagicbulletRicochets) + spp_richochetMod;
         //Helps us track how many more times it can bounce
         private int recursion;
+
+        //Fx
+        private GameObject tracerEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Bandit2/TracerBandit2Rifle.prefab").WaitForCompletion();
+        private GameObject hitEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Bandit2/HitsparkBandit.prefab").WaitForCompletion();
+        private GameObject muzzleEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Bandit2/MuzzleflashBandit2.prefab").WaitForCompletion();
 
         //Keeps track of enemies we already hit
         private List<HurtBox> hitHurtBoxes = new List<HurtBox>();
@@ -56,7 +63,7 @@ namespace EggsSkills.EntityStates
         public override void FireBullet(Ray aimRay)
         {
             //Play the sound
-            Util.PlaySound(assetRef.fireSoundString, gameObject);
+            Util.PlaySound(soundString, gameObject);
             //Network check
             if (base.isAuthority)
             {
@@ -67,9 +74,9 @@ namespace EggsSkills.EntityStates
                 {
                     origin = aimRay.origin,
                     aimVector = aimRay.direction,
-                    tracerEffectPrefab = assetRef.tracerEffectPrefab,
-                    muzzleName = assetRef.muzzleName,
-                    hitEffectPrefab = assetRef.hitEffectPrefab,
+                    tracerEffectPrefab = tracerEffect,
+                    muzzleName = muzzleString,
+                    hitEffectPrefab = hitEffect,
                     damage = damage,
                     owner = gameObject,
                     isCrit = isCrit,
@@ -84,7 +91,7 @@ namespace EggsSkills.EntityStates
                 attack.Fire();
             }
             //Apply the muzzleflash
-            EffectManager.SimpleMuzzleFlash(assetRef.muzzleFlashPrefab, gameObject, assetRef.muzzleName, false);
+            EffectManager.SimpleMuzzleFlash(muzzleEffect, gameObject, muzzleString, false);
         }
         
         //Event called when bullet hits anything
@@ -154,7 +161,7 @@ namespace EggsSkills.EntityStates
                 origin = box.transform.position
             };
             //Play the effect
-            EffectManager.SpawnEffect(assetRef.tracerEffectPrefab, data, true);
+            EffectManager.SpawnEffect(tracerEffect, data, true);
             //This used to be takedamage but it was unreliable lol, just explode them point blank no radius
             new BlastAttack
             {

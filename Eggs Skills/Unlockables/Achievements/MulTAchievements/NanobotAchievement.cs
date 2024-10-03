@@ -5,11 +5,12 @@ using RoR2.Achievements;
 
 namespace EggsSkills.Achievements
 {
-    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, null)]
+    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, TOKENS)]
     internal class NanoBotAchievement : BaseAchievement
     {
         internal const string ACHNAME = "ToolbotManyDrones";
         internal const string REWARDNAME = "EggsSkills.NanoBot";
+        internal const uint TOKENS = 10;
 
         //How many drones to unlock
         private static readonly int droneReq = 8;

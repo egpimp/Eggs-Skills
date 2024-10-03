@@ -1,6 +1,7 @@
 ﻿using RoR2.Orbs;
 using RoR2;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace EggsSkills.Orbs
 {
@@ -32,7 +33,7 @@ namespace EggsSkills.Orbs
         public override GameObject GetOrbEffect()
         {
             //We use the squid orb effect for this, it looks cool and does what we want
-            return LegacyResourcesAPI.Load<GameObject>("prefabs/effects/orbeffects/SquidOrbEffect");
+            return Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Squid/SquidOrbEffect.prefab").WaitForCompletion();
         }
     }
 }

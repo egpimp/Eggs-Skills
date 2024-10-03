@@ -2,57 +2,57 @@
 	"strings":
 	{
 		"ACHIEVEMENT_ES_CROCOMANYPOISONED_NAME":"Acrid: The Cure",
-		"ACHIEVEMENT_ES_CROCOMANYPOISONED_DESCRIPTION":"As Acrid, have 20 enemies poisoned or blighted at once",
+		"ACHIEVEMENT_ES_CROCOMANYPOISONED_DESCRIPTION":"As Acrid, have 20 enemies poisoned or blighted at once.",
 
-		"ACHIEVEMENT_ES_CROCOPOISONDAMAGE_NAME": "Acrid: Halitosis",
-		"ACHIEVEMENT_ES_CROCOPOISONDAMAGE_DESCRIPTION": "As Acrid, deal a total of 500,000 damage with poison or blight",
+		"ACHIEVEMENT_ES_CROCODOTDAMAGE_NAME": "Acrid: Halitosis",
+		"ACHIEVEMENT_ES_CROCODOTDAMAGE_DESCRIPTION": "As Acrid, deal a total of 500,000 damage through damage-over-time effects.",
 
 		"ACHIEVEMENT_ES_MAGEFASTMOVESPEED_NAME":"Artificer: FTL",
-		"ACHIEVEMENT_ES_MAGEFASTMOVESPEED_DESCRIPTION":"As Artificer, reach +500% movespeed",
+		"ACHIEVEMENT_ES_MAGEFASTMOVESPEED_DESCRIPTION":"As Artificer, reach +500% movespeed.",
 		
 		"ACHIEVEMENT_ES_BANDIT2LONGINVIS_NAME":"Bandit: Flanked",
-		"ACHIEVEMENT_ES_BANDIT2LONGINVIS_DESCRIPTION":"As Bandit, remain invisible for a total of 3 minutes in a run",
+		"ACHIEVEMENT_ES_BANDIT2LONGINVIS_DESCRIPTION":"As Bandit, remain invisible for a total of 3 minutes in a run.",
 		
 		"ACHIEVEMENT_ES_BANDIT2FASTKILLS_NAME":"Bandit: Hat Trick",
-		"ACHIEVEMENT_ES_BANDIT2FASTKILLS_DESCRIPTION":"As Bandit, kill 3 enemies in under 1 second",
+		"ACHIEVEMENT_ES_BANDIT2FASTKILLS_DESCRIPTION":"As Bandit, kill 3 enemies in under 1 second.",
 		
 		"ACHIEVEMENT_ES_CAPTAINSTAGENOBEACON_NAME":"Captain: My Own Backup",
-		"ACHIEVEMENT_ES_CAPTAINSTAGENOBEACON_DESCRIPTION": "As Captain, complete a stage past stage 3 without having deployed any orbital beacons",
+		"ACHIEVEMENT_ES_CAPTAINSTAGENOBEACON_DESCRIPTION": "As Captain, complete a stage past stage 3 without having deployed any orbital beacons.",
 
 		"ACHIEVEMENT_ES_CAPTAIN3MOUNTAINTELEPORTER_NAME": "Captain: Rip and Tear",
-		"ACHIEVEMENT_ES_CAPTAIN3MOUNTAINTELEPORTER_DESCRIPTION": "As Captain, survive a Teleporter event after activating 3 Shrines of the Mountain",
+		"ACHIEVEMENT_ES_CAPTAIN3MOUNTAINTELEPORTER_DESCRIPTION": "As Captain, survive a Teleporter event after activating 3 Shrines of the Mountain.",
 		
 		"ACHIEVEMENT_ES_COMMANDOFINISHTELEPORTERLOWHEALTH_NAME":"Commando: Perseverence",
-		"ACHIEVEMENT_ES_COMMANDOFINISHTELEPORTERLOWHEALTH_DESCRIPTION":"As Commando, finish a Teleporter event under 20% health",
+		"ACHIEVEMENT_ES_COMMANDOFINISHTELEPORTERLOWHEALTH_DESCRIPTION":"As Commando, finish a Teleporter event under 20% health.",
 		
 		"ACHIEVEMENT_ES_COMMANDOM1KILLS_NAME":"Commando: 65% More Bullet",
-		"ACHIEVEMENT_ES_COMMANDOM1KILLS_DESCRIPTION":"As Commando, kill 20 enemies in a row without releasing primary fire",
+		"ACHIEVEMENT_ES_COMMANDOM1KILLS_DESCRIPTION":"As Commando, kill 20 enemies in a row without releasing primary fire.",
 		
 		"ACHIEVEMENT_ES_ENGIMULTIPLEELECTRICITEMS_NAME":"Engineer: Electric Boogaloo",
-		"ACHIEVEMENT_ES_ENGIMULTIPLEELECTRICITEMS_DESCRIPTION": "As Engineer, have 4 different electric items at once",
+		"ACHIEVEMENT_ES_ENGIMULTIPLEELECTRICITEMS_DESCRIPTION": "As Engineer, have 4 different electric items at once.",
 
-		"ACHIEVEMENT_ES_ENGIKILLVAGRANTMINE_NAME": "Engineer: Wait, what?",
-		"ACHIEVEMENT_ES_ENGIKILLVAGRANTMINE_DESCRIPTION":  "As Engineer, land the killing blow on a Wandering Vagrant with a mine",
+		"ACHIEVEMENT_ES_ENGIKILLVAGRANTMINE_NAME": "Engineer: Wait, What?",
+		"ACHIEVEMENT_ES_ENGIKILLVAGRANTMINE_DESCRIPTION":  "As Engineer, land the killing blow on a Wandering Vagrant with a mine.",
 		
 		"ACHIEVEMENT_ES_HUNTRESSPRIMARYUTILITYONLY_NAME":"Huntress: Traditional",
-		"ACHIEVEMENT_ES_HUNTRESSPRIMARYUTILITYONLY_DESCRIPTION":"As Huntress, complete a teleporter event without using your secondary or special skills",
+		"ACHIEVEMENT_ES_HUNTRESSPRIMARYUTILITYONLY_DESCRIPTION":"As Huntress, complete a teleporter event without using your secondary or special skills.",
 		
 		"ACHIEVEMENT_ES_LOADERHIGHBARRIER_NAME":"Loader: Overcharged",
-		"ACHIEVEMENT_ES_LOADERHIGHBARRIER_DESCRIPTION":"As Loader, reach 95% barrier",
+		"ACHIEVEMENT_ES_LOADERHIGHBARRIER_DESCRIPTION":"As Loader, reach 95% barrier.",
 		
 		"ACHIEVEMENT_ES_MERCEXPOSEENEMIES_NAME":"Mercenary: Culled",
-		"ACHIEVEMENT_ES_MERCEXPOSEENEMIES_DESCRIPTION":"As Mercenary, strike 10 unique exposed enemies with no more than 5 seconds between each strike",
+		"ACHIEVEMENT_ES_MERCEXPOSEENEMIES_DESCRIPTION":"As Mercenary, strike 10 unique exposed enemies with no more than 5 seconds between each strike.",
 		
 		"ACHIEVEMENT_ES_TOOLBOTMANYDRONES_NAME":"MUL-T: Mothership",
-		"ACHIEVEMENT_ES_TOOLBOTMANYDRONES_DESCRIPTION":"As MUL-T, have 8 drone followers at once",
+		"ACHIEVEMENT_ES_TOOLBOTMANYDRONES_DESCRIPTION":"As MUL-T, have 8 drone followers at once.",
 		
 		"ACHIEVEMENT_ES_TREEBOTMANYCLOSEKILLS_NAME":"REX: Breathing Room",
-		"ACHIEVEMENT_ES_TREEBOTMANYCLOSEKILLS_DESCRIPTION": "As REX, kill 100 enemies in close range in a single run",
+		"ACHIEVEMENT_ES_TREEBOTMANYCLOSEKILLS_DESCRIPTION": "As REX, kill 100 enemies in close range in a single run.",
 
 		"ACHIEVEMENT_ES_RAILGUNNERHIGHCRIT_NAME": "Railgunner: Lethal Force Authorized",
-		"ACHIEVEMENT_ES_RAILGUNNERHIGHCRIT_DESCRIPTION": "As Railgunner, reach +200% bonus critical strike damage",
+		"ACHIEVEMENT_ES_RAILGUNNERHIGHCRIT_DESCRIPTION": "As Railgunner, reach +200% bonus critical strike damage.",
 
-		"ACHIEVEMENT_ES_VOIDFIENDMANYFORMCHANGE_NAME": "V??oid Fiend: V??olat?ile",
-		"ACHIEVEMENT_ES_VOIDFIENDMANYFORMCHANGE_DESCRIPTION": "As Void Fiend, change forms 6 times during a single Teleporter event"
+		"ACHIEVEMENT_ES_VOIDSURVIVORMANYFORMCHANGE_NAME": "V??oid Fiend: V??olat?ile",
+		"ACHIEVEMENT_ES_VOIDSURVIVORMANYFORMCHANGE_DESCRIPTION": "As Void Fiend, change forms 6 times during a single Teleporter event."
 	}
 }

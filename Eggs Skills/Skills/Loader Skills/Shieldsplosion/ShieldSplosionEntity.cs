@@ -5,6 +5,7 @@ using EntityStates.JellyfishMonster;
 using EggsSkills.Config;
 using EggsUtils.Helpers;
 using UnityEngine.Networking;
+using UnityEngine.AddressableAssets;
 
 namespace EggsSkills.EntityStates
 {
@@ -14,25 +15,24 @@ namespace EggsSkills.EntityStates
         internal static float spp_radiusMult = 1f;
         internal static float spp_refund = 0f;
 
-        //Should the barrier be removed on use?
-        private readonly bool shouldRemoveBarrier = Configuration.GetConfigValue(Configuration.LoaderShieldsplodeRemovebarrieronuse);
-
         //Force of the blast
-        private readonly float baseForce = 50f;
+        private static readonly float baseForce = 50f;
         //Min radius at min barrier
-        private readonly float baseRadius = Configuration.GetConfigValue(Configuration.LoaderShieldsplodeBaseradius);
+        private static readonly float baseRadius = Configuration.GetConfigValue(Configuration.LoaderShieldsplodeBaseradius);
         //Damage coefficient
-        private readonly float damageCoefficient = 20f;
+        private static readonly float damageCoefficient = 20f;
         //Max radius multiplier
-        private readonly float maxRadiusMult = 3f;
+        private static readonly float maxRadiusMult = 3f;
         //Proc coefficient
-        private readonly float procCoefficient = 1f;
+        private static readonly float procCoefficient = 1f;
 
         //FX prefab
-        private GameObject bodyPrefab = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/JellyfishNova");
+        private GameObject bodyPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Jellyfish/JellyfishNova.prefab").WaitForCompletion();
+
+        private static readonly string soundString = "Play_jellyfish_detonate";
 
         //Player health component
-        public HealthComponent component;
+        private HealthComponent component;
 
         public override void OnEnter()
         {
@@ -49,7 +49,7 @@ namespace EggsSkills.EntityStates
             //Radius is based on damage, tripled at max barrier
             float radius = baseRadius * Math.ConvertToRange(2f, damageCoefficient, 1f, maxRadiusMult, damageMod);
             //If barrier should be removed, remove it
-            if (shouldRemoveBarrier && NetworkServer.active) component.AddBarrier(-component.barrier);
+            if (NetworkServer.active) component.AddBarrier(-component.barrier);
             //Network check
             if (base.isAuthority)
             {
@@ -72,7 +72,7 @@ namespace EggsSkills.EntityStates
                 atk.Fire();
             }
             //Play the sound
-            Util.PlaySound(JellyNova.novaSoundString, base.gameObject);
+            Util.PlaySound(soundString, base.gameObject);
             //Refund barrier if spp enabled
             if (NetworkServer.active) component.AddBarrier(component.fullCombinedHealth * spp_refund);
             //Setup fx data

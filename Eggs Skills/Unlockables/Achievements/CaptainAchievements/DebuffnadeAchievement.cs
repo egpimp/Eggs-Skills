@@ -7,11 +7,12 @@ using RoR2.Achievements;
 
 namespace EggsSkills.Achievements
 {
-    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, null)]
+    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, TOKENS)]
     class DebuffnadeAchievement : BaseAchievement
     {
         internal const string ACHNAME = "CaptainStageNoBeacon";
         internal const string REWARDNAME = "EggsSkills.DebuffNade";
+        internal const uint TOKENS = 10;
 
         public override BodyIndex LookUpRequiredBodyIndex()
         {

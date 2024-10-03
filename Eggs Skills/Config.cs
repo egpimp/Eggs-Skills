@@ -72,10 +72,6 @@ namespace EggsSkills.Config
         internal static ConfigEntry<float> LoaderShieldsplodeBaseradius { get; private set; }
         internal const float defaultLoaderShieldsplodeBaseradius = 10f;
         
-        //Should barrier gone or stay
-        internal static ConfigEntry<bool> LoaderShieldsplodeRemovebarrieronuse { get; private set; }
-        internal const bool defaultLoaderShieldsplodeRemovebarrieronuse = true;
-
         //How big purge explode
         internal static ConfigEntry<float> CrocoPurgeBaseradius { get; private set; }
         internal const float defaultCrocoPurgeBaseradius = 16f;
@@ -116,6 +112,18 @@ namespace EggsSkills.Config
         internal static ConfigEntry<uint> CaptainAutoshotgunPellets { get; private set; }
         internal const uint defaultCaptainAutoshotgunPellets = 8;
 
+        //Engi micromissile salvo count
+        internal static ConfigEntry<int> EngiMicromissileSalvocount { get; private set; }
+        internal const int defaultEngiMicromissileSalvocount = 0;
+
+        //Poison Breath Angle
+        internal static ConfigEntry<float> CrocoPoisonbreathAngle { get; private set; }
+        internal const float defaultCrocoPoisonbreathAngle = 20f;
+
+        //Void fiend explosion radius
+        internal static ConfigEntry<float> VoidfiendInversionRadius { get; private set; }
+        internal const float defaultVoidfiendInversionRadius = 24f;
+
         //This is where we load up all of the config values
         internal static void LoadConfig()
         {
@@ -144,9 +152,8 @@ namespace EggsSkills.Config
             MageZapportBaseradius = configFile.Bind("ArtificerConfigs", "ZapportBaseRadius", defaultMageZapportBaseradius, "Radius of a minimum charge cast of Artificer's Quantum Transposition");
             CrocoPurgeBaseradius = configFile.Bind("AcridConfigs", "PurgeRadius", defaultCrocoPurgeBaseradius, "Radius that Acrid's Expunge will affect upon detonation");
             LoaderShieldsplodeBaseradius = configFile.Bind("LoaderConfigs", "ShieldsplodeRadius", defaultLoaderShieldsplodeBaseradius, "Radius of a minimum (10%) barrier cast of Loader's Barrier Buster");
-            LoaderShieldsplodeRemovebarrieronuse = configFile.Bind("LoaderConfigs", "ShieldsplodeRemoveBarrierOnUse", defaultLoaderShieldsplodeRemovebarrieronuse, "Should Loader's Barrier Buster remove your barrier on use");
             EngiTeslaminePulses = configFile.Bind("EngiConfigs", "TeslaminePulseCount", defaultEngiTeslaminePulses, "How many times should Engineer's Shock Mines deal damage before dissapearing");
-            CaptainDebuffnadeRadius = configFile.Bind("CaptainConfigs", "DebuffnadeRadius", defaultCaptainDebuffnadeRadius, "Radius of Captain's Tracking Grenade");
+            CaptainDebuffnadeRadius = configFile.Bind("CaptainConfigs", "DebuffnadeRadius", defaultCaptainDebuffnadeRadius, "Radius of Captain's Tracking Grenade explosion");
             MercSlashStunrange = configFile.Bind("MercConfigs", "SlashportHealthFraction", defaultMercSlashStunrange, "What is the range on merc stunning enemies with Execute");
             TreebotPullRange = configFile.Bind("REXConfigs", "PullRange", defaultTreebotPullRange, "Radius at which enemies should be affected by REX's DIRECTIVE: Respire");
             TreebotPullSpeedcap = configFile.Bind("REXConfigs", "PullSpeedCap", defaultTreebotPullSpeedcap, "Should REX's DIRECTIVE: Respire be capped in how fast it can pulse");
@@ -155,6 +162,9 @@ namespace EggsSkills.Config
             CommandoDashBuffTimer = configFile.Bind("CommandoConfigs", "DashBuffTimer", defaultCommandoDashBuffTimer, "How long should the Commando's Tactical Pursuit post-dash invulnerability last");
             RailgunnerLanceWallPen = configFile.Bind("RailgunnerConfigs", "LanceWallPenetration", defaultRailgunnerLanceWallPen, "Should Railgunner's Lancer Rounds pierce everything");
             CaptainAutoshotgunPellets = configFile.Bind("CaptainConfigs", "AutoshotgunPellets", defaultCaptainAutoshotgunPellets, "How many pellets per shot from Captain's Mercury Repeater");
+            EngiMicromissileSalvocount = configFile.Bind("EngiConfigs", "BonusMicromissileSalvoCount", defaultEngiMicromissileSalvocount, "How many extra micromissiles should be fired per turret per salvo from Engineer's Guided Salvo ability?");
+            CrocoPoisonbreathAngle = configFile.Bind("AcridConfigs", "PoisonBreathAngle", defaultCrocoPoisonbreathAngle, "What should the angle of the cone for hitting enemies for Acrid's Caustic Spray be?");
+            VoidfiendInversionRadius = configFile.Bind("VoidFiendConfigs", "ExplosionRadius", defaultVoidfiendInversionRadius, "Radius of Void Fiend's ");
             #endregion
 
             //If they fugged with the file note it

@@ -11,11 +11,13 @@ namespace EggsSkills.EntityStates
         public static float spp_damageMult = 1f;
 
         //Standard cast time
-        private readonly float baseDelay = 0.6f;
+        private static readonly float baseDelay = 0.6f;
         //Damage coefficient
-        private readonly float damageCoefficient = 2.5f * spp_damageMult;
+        private static readonly float damageCoefficient = 2.5f * spp_damageMult;
         //Post-attackspeed factoring cast time
         private float delay;
+
+        private static readonly string soundString = "Play_treeBot_R_shoot";
 
         public override void OnEnter()
         {
@@ -26,7 +28,7 @@ namespace EggsSkills.EntityStates
             //Grab aimray
             var aimRay = GetAimRay();
             //Play the firing sound
-            Util.PlaySound(FireFlower2.enterSoundString, base.gameObject);
+            Util.PlaySound(soundString, base.gameObject);
             //Play animations 
             base.PlayAnimation("Gesture, Additive", "FireCaptainShotgun");
             base.PlayAnimation("Gesture, Override", "FireCaptainShotgun");

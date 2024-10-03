@@ -4,11 +4,13 @@ using RoR2.Achievements;
 
 namespace EggsSkills.Achievements
 {
-    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, null)]
+    [RegisterAchievement("ES_" + ACHNAME, REWARDNAME, null, TOKENS)]
     internal class BarrierAchievement : BaseAchievement
     {
         internal const string ACHNAME = "LoaderHighBarrier";
         internal const string REWARDNAME = "EggsSkills.ShieldSplosion";
+        internal const uint TOKENS = 10;
+
         //What % barrier required
         private static readonly float barrierReq = 0.95f;
 

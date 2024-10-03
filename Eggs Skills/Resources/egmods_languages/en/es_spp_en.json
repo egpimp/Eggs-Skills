@@ -1,37 +1,41 @@
 {
-	"strings":
-	{
-		"ESPURGE_UPGRADE_DESCRIPTION":"<style=cIsUtility>+20%</style> radius and <style=cIsDamage>+10%</style> damage",
-		
-		"ESZAPPORT_UPGRADE_DESCRIPTION":"style=cIsUtility>+10%</style> distance and <style=cIsDamage>+20%</style> damage",
-		
-		"ESINVISSPRINT_UPGRADE_DESCRIPTION":"<style=cIsUtility>+10%</style> movement speed and <style=cIsUtility>+4m</style> radius stun on exiting stealth",
-		"ESMAGICBULLET_UPGRADE_DESCRIPTION":"<style=cIsDamage>+5%</style> damage per bounce and <style=cIsUtility>+1</style> bounce every 2 levels",
-		
-		"ESDEBUFFNADE_UPGRADE_DESCRIPTION":"<style=cIsDamage>+20%</style> damage and <style=cIsUtility>+1</style> stock per 2 levels",
-		
-		"ESCOMBATSHOTGUN_UPGRADE_DESCRIPTION":"<style=cIsUtility>+0.1</style> proc coefficient per bullet and <style=cIsUtility>+1</style> bullet per 2 levels",
-		"ESDASH_UPGRADE_DESCRIPTION":"<style=cIsDamage>+10%</style> damage buff for 2 seconds after dashing",
-		
-		"ESTESLAMINE_UPGRADE_DESCRIPTION":"<style=cIsDamage>+10%</style> damage, <style=cIsUtility>+10%</style> radius, and <style=cIsUtility>+1</style> pulses every 2 levels",
-		
-		"ESCLUSTERARROW_UPGRADE_DESCRIPTION":"<style=cIsUtility>+10%</style> explosion and bomblet damage and <style=cIsUtility>+1</style> bomblets",
-		
-		"ESSHIELDSPLOSION_UPGRADE_DESCRIPTION":"<style=cIsUtility>+10%</style> radius and <style=cIsHealing>+5%</style> max hp barrier returned",
-		
-		"ESSLASHPORT_UPGRADE_DESCRIPTION":"<style=cIsDamage>+20%</style> damage and <style=cIsUtility>+0.1</style> proc coefficient",
-		
-		"ESNANOBOTS_UPGRADE_DESCRIPTION":"<style=cIsHealing>+20%</style> healing, <style=cIsDamage>+10%</style> damage, and <style=cIsUtility>+1</style> swarm per enemy every 2 levels",
-		
-		"ESROOT_UPGRADE_DESCRIPTION":"<style=cIsUtility>+4m</style> radius and <style=cIsHealing>+10%</style> barrier gained per hit",
-		
+	"strings": {
+		"ESPURGE_UPGRADE_DESCRIPTION": "<style=cIsUtility>+20%</style> radius and <style=cIsDamage>+10%</style> damage",
+		"ESPOISONBREATH_UPGRADE_DESCRIPTION": "<style=cIsUtility>+15%</style> size and <style=cIsDamage>+10%</style> damage",
+
+		"ESZAPPORT_UPGRADE_DESCRIPTION": "style=cIsUtility>+10%</style> distance and <style=cIsDamage>+20%</style> damage",
+
+		"ESINVISSPRINT_UPGRADE_DESCRIPTION": "<style=cIsUtility>+10%</style> movement speed and <style=cIsUtility>+4m</style> radius stun on exiting stealth",
+		"ESMAGICBULLET_UPGRADE_DESCRIPTION": "<style=cIsDamage>+5%</style> damage per bounce and <style=cIsUtility>+1</style> bounce every 2 levels",
+
+		"ESAUTOSHOTGUN_UPGRADE_DESCRIPTION": "<style=cIsUtility>+0.05</style> proc coefficient per bullet and <style=cIsUtility>+1</style> bullet per 2 levels",
+		"ESDEBUFFNADE_UPGRADE_DESCRIPTION": "<style=cIsDamage>+20%</style> damage and <style=cIsUtility>+1</style> stock per 2 levels",
+
+		"ESCOMBATSHOTGUN_UPGRADE_DESCRIPTION": "<style=cIsUtility>+0.1</style> proc coefficient per bullet and <style=cIsUtility>+1</style> bullet per 2 levels",
+		"ESDASH_UPGRADE_DESCRIPTION": "<style=cIsDamage>+10%</style> damage buff for 2 seconds after dashing",
+
+		"ESTESLAMINE_UPGRADE_DESCRIPTION": "<style=cIsDamage>+10%</style> damage, <style=cIsUtility>+10%</style> radius, and <style=cIsUtility>+1</style> pulses every 2 levels",
+		"ESMICROMISSILES_UPGRADE_DESCRIPTION": "<style=cIsDamage>+10%</style> total damage and <style=cIsUtility>+10%</style> explosion radius",
+
+		"ESCLUSTERARROW_UPGRADE_DESCRIPTION": "<style=cIsUtility>+10%</style> explosion and bomblet damage and <style=cIsUtility>+1</style> bomblets",
+
+		"ESSHIELDSPLOSION_UPGRADE_DESCRIPTION": "<style=cIsUtility>+10%</style> radius and <style=cIsHealing>+5%</style> max hp barrier returned",
+
+		"ESSLASHPORT_UPGRADE_DESCRIPTION": "<style=cIsDamage>+20%</style> damage and <style=cIsUtility>+0.1</style> proc coefficient",
+
+		"ESNANOBOTS_UPGRADE_DESCRIPTION": "<style=cIsHealing>+20%</style> healing, <style=cIsDamage>+10%</style> damage, and <style=cIsUtility>+1</style> swarm per enemy every 2 levels",
+
+		"ESROOT_UPGRADE_DESCRIPTION": "<style=cIsUtility>+4m</style> radius and <style=cIsHealing>+10%</style> barrier gained per hit",
+
 		"ESLANCEROUNDS_UPGRADE_DESCRIPTION": "<style=cIsDamage>+15%</style> damage and <style=cIsUtility>+0.1</style> proc coefficient",
-		
-		
-		"ESPURGE_UG_UPGRADE_DESCRIPTION":"<style=cIsUtility>+20%</style> radius and <style=cIsDamage>+10%</style> damage",
-		
-		"ESROOT_UG_UPGRADE_DESCRIPTION":"<style=cIsUtility>+4m</style> radius and <style=cIsHealing>+10%</style> barrier gained per hit",
-		
-		"ESSLASHPORT_UG_UPGRADE_DESCRIPTION":"<style=cIsDamage>+20%</style> damage and <style=cIsUtility>+0.1</style> proc coefficient"
+
+		"ESINVERSION_UPGRADE_DESCRIPTION": "<style=cIsDamage>+15%</style> damage and <style=cIsUtility>+4m</style>radius",
+
+
+		"ESPURGE_UG_UPGRADE_DESCRIPTION": "<style=cIsUtility>+20%</style> radius and <style=cIsDamage>+10%</style> damage",
+
+		"ESROOT_UG_UPGRADE_DESCRIPTION": "<style=cIsUtility>+4m</style> radius and <style=cIsHealing>+10%</style> barrier gained per hit",
+
+		"ESSLASHPORT_UG_UPGRADE_DESCRIPTION": "<style=cIsDamage>+20%</style> damage and <style=cIsUtility>+0.1</style> proc coefficient"
 	}
 }

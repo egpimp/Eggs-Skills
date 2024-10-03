@@ -2,28 +2,30 @@
 using UnityEngine;
 using RoR2;
 using EntityStates.VagrantMonster;
+using UnityEngine.AddressableAssets;
 
 namespace EggsSkills.EntityStates
 {
     class ZapportFireEntity : BaseSkillState
     {
         //Force of the explosion
-        private readonly float baseForce = 100f;
+        private static readonly float baseForce = 100f;
         //Damage multiplier
         internal float damageMult;
         //Proc coefficient of the skill
-        private readonly float procCoef = 1f;
+        private static readonly float procCoef = 1f;
         //Radius of the explosion
         internal float radius;
 
         //Explosion fx
-        private GameObject explosionPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/effects/MageLightningBombExplosion");
+        private GameObject explosionPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Junk/Mage/MageLightningBombExplosion.prefab").WaitForCompletion();
         //Muzzle fx
-        private GameObject muzzlePrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/effects/muzzleflashes/MuzzleflashMageLightningLarge");
+        private GameObject muzzlePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Mage/MuzzleflashMageLightningLarge.prefab").WaitForCompletion();
 
         //Strings for the hand 'muzzle' positions
-        private readonly string rMuzzleString = "MuzzleRight";
-        private readonly string lMuzzleString = "MuzzleLeft";
+        private static readonly string rMuzzleString = "MuzzleRight";
+        private static readonly string lMuzzleString = "MuzzleLeft";
+        private static readonly string soundString = "Play_vagrant_R_explode";
 
         //Where the artificer go
         internal Vector3 movePos;
@@ -37,7 +39,7 @@ namespace EggsSkills.EntityStates
             //Play the animation
             base.PlayAnimation("Gesture, Additive", "FireWall");
             //Play the splodey sound
-            Util.PlaySound(FireMegaNova.novaSoundString, base.gameObject);
+            Util.PlaySound(soundString, base.gameObject);
             //Play both muzzle flashes
             EffectManager.SimpleMuzzleFlash(muzzlePrefab, base.gameObject, lMuzzleString, false);
             EffectManager.SimpleMuzzleFlash(muzzlePrefab, base.gameObject, rMuzzleString, false);

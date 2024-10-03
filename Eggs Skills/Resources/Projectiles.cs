@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using EggsSkills.EntityStates.TeslaMine.MineStates.MainStates;
 using EggsSkills.EntityStates.TeslaMine.MineStates.ArmingStates;
-using R2API;
 using static R2API.ContentAddition;
 using EggsUtils.Buffs;
 using System.Linq;
@@ -10,6 +9,9 @@ using EggsSkills.Config;
 using RoR2;
 using RoR2.Projectile;
 using EntityStates;
+using UnityEngine.AddressableAssets;
+using RoR2.Audio;
+using R2API;
 
 namespace EggsSkills.Resources
 {
@@ -26,6 +28,10 @@ namespace EggsSkills.Resources
         internal static GameObject nanoBeaconPrefab;
         //Prefab for engi tesla mine
         internal static GameObject teslaMinePrefab;
+        //Prefab for engi micromissile marker
+        internal static GameObject micromissileMarkerPrefab;
+        //Prefab for engi micromissiles
+        internal static GameObject micromissilePrefab;
 
         //Main method for adding projectiles to the game
         internal static void RegisterProjectiles()
@@ -35,6 +41,8 @@ namespace EggsSkills.Resources
             {
                 //Register the tesla mine
                 try { RegisterTeslaMine(); } catch { Log.LogError("Error loading Tesla Mine projectile"); }
+                //Register micromissile marker (Thing the missiles follow)
+                try { RegisterMicromissileProjectiles(); } catch { Log.LogError("Error loading Micromissile projectiles"); }
             }
             if (Configuration.GetConfigValue(Configuration.EnableCaptainSkills))
             {
@@ -76,7 +84,7 @@ namespace EggsSkills.Resources
         internal static void RegisterTeslaMine()
         {
             //Start with the base engi mine
-            teslaMinePrefab = LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/engimine").InstantiateClone("TeslaMine", true);
+            teslaMinePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiMine.prefab").WaitForCompletion().InstantiateClone("TeslaMine", true);
             //If it exists (AKA if shit no break)
             if (teslaMinePrefab)
             {
@@ -100,11 +108,77 @@ namespace EggsSkills.Resources
                 projList.Add(teslaMinePrefab);
             }
         }
+        //Adds micromissile marker to the projectile register list
+        internal static void RegisterMicromissileProjectiles()
+        {
+            //Use the railgunner thing because built in steering 
+            micromissileMarkerPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/Railgunner/RailgunnerPistolProjectile.prefab").WaitForCompletion().InstantiateClone("MissileMarker", true);
+            //If it exists
+            if(micromissileMarkerPrefab)
+            {
+                //Very slight tracking
+                ProjectileSteerTowardTarget steerComponent = micromissileMarkerPrefab.GetComponent<ProjectileSteerTowardTarget>();
+                steerComponent.rotationSpeed = 90f;
+                //Make it track only when close to a target
+                ProjectileDirectionalTargetFinder targetFinderComponent = micromissileMarkerPrefab.GetComponent<ProjectileDirectionalTargetFinder>();
+                targetFinderComponent.allowTargetLoss = true;
+                targetFinderComponent.lookRange = 30f;
+                targetFinderComponent.lookCone = 20f;
+                targetFinderComponent.onlySearchIfNoTarget = false;
+                targetFinderComponent.targetSearchInterval = 0.2f;
+                targetFinderComponent.ignoreAir = false;
+                targetFinderComponent.flierAltitudeTolerance = float.PositiveInfinity;
+                //Last longer and move slower
+                ProjectileSimple simpleComponent = micromissileMarkerPrefab.GetComponent<ProjectileSimple>();
+                simpleComponent.lifetime = 3f;
+                simpleComponent.desiredForwardSpeed = 35f;
+                //Make it stay after hit
+                ProjectileSingleTargetImpact impactComponent = micromissileMarkerPrefab.GetComponent<ProjectileSingleTargetImpact>();
+                impactComponent.destroyWhenNotAlive = false;
+                impactComponent.destroyOnWorld = false;
+                //Also cause it to stick to whatever
+                ProjectileStickOnImpact stickComponent = micromissileMarkerPrefab.AddComponent<ProjectileStickOnImpact>();
+                stickComponent.ignoreWorld = false;
+                //Add our own component
+                micromissileMarkerPrefab.AddComponent<MicroMissileLauncher>();
+                //Add to list
+                projList.Add(micromissileMarkerPrefab);
+            }
+            //Next the actual missiles
+            micromissilePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Junk/Engi/EngiSeekerGrenadeProjectile.prefab").WaitForCompletion().InstantiateClone("MicroMissile");
+            if(micromissilePrefab)
+            {
+                micromissilePrefab.transform.localScale = micromissileMarkerPrefab.transform.localScale / 4;
+                ProjectileController controller = micromissilePrefab.GetComponent<ProjectileController>();
+                controller.flightSoundLoop = ScriptableObject.CreateInstance<LoopSoundDef>();
+                controller.flightSoundLoop.startSoundName = "Play_item_proc_missile_fly_loop";
+                controller.flightSoundLoop.stopSoundName = "Stop_item_proc_missile_fly_loop";
+                //Make it track what it should
+                micromissilePrefab.AddComponent<MicroMissileDelayedImpact>();
+                //Impact explosion
+                ProjectileImpactExplosion impactExplosionComponent = micromissilePrefab.AddComponent<ProjectileImpactExplosion>();
+                impactExplosionComponent.lifetime = 2.4f;
+                impactExplosionComponent.destroyOnEnemy = false;
+                impactExplosionComponent.destroyOnWorld = false;
+                impactExplosionComponent.blastDamageCoefficient = 0.15f;
+                impactExplosionComponent.blastRadius = 5f;
+                impactExplosionComponent.blastProcCoefficient = 0.7f;
+                impactExplosionComponent.falloffModel = BlastAttack.FalloffModel.None;
+                impactExplosionComponent.explosionEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiHarpoonExplosion.prefab").WaitForCompletion();
+                //Missile component
+                MissileController missileComponent = micromissilePrefab.GetComponent<MissileController>();
+                missileComponent.maxSeekDistance = 0f;
+                missileComponent.acceleration = 15f;
+                missileComponent.turbulence = 8f;
+                //Add to list
+                projList.Add(micromissilePrefab);
+            }
+        }
         //Adds tracking grenade to projectile register list
         internal static void RegisterDebuffNade()
         {
             //Start with base engi grenade cause it has a nice grenade shape
-            debuffGrenadePrefab = LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/engigrenadeprojectile").InstantiateClone("DebuffGrenade", true);
+            debuffGrenadePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiGrenadeProjectile.prefab").WaitForCompletion().InstantiateClone("DebuffGrenade", true);
             //As long as it actually exists we can do stuff with it
             if (debuffGrenadePrefab)
             {
@@ -122,7 +196,7 @@ namespace EggsSkills.Resources
                 //Implement our own proc coefficient-to-damage-type stuff
                 debuffGrenadeExplosion.blastProcCoefficient = BuffsLoading.ProcToDamageTypeEncoder(BuffsLoading.trackingOnHit.procIndex, 1f);
                 //Change the explosion fx to something cooler as well
-                debuffGrenadeExplosion.impactEffect = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFXScavCannonImpactExplosion");
+                debuffGrenadeExplosion.impactEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Scav/OmniExplosionVFXScavCannonImpactExplosion.prefab").WaitForCompletion();
 
                 //Nab the damage component of it
                 ProjectileDamage debuffGrenadeDamage = debuffGrenadePrefab.GetComponent<ProjectileDamage>();
@@ -137,7 +211,7 @@ namespace EggsSkills.Resources
         internal static void RegisterNanoBeacon()
         {
             //Nab the projectile that's usually used for MUL-T scrap launcher
-            nanoBeaconPrefab = LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/toolbotgrenadelauncherprojectile").InstantiateClone("NanoBeacon", true);
+            nanoBeaconPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Toolbot/ToolbotGrenadeLauncherProjectile.prefab").WaitForCompletion().InstantiateClone("NanoBeacon", true);
             //Ofc check if it actually exists
             if (nanoBeaconPrefab)
             {
@@ -192,7 +266,7 @@ namespace EggsSkills.Resources
         internal static void RegisterArrowBomblet()
         {
             //As usual grab the prefab we want to base it off of
-            bombletPrefab = LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/engigrenadeprojectile").InstantiateClone("ClusterBomblets", true);
+            bombletPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiGrenadeProjectile.prefab").WaitForCompletion().InstantiateClone("ClusterBomblets", true);
             //If it exists
             if (bombletPrefab)
             {
@@ -210,7 +284,7 @@ namespace EggsSkills.Resources
                 //Reduce the proc coeff a bit for the sake of not making it busted
                 bombletExplosion.blastProcCoefficient = 0.6f;
                 //Make it a cooler kersplodey fx
-                bombletExplosion.impactEffect = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFXCommandoGrenade");
+                bombletExplosion.impactEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/OmniExplosionVFXCommandoGrenade.prefab").WaitForCompletion();
                 //We want it to blow up on world only, if it's on enemy it just instantly all explodes which is no fun
                 bombletExplosion.destroyOnWorld = true;
                 bombletExplosion.destroyOnEnemy = false;

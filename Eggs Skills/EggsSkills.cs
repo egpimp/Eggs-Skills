@@ -10,6 +10,7 @@ using static EggsSkills.Config.Configuration;
 using EggsSkills.Properties;
 using static EggsSkills.SkillsLoader;
 using R2API.Utils;
+using EggsUtils.Properties;
 
 [module: UnverifiableCode]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -26,7 +27,6 @@ namespace EggsSkills
     [BepInDependency(CLASSICITEMS_NAME, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(STANDALONESCEPTER_NAME, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(PLASMACORESPIKESTRIP_NAME, BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency(BETTERUI_NAME, BepInDependency.DependencyFlags.SoftDependency)]
     //My mod
     [BepInPlugin(MODNAME, MODTITLE, MODVERS)]
     internal class EggsSkills : BaseUnityPlugin
@@ -34,7 +34,7 @@ namespace EggsSkills
         //Mod focused stuff / strings
         public const string MODNAME = "com.Egg.EggsSkills";
         public const string MODTITLE = "Eggs Skills";
-        public const string MODVERS = "2.4.0";
+        public const string MODVERS = "2.4.5";
         //Hard dependancy strings
         public const string API_NAME = "com.bepis.r2api";
         //Soft dependancy strings
@@ -43,13 +43,11 @@ namespace EggsSkills
         public const string CLASSICITEMS_NAME = "com.ThinkInvisible.ClassicItems";
         public const string STANDALONESCEPTER_NAME = "com.DestroyedClone.AncientScepter";
         public const string PLASMACORESPIKESTRIP_NAME = "com.plasmacore.PlasmaCoreSpikestripContent";
-        public const string BETTERUI_NAME = "com.xoxfaby.BetterUI";
 
         public static bool skillsPlusLoaded = false;
         public static bool classicItemsLoaded = false;
         public static bool standaloneScepterLoaded = false;
         public static bool plasmacoreSpikestripLoaded = false;
-        public static bool betterUILoaded = false;
 
         private void Awake()
         {
@@ -64,18 +62,14 @@ namespace EggsSkills
             standaloneScepterLoaded = Chainloader.PluginInfos.ContainsKey(STANDALONESCEPTER_NAME);
             //Deeprot specifically is all we need from here
             plasmacoreSpikestripLoaded = Chainloader.PluginInfos.ContainsKey(PLASMACORESPIKESTRIP_NAME);
-            //Fancy new BetterUI compat
-            betterUILoaded = Chainloader.PluginInfos.ContainsKey(BETTERUI_NAME);
             #endregion
             #region Assets loading
-            //Thank SOM for being a poggers
-            Log.LogMessage("Thanks SOM for the icon work <3");
             //Autosprint
             AutosprintAgonyEngage();
             //Load up the config file
             LoadConfig();
             //Load up all the resources
-            Assets.LoadResources();
+            SkillsAssets.LoadResources();
             #endregion
             #region Skills stuff
             //Load up achievements and unlockables before skills

@@ -5,20 +5,34 @@ using SkillsPlusPlus.Modifiers;
 using EggsUtils.Buffs;
 using EggsSkills.EntityStates.TeslaMine.MineStates.MainStates;
 using UnityEngine.Networking;
+using EggsSkills.Skills.Engi_Skills.MicroMissiles;
 
 namespace EggsSkills.SkillModifiers
 {
     #region Skills
     [SkillLevelModifier("ESPurge", typeof(AcridPurgeEntityUpgrade))]
-    class AcridPurgeModifier : SimpleSkillModifier<AcridPurgeEntityUpgrade>
+    class AcridPurgeModifier : SimpleSkillModifier<AcridPurgeEntity>
     {
         public override void OnSkillLeveledUp(int level, CharacterBody characterBody, SkillDef skillDef)
         {
             base.OnSkillLeveledUp(level, characterBody, skillDef);
             //+20% radius per level
-            AcridPurgeEntityUpgrade.spp_radiusMult = 1 + level * 0.2f;
+            AcridPurgeEntity.spp_radiusMult = 1 + level * 0.2f;
             //+10% damage per level
-            AcridPurgeEntityUpgrade.spp_damageMult = 1 + level * 0.1f;
+            AcridPurgeEntity.spp_damageMult = 1 + level * 0.1f;
+        }
+    }
+
+    [SkillLevelModifier("ESPoisonBreath", typeof(AcridPurgeEntityUpgrade))]
+    class AcridPoisonBreathModifier : SimpleSkillModifier<PoisonBreath>
+    {
+        public override void OnSkillLeveledUp(int level, CharacterBody characterBody, SkillDef skillDef)
+        {
+            base.OnSkillLeveledUp(level, characterBody, skillDef);
+            //+20% radius per level
+            PoisonBreath.spp_sizeMultiplier = 1 + level * 0.15f;
+            //+10% damage per level
+            PoisonBreath.spp_damageMult = 1 + level * 0.1f;
         }
     }
 
@@ -62,6 +76,19 @@ namespace EggsSkills.SkillModifiers
             MagicBulletEntity.spp_bounceMod = level * 0.05f;
             //+1 bounce per 2 levels
             MagicBulletEntity.spp_richochetMod = level / 2;
+        }
+    }
+
+    [SkillLevelModifier("ESAutoShotgun", typeof(CaptainAutoShotgunEntity))]
+    class CaptainAutoShotgunModifier : SimpleSkillModifier<CaptainAutoShotgunEntity>
+    {
+        public override void OnSkillLeveledUp(int level, CharacterBody characterBody, SkillDef skillDef)
+        {
+            base.OnSkillLeveledUp(level, characterBody, skillDef);
+            //+0.05 proc chance per level
+            CaptainAutoShotgunEntity.spp_procMod = level * 0.05f;
+            //+1 Bullet per 2 levels
+            CaptainAutoShotgunEntity.spp_bulletMod = (uint)level / 2;
         }
     }
 
@@ -117,6 +144,20 @@ namespace EggsSkills.SkillModifiers
             TeslaDetonateState.spp_damageMult = 1 + level * 0.1f;
             //+1 pulse
             TeslaDetonateState.spp_pulseBonus = level / 2;
+        }
+    }
+
+    [SkillLevelModifier("ESMicroMissiles", typeof(MicroMissileEntity), typeof(MicroMissileDelayedImpact))]
+    class EngiMicroMissileModifier : SimpleSkillModifier<MicroMissileEntity>
+    {
+        public override void OnSkillLeveledUp(int level, CharacterBody characterBody, SkillDef skillDef)
+        {
+            base.OnSkillLeveledUp(level, characterBody, skillDef);
+            //+10% radius
+            MicroMissileDelayedImpact.spp_radiusMult = 1 + level * 0.1f;
+            //+10% damage
+            MicroMissileEntity.spp_damageMult = 1 + level * 0.1f;
+
         }
     }
 
@@ -201,6 +242,20 @@ namespace EggsSkills.SkillModifiers
 
         }
     }
+
+    [SkillLevelModifier("ESInversion", typeof(InversionBase))]
+    class VoidFiendInversionModifier : SimpleSkillModifier<InversionBase>
+    {
+        public override void OnSkillLeveledUp(int level, CharacterBody characterBody, SkillDef skillDef)
+        {
+            base.OnSkillLeveledUp(level, characterBody, skillDef);
+            //+15% damage
+            InversionBase.spp_damageMult = 1 + level * 0.15f;
+            //+4m radius
+            InversionBase.spp_radiusBonus = level * 4f;            
+        }
+    }
+
     #endregion
 
     #region Scepter Skills

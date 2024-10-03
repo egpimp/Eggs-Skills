@@ -4,6 +4,7 @@ using RoR2;
 using RoR2.Projectile;
 using EggsSkills.Config;
 using System;
+using UnityEngine.AddressableAssets;
 
 namespace EggsSkills.Orbs
 {
@@ -14,16 +15,16 @@ namespace EggsSkills.Orbs
         public int spp_orbBombletBonus;
 
         //Bomblet damage
-        private readonly float bombletDamageCoef = 0.8f;
+        private static readonly float bombletDamageCoef = 0.8f;
         //Explosion Damage
-        private readonly float damageCoef = 5f;
+        private static readonly float damageCoef = 5f;
         //Proc coefficient
-        private readonly float procCoeff = 1f;
+        private static readonly float procCoeff = 1f;
         //Explosion radius
-        private readonly float radius = 12f;
+        private static readonly float radius = 12f;
 
         //Explosion effect
-        private GameObject effectPrefab = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFXScavCannonImpactExplosion");
+        private GameObject effectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Scav/OmniExplosionVFXScavCannonImpactExplosion.prefab").WaitForCompletion();
         
         //Number of bomblets
         private readonly int bombletCount = Configuration.GetConfigValue(Configuration.HuntressArrowBomblets);
@@ -45,7 +46,7 @@ namespace EggsSkills.Orbs
         public override GameObject GetOrbEffect()
         {
             //The orb effect is basically just existing arrow orb
-            return LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/OrbEffects/ArrowOrbEffect");
+            return Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Huntress/ArrowOrbEffect.prefab").WaitForCompletion();
         }
         private void FireBomblets()
         {
