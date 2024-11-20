@@ -14,7 +14,7 @@ namespace EggsSkills.Achievements
 
         //How many kills req to meet
         private static readonly int killsReq = 20;
-
+            
         public override BodyIndex LookUpRequiredBodyIndex()
         {
             return BodyCatalog.FindBodyIndex(SkillsLoader.commandoRef);
@@ -43,10 +43,10 @@ namespace EggsSkills.Achievements
             orig(self, damageReport);
             //If not commando or not alive, return
             if (!base.meetsBodyRequirement || !base.isUserAlive) return;
-            //If attacker doesn't exist, return
-            if (!damageReport.attacker) return;
+            //If attackerbody doesn't exist, return
+            if (!damageReport.attackerBody) return;
             //If the netid exists and matches this user continue
-            if (damageReport.attacker.GetComponent<CharacterBody>().master.netId == null || damageReport.attacker.GetComponent<CharacterBody>().master.netId != base.localUser.cachedMasterController.master.netId) return;
+            if (damageReport.attackerBody.master.netId == null || damageReport.attackerBody.master.netId != base.localUser.cachedMasterController.master.netId) return;
             //Kill go up when kill
             killCounter++;
             //If met then grant

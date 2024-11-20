@@ -34,7 +34,7 @@ namespace EggsSkills
         //Mod focused stuff / strings
         public const string MODNAME = "com.Egg.EggsSkills";
         public const string MODTITLE = "Eggs Skills";
-        public const string MODVERS = "2.4.5";
+        public const string MODVERS = "2.4.6";
         //Hard dependancy strings
         public const string API_NAME = "com.bepis.r2api";
         //Soft dependancy strings
