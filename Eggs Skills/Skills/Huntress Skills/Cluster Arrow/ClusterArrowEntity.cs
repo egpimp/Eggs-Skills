@@ -107,7 +107,6 @@ namespace EggsSkills.EntityStates
                 //Apply the muzzle flash effect
                 EffectManager.SimpleMuzzleFlash(muzzleEffect, base.gameObject, muzzleString, false);
                 //Set the origin to the muzzle position
-                Log.LogError(muzzle);
                 genericDamageOrb.origin = muzzle.position;
                 //Set the target of the orb to the target we found
                 genericDamageOrb.target = target;

@@ -15,7 +15,7 @@ namespace EggsSkills.Achievements
 
         public override BodyIndex LookUpRequiredBodyIndex()
         {
-            return base.LookUpRequiredBodyIndex();
+            return BodyCatalog.FindBodyIndex(SkillsLoader.captainRef);
         }
 
         public override void OnInstall()
@@ -33,10 +33,9 @@ namespace EggsSkills.Achievements
 
         private void ShrineCheck(TeleporterInteraction interaction)
         {
-            if(base.isUserAlive && base.localUser.cachedBody && base.meetsBodyRequirement && interaction && interaction.shrineBonusStacks >= shrineCount)
-            {
-                base.Grant();
-            }
+            if (!base.isUserAlive) return;
+            if (!base.meetsBodyRequirement) return;
+            if (interaction && interaction.shrineBonusStacks >= shrineCount) base.Grant();
         }
     }
 }

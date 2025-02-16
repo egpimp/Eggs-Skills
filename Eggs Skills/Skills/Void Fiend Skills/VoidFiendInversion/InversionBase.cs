@@ -28,7 +28,7 @@ namespace EggsSkills.EntityStates
         private static readonly float procCoef = 1f;
         private static readonly float healFraction = 0.25f;
         protected float corruptionChange;
-        private static readonly float baseForce = 3500f;
+        private static readonly float baseForce = 3800f;
         protected float forceMultiplier;
 
         //Sound string

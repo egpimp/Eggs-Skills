@@ -1,0 +1,42 @@
+{
+	"strings": {
+		"ESPURGE_UPGRADE_DESCRIPTION": "<style=cIsUtility>+20%</style> de alcance e <style=cIsDamage>+10%</style> de dano bônus",
+		"ESPOISONBREATH_UPGRADE_DESCRIPTION": "<style=cIsUtility>+15%</style> de tamanho e <style=cIsDamage>+10%</style> de dano bônus",
+
+		"ESZAPPORT_UPGRADE_DESCRIPTION": "style=cIsUtility>+10%</style> de distância e <style=cIsDamage>+20%</style> de dano bônus",
+
+		"ESINVISSPRINT_UPGRADE_DESCRIPTION": "<style=cIsUtility>+10%</style> de velocidade de movimento e <style=cIsUtility>+4m</style> de alcance atordoador ao sair da invisibilidade",
+		"ESMAGICBULLET_UPGRADE_DESCRIPTION": "<style=cIsDamage>+5%</style> de dano por ricochete e <style=cIsUtility>+1</style> ricochete a cada 2 níveis",
+
+		"ESAUTOSHOTGUN_UPGRADE_DESCRIPTION": "<style=cIsUtility>+0.05</style> coeficiente de proc por bala e <style=cIsUtility>+1</style> bala a cada 2 níveis",
+		"ESDEBUFFNADE_UPGRADE_DESCRIPTION": "<style=cIsDamage>+20%</style> de dano e <style=cIsUtility>+1</style> carga a cada 2 níveis",
+
+		"ESCOMBATSHOTGUN_UPGRADE_DESCRIPTION": "<style=cIsUtility>+0.1</style> coeficiente de proc por bala e <style=cIsUtility>+1</style> bala a cada 2 níveis",
+		"ESDASH_UPGRADE_DESCRIPTION": "<style=cIsDamage>+10%</style> de buff de dano por 2 segundos após avançar",
+
+		"ESTESLAMINE_UPGRADE_DESCRIPTION": "<style=cIsDamage>+10%</style> de dano, <style=cIsUtility>+10%</style> de alcance, e <style=cIsUtility>+1</style> pulso a cada dois níveis",
+		"ESMICROMISSILES_UPGRADE_DESCRIPTION": "<style=cIsDamage>+10%</style> de dano total e <style=cIsUtility>+10%</style> de alcance de explosão",
+
+		"ESCLUSTERARROW_UPGRADE_DESCRIPTION": "<style=cIsUtility>+10%</style> de dano na explosão primária/biribinha e <style=cIsUtility>+1</style> biribinha",
+
+		"ESSHIELDSPLOSION_UPGRADE_DESCRIPTION": "<style=cIsUtility>+10%</style> alcance e <style=cIsHealing>+5%</style> de vida máxima para barreira retornada",
+
+		"ESSLASHPORT_UPGRADE_DESCRIPTION": "<style=cIsDamage>+20%</style> de dano e <style=cIsUtility>+0.1</style> coeficiente de proc",
+
+		"ESNANOBOTS_UPGRADE_DESCRIPTION": "<style=cIsHealing>+20%</style> de cura extra, <style=cIsDamage>+10%</style> de dano, e <style=cIsUtility>+1</style> enxame por inimigo a cada 2 níveis",
+
+		"ESROOT_UPGRADE_DESCRIPTION": "<style=cIsUtility>+4m</style> de alcance e <style=cIsHealing>+10%</style> de barreira gerada por acerto",
+
+		"ESLANCEROUNDS_UPGRADE_DESCRIPTION": "<style=cIsDamage>+15%</style> damage and <style=cIsUtility>+0.1</style> proc coefficient",
+
+		"ESINVERSION_UPGRADE_DESCRIPTION": "<style=cIsDamage>+15%</style> damage and <style=cIsUtility>+4m</style>radius",
+
+
+		"ESPURGE_UG_UPGRADE_DESCRIPTION": "<style=cIsUtility>+20%</style> radius and <style=cIsDamage>+10%</style> damage",
+
+		"ESROOT_UG_UPGRADE_DESCRIPTION": "<style=cIsUtility>+4m</style> radius and <style=cIsHealing>+10%</style> barrier gained per hit",
+
+		"ESSLASHPORT_UG_UPGRADE_DESCRIPTION": "<style=cIsDamage>+20%</style> de dano e <style=cIsUtility>+0.1</style> coeficiente de proc"
+	}
+}
+// :3

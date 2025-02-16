@@ -1,0 +1,60 @@
+{
+	"strings": {
+		"ES_CROCO_PRIMARY_POISONBREATH_NAME": "Borrifo Cáustico",
+		"ES_CROCO_PRIMARY_POISONBREATH_DESCRIPTION": "<style=cIsHealing>Venenoso.</style> Borrifa uma névoa cáustica a sua frente, causando<style=cIsDamage>50% de dano </style> por segundo, <style=cIsDamage>com dobro</style> de dano contra inimigos<style=cIsHealing>envenenados</style> ou <style=cIsDamage>praguejados</style>.",
+
+		"ES_CROCO_SPECIAL_PURGE_NAME": "Expurgo",
+		"ES_CROCO_SPECIAL_PURGE_DESCRIPTION": "Causa dano a todos os inimigos <style=cIsHealing>envenenados</style> ou <style=cIsDamage>praguejados</style> no alcance, causando <style=cIsHealing>200% de dano + 10% da vida máxima</style> ou <style=cIsDamage>300% de dano por carga</style> em uma área ao redor dos mesmos, dependendo da <style=cIsUtility>seleção de passiva</style>.",
+
+		"ES_MAGE_UTILITY_ZAPPORT_NAME": "Transposição Quântica",
+		"ES_MAGE_UTILITY_ZAPPORT_DESCRIPTION": "<style=cIsDamage>Atordoador. Sobrecarga.</style> Avança para <style=cIsUtility>teleportar</style> a frente, causando <style=cIsDamage>250%-1000% de dano </style> a inimigos no alcance selecionado.",
+
+		"ES_BANDIT2_UTILITY_INVISSPRINT_NAME": "Refrator Cinético",
+		"ES_BANDIT2_UTILITY_INVISSPRINT_DESCRIPTION": "Passivamente fique <style=cIsUtility>invisível enquanto corre</style>.  Ganha uma explosão de <style=cIsUtility>velocidade de movimento e acreção de dano</style> após sair da <style=cIsUtility>invisibilidade</style>.",
+
+		"ES_BANDIT2_PRIMARY_MAGICBULLET_NAME": "Ressaltar",
+		"ES_BANDIT2_PRIMARY_MAGICBULLET_DESCRIPTION": "Atira um projétil que causa <style=cIsDamage>200% de dano</style>, e <style=cIsUtility>ricocheteia</style> para um inimigo por perto por <style=cIsDamage>60% do dano primário</style>.",
+
+		"ES_CAPTAIN_PRIMARY_AUTOSHOTGUN_NAME": "Repetidor de Mercúrio",
+		"ES_CAPTAIN_PRIMARY_AUTOSHOTGUN_DESCRIPTION": "Atira uma explosão de projéteis que causa <style=cIsDamage>8x100% de dano</style>.  <style=cIsUtility>Velocidade de ataque</style> aumenta enquanto contínuo ataque.",
+
+		"ES_CAPTAIN_SECONDARY_DEBUFFNADE_NAME": "Granada de Rastreamento MK-4",
+		"ES_CAPTAIN_SECONDARY_DEBUFFNADE_DESCRIPTION": "Joga uma granada que causa <style=cIsDamage>250% de dano</style> e inflinge <style=cArtifact>no encalço</style> em inimigos em uma área grande por <style=cIsDamage>5 segundos</style>.",
+
+		"ES_COMMANDO_PRIMARY_COMBATSHOTGUN_NAME": "Cartuchos Flechette",
+		"ES_COMMANDO_PRIMARY_COMBATSHOTGUN_DESCRIPTION": "Atira balas flechette, causando <style=cIsDamage>6x60% de dano</style> em uma área mais abrangente, mas curta.  <style=cIsUtility>Disperção</style> decai com <style=cIsDamage>dano crítico</style>.",
+
+		"ES_COMMANDO_UTILITY_DASH_NAME": "Perseguição Tática",
+		"ES_COMMANDO_UTILITY_DASH_DESCRIPTION": "<style=cIsUtility>Preparo: Secundária. Ágil. Avança</style> uma distância curta e ganha <style=cIsDamage>invulnerabilidade</style> durante e por um momento breve após.",
+
+		"ES_ENGI_PRIMARY_MICROMISSILES_NAME": "Salva Guiada",
+		"ES_ENGI_PRIMARY_MICROMISSILES_DESCRIPTION": "Atira um projétil que causa <style=cIsDamage>20% de dano</style> no impacto. <style=cIsDamage>4 Micromísseis rapidamente seguem para causar 15% de dano cada</style>. <style=cIsUtility>Torretas por perto</style> também liberam <style=cIsDamage>2 micromísseis cada</style>.",
+
+		"ES_ENGI_SECONDARY_TESLAMINE_NAME": "Mina de Choque T-3514",
+		"ES_ENGI_SECONDARY_TESLAMINE_DESCRIPTION": "<style=cIsDamage>Atordoador.</style> Planta uma mina de choque que, ao detonar, causa <style=cIsDamage>125% de dano </style> e afeta uma área de dano persistente por <style=cIsDamage>5 segundos</style> que causa <style=cIsDamage>125% de dano por segundo</style>.  É possível plantar até <style=cIsDamage>4</style>.",
+
+		"ES_HUNTRESS_SECONDARY_CLUSTERARROW_NAME": "Flecha Explosiva",
+		"ES_HUNTRESS_SECONDARY_CLUSTERARROW_DESCRIPTION": "<style=cIsUtility>Ágil.</style> Atira uma flecha que <style=cIsDamage>explode</style> no impacto, causando <style=cIsDamage>500% de dano</style> e liberando <style=cIsDamage>8 biribinhas</style> que causam <style=cIsDamage>80% de dano cada </style>. Ataques críticos liberam <style=cIsDamage>12</style>.",
+
+		"ES_LOADER_SPECIAL_SHIELDSPLOSION_NAME": "Come Barreira",
+		"ES_LOADER_SPECIAL_SHIELDSPLOSION_DESCRIPTION": "Consume toda sua atual <style=cIsHealing>barreira (Mínimo 10% da sua vida máxima)</style> para ganhar uma explosão de <style=cIsUtility>velocidade de movimento </style> e causar <style=cIsDamage>600-6000% de dano</style> ao redor, baseado na <style=cIsHealing>barreira</style> consumida.",
+
+		"ES_MERC_SPECIAL_SLASHPORT_NAME": "Execute",
+		"ES_MERC_SPECIAL_SLASHPORT_DESCRIPTION": "<style=cIsDamage>Algoz</style>. Fixa um inimigo para <style=cIsUtility>revelar, teleportar </style> e <style=cIsDamage>estraçalhar</style> causando <style=cIsDamage>700% de dano</style>, <style=cIsUtility>atordoando</style> inimigos ao redor.",
+
+		"ES_TOOLBOT_SECONDARY_NANOBOTS_NAME": "Enxame de Nanorobôs",
+		"ES_TOOLBOT_SECONDARY_NANOBOTS_DESCRIPTION": "Atira um <style=cIsUtility>projétil</style> que causa<style=cIsDamage>100% de dano</style> e aplica <style=cArtifact>no encalço</style> no impacto.  Depois de um atraso, libera <style=cIsDamage>enxames de nanorobôs</style> pra cada inimigo, causando <style=cIsDamage>3x80% de dano</style> e <style=cIsHealing>cura 1.5% da vida máxima, cada</style>.",
+
+		"ES_TREEBOT_SPECIAL_ROOT_NAME": "DIRETIVA: Respire",
+		"ES_TREEBOT_SPECIAL_ROOT_DESCRIPTION": "<style=cIsDamage>Atordoador.</style> <style=cIsUtility>Se desacelere</style> para ganhar <style=cIsUtility>obstinado</style> por até 8 segundos.  Enquanto ativo, causa <style=cIsDamage>250% de dano</style> por segundo para inimigos ao redor, ganhando <style=cIsHealing>barreira</style> por inimigo atingido, <style=cIsDamage>puxando os mesmos até você</style>.",
+
+		"ES_RAILGUNNER_PRIMARY_LANCEROUNDS_NAME": "Cartuchos Lancer G2",
+		"ES_RAILGUNNER_PRIMARY_LANCEROUNDS_DESCRIPTION": "Atira balas pesadas que perfuram, causando <style=cIsDamage>300% de dano</style>.  Metade da<style=cIsUtility>velocidade de ataque bônus</style> é aplicada como <style=cIsDamage>dano</style> como alternativa.",
+
+		"ES_VOIDSURVIVOR_SPECIAL_INVERSION_NAME": "「Co?nsum??ir??】",
+		"ES_VOIDSURVIVOR_SPECIAL_INVERSION_DESCRIPTION": "Ganha <style=cIsVoid>25% de corrupção</style>, sacrificando <style=cIsHealth>25% de vida</style> para puxar inimigos, causando <style=cIsDamage>1000% de dano</style>.",
+		"ES_VOIDSURVIVOR_SPECIAL_INVERSION_NAME_ALT": "「Ex??pelir??】",
+		"ES_VOIDSURVIVOR_SPECIAL_INVERSION_DESCRIPTION_ALT": "Suprime <style=cIsVoid>25% de corrupção</style>, ganhando <style=cIsHealing>25% de vida</style> e <style=cIsUtility>repelindo</style> inimigos próximos.",
+		"ES_VOIDSURVIVOR_SPECIAL_INVERSION_KEYWORD": "<style=cKeywordName>【Aprimoramento Corrupto】</style><style=cSub>Se transforma para curar 25% de vida e repelir inimigos sem causar dano, perdendo 25% de corrupção.</style>"
+	}
+}

@@ -122,7 +122,7 @@ namespace EggsSkills.Config
 
         //Void fiend explosion radius
         internal static ConfigEntry<float> VoidfiendInversionRadius { get; private set; }
-        internal const float defaultVoidfiendInversionRadius = 24f;
+        internal const float defaultVoidfiendInversionRadius = 28f;
 
         //This is where we load up all of the config values
         internal static void LoadConfig()

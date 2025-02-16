@@ -1,0 +1,13 @@
+{
+	"strings":
+	{
+		"ES_CROCO_SPECIAL_PURGE_UGPRADED_NAME":"Liquefazer",
+		"ES_CROCO_SPECIAL_PURGE_UGPRADED_DESCRIPTION":"<style=cIsHealing>Venenoso.</style> Causa dano a todos os inimigos <style=cIsHealing>envenenados</style> ou <style=cIsDamage>praguejado</style> no alcance, causando <style=cIsHealing>300% + 15% da vida máxima dos mesmos </style> ou <style=cIsDamage>450% de dano por contagem de efeito</style>, dependendo da <style=cIsUtility>escolha de passiva</style>.",
+		
+		"ES_TREEBOT_SPECIAL_ROOT_UPGRADED_NAME":"DIRETIVA: Florescer",
+		"ES_TREEBOT_SPECIAL_ROOT_UPGRADED_DESCRIPTION":"<style=cIsDamage>Atordoador</style> <style=cIsUtility>Se desacelere</style> mas, ganha <style=cIsUtility>Obstinado</style> por até 8 segundos.  Enquanto ativo, causa <style=cIsDamage>250% de dano</style> por segundo ao seu redor, ganhando <style=cIsHealing>barreira</style> por inimigo atingido, além de <style=cIsDamage>puxar inimigos até você</style>.  Após, libera uma explosão que causa <style=cIsDamage>75% de dano</style> para cada pulso que atingiu inimigos.",
+		
+		"ES_MERC_SPECIAL_SLASHPORT_UPGRADED_NAME":"Terminus",
+		"ES_MERC_SPECIAL_SLASHPORT_UPGRADED_DESCRIPTION":"<style=cIsDamage>Assasino</style>. Foca em um inimigo para <style=cIsUtility>expor, teleportar,</style> e <style=cIsDamage>golpeia</style> para causar <style=cIsDamage>1400% de dano</style>, <style=cIsUtility>atordoando</style> inimigos ao redor."
+	}
+}

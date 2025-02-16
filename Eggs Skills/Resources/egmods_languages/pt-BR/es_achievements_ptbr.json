@@ -1,0 +1,58 @@
+{
+	"strings":
+	{
+		"ACHIEVEMENT_ES_CROCOMANYPOISONED_NAME":"Acrid: The Cure",
+		"ACHIEVEMENT_ES_CROCOMANYPOISONED_DESCRIPTION":"Como Acrid, pragueje ou envenene 20 inimigos ao mesmo tempo.",
+
+		"ACHIEVEMENT_ES_CROCODOTDAMAGE_NAME": "Acrid: Halitose",
+		"ACHIEVEMENT_ES_CROCODOTDAMAGE_DESCRIPTION": "Como Acrid, cause 500,000 de dano através de danos ao longo to tempo.",
+
+		"ACHIEVEMENT_ES_MAGEFASTMOVESPEED_NAME":"Artificer: FTL",
+		"ACHIEVEMENT_ES_MAGEFASTMOVESPEED_DESCRIPTION":"Como Artificier, alcance +500% de velocidade.",
+		
+		"ACHIEVEMENT_ES_BANDIT2LONGINVIS_NAME":"Bandit: Flanqueado",
+		"ACHIEVEMENT_ES_BANDIT2LONGINVIS_DESCRIPTION":"Como Bandit, fique um total de 3 minutos invisível durante uma partida.",
+		
+		"ACHIEVEMENT_ES_BANDIT2FASTKILLS_NAME":"Bandit: Truque De Chapéu",
+		"ACHIEVEMENT_ES_BANDIT2FASTKILLS_DESCRIPTION":"Como Bandit, mate 3 inimigos em, 1 segundo.",
+		
+		"ACHIEVEMENT_ES_CAPTAINSTAGENOBEACON_NAME":"Captain: Meu Próprio Reforço",
+		"ACHIEVEMENT_ES_CAPTAINSTAGENOBEACON_DESCRIPTION": "Como Captain, complete um estágio depois do estágio 3 sem implantar nenhum farol orbital.",
+
+		"ACHIEVEMENT_ES_CAPTAIN3MOUNTAINTELEPORTER_NAME": "Captain: Despedaçar e Dilacerar",
+		"ACHIEVEMENT_ES_CAPTAIN3MOUNTAINTELEPORTER_DESCRIPTION": "Como Captain, sobreviva um evento de teleporte após ativar 3 santuários das montanhas.",
+		
+		"ACHIEVEMENT_ES_COMMANDOFINISHTELEPORTERLOWHEALTH_NAME":"Commando: Perseverança",
+		"ACHIEVEMENT_ES_COMMANDOFINISHTELEPORTERLOWHEALTH_DESCRIPTION":"Como Commando, sobreviva a um evento de teleporte com apenas 20% da vida sobrando.",
+		
+		"ACHIEVEMENT_ES_COMMANDOM1KILLS_NAME":"Commando: 65% Mais Balas",
+		"ACHIEVEMENT_ES_COMMANDOM1KILLS_DESCRIPTION":"Como Commando, mate 20 inimigos em sequência sem soltar o botão de tiro primário.",
+		
+		"ACHIEVEMENT_ES_ENGIMULTIPLEELECTRICITEMS_NAME":"Engineer: Electric Boogaloo",
+		"ACHIEVEMENT_ES_ENGIMULTIPLEELECTRICITEMS_DESCRIPTION": "Como Engineer, tenha 4 items elétricos ao mesmo tempo.",
+
+		"ACHIEVEMENT_ES_ENGIKILLVAGRANTMINE_NAME": "Engineer: Pera, Quê?",
+		"ACHIEVEMENT_ES_ENGIKILLVAGRANTMINE_DESCRIPTION":  "Como Engineer, mate um Vagabundo Errante com uma mina.",
+		
+		"ACHIEVEMENT_ES_HUNTRESSPRIMARYUTILITYONLY_NAME":"Huntress: Tradicional",
+		"ACHIEVEMENT_ES_HUNTRESSPRIMARYUTILITYONLY_DESCRIPTION":"Como Huntress, complete o evento de teleporte sem usar nem suas habilidades especial ou secundária.",
+		
+		"ACHIEVEMENT_ES_LOADERHIGHBARRIER_NAME":"Loader: Sobrecarregada",
+		"ACHIEVEMENT_ES_LOADERHIGHBARRIER_DESCRIPTION":"Como Loader, alcance 95% da vida máxima de barreira.",
+		
+		"ACHIEVEMENT_ES_MERCEXPOSEENEMIES_NAME":"Mercenary: Abatido",
+		"ACHIEVEMENT_ES_MERCEXPOSEENEMIES_DESCRIPTION":"Como Mercenary, atinja 10 inimigos expostos únicos com não menos de 5 segundos entre cada ataque.",
+		
+		"ACHIEVEMENT_ES_TOOLBOTMANYDRONES_NAME":"MUL-T: Nave Mãe",
+		"ACHIEVEMENT_ES_TOOLBOTMANYDRONES_DESCRIPTION":"Como MUL-T, tenha 8 drones ao seu lado ao mesmo tempo.",
+		
+		"ACHIEVEMENT_ES_TREEBOTMANYCLOSEKILLS_NAME":"REX: Espaço Pra Respirar",
+		"ACHIEVEMENT_ES_TREEBOTMANYCLOSEKILLS_DESCRIPTION": "Como REX, mate 100 inimigos que estão na sua cola em uma partida.",
+
+		"ACHIEVEMENT_ES_RAILGUNNERHIGHCRIT_NAME": "Railgunner: Força Letal Autorizada",
+		"ACHIEVEMENT_ES_RAILGUNNERHIGHCRIT_DESCRIPTION": "Como Railgunner, alcance +200% dano crítico bônus.",
+
+		"ACHIEVEMENT_ES_VOIDSURVIVORMANYFORMCHANGE_NAME": "V??oid Fiend: V??olát?il?",
+		"ACHIEVEMENT_ES_VOIDSURVIVORMANYFORMCHANGE_DESCRIPTION": "Como V??oid Fiend, mude de forma 6 vezes durante um evento de teleporte."
+	}
+}

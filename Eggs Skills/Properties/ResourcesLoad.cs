@@ -32,7 +32,6 @@ namespace EggsSkills.Properties
 
         private static void RegisterTokensFolder(List<string> list)
         {
-            Log.LogError(RootLangFolderPath);
             foreach (string l in list) Log.LogError(l);
             //Add our folder full of language tokens to be loaded
             list.Add(RootLangFolderPath);

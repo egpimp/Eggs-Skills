@@ -21,7 +21,7 @@ namespace EggsSkills
         private CharacterBody characterBody;
 
         //How long til player turns invis while sprinting
-        private static readonly float baseTimeTilInvis = 0.4f;
+        private static readonly float baseTimeTilInvis = 0.8f;
         //How long does buff last after exiting invis
         private static readonly float buffDuration = Configuration.GetConfigValue(Configuration.BanditInvissprintBuffduration);
         //Helps stop cd during invisibility
