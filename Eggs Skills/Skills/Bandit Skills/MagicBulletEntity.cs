@@ -1,6 +1,7 @@
 ﻿using EggsSkills.Config;
 using EntityStates.Bandit2.Weapon;
 using RoR2;
+using RoR2.Projectile;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -85,7 +86,9 @@ namespace EggsSkills.EntityStates
                     procCoefficient = procCoef,
                     falloffModel = BulletAttack.FalloffModel.None,
                     weapon = gameObject,
-                    hitCallback = CallBack
+                    hitCallback = CallBack,
+                    radius = 1f,
+                    damageType = DamageTypeCombo.GenericPrimary
                 };
                 //Fire
                 attack.Fire();
@@ -125,10 +128,24 @@ namespace EggsSkills.EntityStates
                     origin = pos,
                     radius = 25f,
                     mask = LayerIndex.entityPrecise.mask,
-                }.RefreshCandidates().FilterCandidatesByHurtBoxTeam(TeamMask.GetEnemyTeams(teamComponent.teamIndex)).OrderCandidatesByDistance().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes())
+                }.RefreshCandidates().OrderCandidatesByDistance().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes())
                 {
                     //Get the mainhurtbox
                     HurtBox mainBox = hurtBox.hurtBoxGroup.mainHurtBox;
+
+                    /*
+                        TODO: 2 pass spheresearch system, first it goes through initially and looks for dynamite, but
+                        remembers the closest otherwise valid entity.  If no dynamite found, ricochet target is that entity,
+                        otherwise it is dynamite and do a few other things
+                    */
+
+                    //Check if its dynamite
+                    //SkillsReturnsDynamiteProjectile(Clone) parent
+                    Debug.Log(hurtBox.gameObject.name);
+                    Debug.Log(hurtBox.transform.parent != null ? hurtBox.transform.parent.gameObject.name : "oops");
+
+                    if (!TeamMask.GetEnemyTeams(teamComponent.teamIndex).HasTeam(mainBox.teamIndex)) continue;
+
                     //If the mainhurtbox is not yet in our list...
                     if (!hitHurtBoxes.Contains(mainBox))
                     {
