@@ -66,6 +66,7 @@ namespace EggsSkills
             nanobotOrb.target = hurtBox.hurtBoxGroup.mainHurtBox;
             //Proc coefficient is proc coefficient :v
             nanobotOrb.procCoefficient = nanoProcCoef;
+            nanobotOrb.damageType = DamageTypeCombo.GenericSecondary;
             if (NetworkServer.active) OrbManager.instance.AddOrb(nanobotOrb);
         }
 

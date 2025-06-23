@@ -93,11 +93,10 @@ namespace EggsSkills.EntityStates
                     force = Vector3.zero,
                     attacker = base.gameObject,
                     crit = base.RollCrit(),
-                    damageType = controller.GetDamageType(),
+                    damageType = controller.GetDamageType() | DamageType.AOE | DamageTypeCombo.GenericPrimary,
                     inflictor = base.gameObject,
                     position = body.corePosition,
-                    procCoefficient = procCoefficient,
-                    
+                    procCoefficient = procCoefficient                    
                 };
                 target.healthComponent.TakeDamage(info);
                 GlobalEventManager.instance.OnHitEnemy(info, body.gameObject);

@@ -201,7 +201,7 @@ namespace EggsSkills.Resources
                 //Nab the damage component of it
                 ProjectileDamage debuffGrenadeDamage = debuffGrenadePrefab.GetComponent<ProjectileDamage>();
                 //This lets us use our own special damage type, it converts back to generic when being read off
-                debuffGrenadeDamage.damageType = DamageType.NonLethal;
+                debuffGrenadeDamage.damageType = DamageType.AOE | DamageTypeCombo.GenericSecondary | DamageType.NonLethal;
 
                 //Add the projectile to the list
                 projList.Add(debuffGrenadePrefab);

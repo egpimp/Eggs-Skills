@@ -22,7 +22,7 @@ namespace EggsSkills.EntityStates
         //Recoil
         private static readonly float baseRecoil = 0.05f;
         //Damage coefficient
-        private static readonly float damageCoefficient = 1f;
+        private static readonly float damageCoefficient = 0.9f;
         //Cast time post-attack speed
         private float duration;
         //Max firing range
@@ -32,7 +32,7 @@ namespace EggsSkills.EntityStates
 
         //For calculating attack speed multiplier based on ramp up
         private static readonly float minMultiplier = 1f;
-        private static readonly float maxMultiplier = 2.5f;
+        private static readonly float maxMultiplier = 2f;
         private float multiplier;
 
         //muzzle
@@ -96,7 +96,7 @@ namespace EggsSkills.EntityStates
                     HitEffectNormal = false,
                     smartCollision = true,
                     maxDistance = maxDist,
-                    damageType = DamageType.Generic,
+                    damageType = DamageTypeCombo.GenericPrimary,
                 }.Fire();
             }
             //Execute muzzle flash

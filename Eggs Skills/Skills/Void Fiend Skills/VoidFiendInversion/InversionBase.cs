@@ -93,7 +93,7 @@ namespace EggsSkills.EntityStates
                 attack.baseForce = baseForce * forceMultiplier;
                 attack.inflictor = base.gameObject;
                 attack.attacker = base.gameObject;
-                attack.damageType = DamageType.AOE;
+                attack.damageType = DamageType.AOE | DamageTypeCombo.GenericSpecial;
                 attack.falloffModel = BlastAttack.FalloffModel.Linear;
                 attack.losType = BlastAttack.LoSType.None;
                 attack.procCoefficient = procCoef;

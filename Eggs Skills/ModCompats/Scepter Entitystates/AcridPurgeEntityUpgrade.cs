@@ -70,7 +70,7 @@ namespace EggsSkills.EntityStates
                             crit = base.RollCrit(),
                             procCoefficient = procCoefficient,
                             falloffModel = BlastAttack.FalloffModel.None,
-                            damageType = DamageType.AOE | DamageType.PoisonOnHit
+                            damageType = DamageType.AOE | DamageType.PoisonOnHit | DamageTypeCombo.GenericSpecial
                         }.Fire();
                     }
                     //Play sfx at enemies
@@ -104,7 +104,7 @@ namespace EggsSkills.EntityStates
                             crit = base.RollCrit(),
                             procCoefficient = procCoefficient,
                             falloffModel = BlastAttack.FalloffModel.None,
-                            damageType = DamageType.AOE | DamageType.BlightOnHit
+                            damageType = DamageType.AOE | DamageType.BlightOnHit | DamageTypeCombo.GenericSpecial
                         }.Fire();
                     }
                     //Play sfx at enemy pos
@@ -137,7 +137,7 @@ namespace EggsSkills.EntityStates
                             crit = base.RollCrit(),
                             procCoefficient = procCoefficient,
                             falloffModel = BlastAttack.FalloffModel.None,
-                            damageType = DamageType.AOE | DamageType.Freeze2s
+                            damageType = DamageType.AOE | DamageType.Freeze2s | DamageTypeCombo.GenericSpecial
                         }.Fire();
                     }
                     //Play sfx at enemy pos

@@ -31,9 +31,7 @@ namespace EggsSkills.EntityStates
         private static readonly float richochetMod = 0.6f + spp_bounceMod;
 
         //How many richochets
-        private static readonly int maxRecursion = Configuration.GetConfigValue(Configuration.BanditMagicbulletRicochets) + spp_richochetMod;
-        //Helps us track how many more times it can bounce
-        private int recursion;
+        private static readonly int maxBounces = Configuration.GetConfigValue(Configuration.BanditMagicbulletRicochets) + spp_richochetMod;
 
         //Fx
         private GameObject tracerEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Bandit2/TracerBandit2Rifle.prefab").WaitForCompletion();
@@ -52,8 +50,6 @@ namespace EggsSkills.EntityStates
             minimumBaseDuration = 0.1f;
             //Find out if it is critting
             isCrit = base.RollCrit();
-            //It hasn't recursed yet, set to 0
-            recursion = 0;
             //Make player face the aimdirection
             base.StartAimMode();
             //Do standard onenter stuff
@@ -107,67 +103,66 @@ namespace EggsSkills.EntityStates
             //If it actually hit something, add the main hurtbox of them to our list
             if (hitInfo.hitHurtBox) hitHurtBoxes.Add(hitInfo.hitHurtBox.hurtBoxGroup.mainHurtBox);
             //Execute our richochet code
-            HandleRichochet(pos);
+            //If it was dynamite, we perform a second ricochet
+            if (hitInfo.hitHurtBox && hitInfo.hitHurtBox.transform.parent && hitInfo.hitHurtBox.transform.parent.gameObject.name == "SkillsReturnsDynamiteProjectile(Clone)")
+            {
+                HandleRichochet(pos, maxBounces, damage);
+                HandleRichochet(pos, maxBounces, damage);
+            }
+            else HandleRichochet(pos, maxBounces, damage, richochetMod);
             //Return the previously found hit / nohit
             return hit;
         }
 
         //What to do when attempting to richochet the bullet
-        private void HandleRichochet(Vector3 pos)
+        private void HandleRichochet(Vector3 pos, int bouncesRemaining, float currentDamage, float multiplier = 1f)
         {
             //Hold variable for whether target is found or not
-            bool targetFound = false;
-            //If the bullet can still recurse...
-            if (recursion < maxRecursion)
+            HurtBox target = null;
+
+            //Loop via spheresearch
+            foreach (HurtBox hurtBox in new SphereSearch
             {
-                //Reduce the damage
-                damage *= richochetMod;
-                //Loop via spheresearch
-                foreach (HurtBox hurtBox in new SphereSearch
+                origin = pos,
+                radius = 25f,
+                mask = LayerIndex.entityPrecise.mask,
+            }.RefreshCandidates().OrderCandidatesByDistance().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes())
+            {
+                //Get the mainhurtbox
+                HurtBox mainBox = hurtBox.hurtBoxGroup.mainHurtBox;
+
+                //Check if its dynamite
+                //SkillsReturnsDynamiteProjectile(Clone) parent
+
+                //If the mainhurtbox is not yet in our list...
+                if (!hitHurtBoxes.Contains(mainBox))
                 {
-                    origin = pos,
-                    radius = 25f,
-                    mask = LayerIndex.entityPrecise.mask,
-                }.RefreshCandidates().OrderCandidatesByDistance().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes())
-                {
-                    //Get the mainhurtbox
-                    HurtBox mainBox = hurtBox.hurtBoxGroup.mainHurtBox;
-
-                    /*
-                        TODO: 2 pass spheresearch system, first it goes through initially and looks for dynamite, but
-                        remembers the closest otherwise valid entity.  If no dynamite found, ricochet target is that entity,
-                        otherwise it is dynamite and do a few other things
-                    */
-
-                    //Check if its dynamite
-                    //SkillsReturnsDynamiteProjectile(Clone) parent
-                    Debug.Log(hurtBox.gameObject.name);
-                    Debug.Log(hurtBox.transform.parent != null ? hurtBox.transform.parent.gameObject.name : "oops");
-
-                    if (!TeamMask.GetEnemyTeams(teamComponent.teamIndex).HasTeam(mainBox.teamIndex)) continue;
-
-                    //If the mainhurtbox is not yet in our list...
-                    if (!hitHurtBoxes.Contains(mainBox))
+                    //Check for dynamite
+                    if (hurtBox.transform.parent && hurtBox.transform.parent.gameObject.name == "SkillsReturnsDynamiteProjectile(Clone)")
                     {
-                        //Add the found target to the list
                         hitHurtBoxes.Add(mainBox);
-                        //Trip the bool flag
-                        targetFound = true;
-                        //Mark that we recursed 
-                        recursion += 1;
-                        //Emulate the bullet, because doing another ACTUAL bullet attack is hell and a half, also feels bad to have all your shots miss cause some geometry
-                        SimulateBullet(pos, mainBox);
-                        //End the loop cause we found our target
+                        SimulateBullet(pos, mainBox, bouncesRemaining, true, currentDamage * multiplier);
+                        target = null;
                         break;
                     }
+
+                    //If not enemy, skip
+                    if (!TeamMask.GetEnemyTeams(teamComponent.teamIndex).HasTeam(mainBox.teamIndex)) continue;
+
+                    //Set target if not assigned
+                    if (!target) target = mainBox;
                 }
-                //If we go through having never found a target, max out the recursion so the loop ends completely
-                if(!targetFound) recursion = maxRecursion;
+                //Try to hit target
+            }
+            if (target)
+            {
+                hitHurtBoxes.Add(target);
+                SimulateBullet(pos, target, bouncesRemaining - 1, false, currentDamage * multiplier);
             }
         }
 
         //Just like the simulations
-        private void SimulateBullet(Vector3 pos, HurtBox box)
+        private void SimulateBullet(Vector3 pos, HurtBox box, int remainingBounces, bool dynamite, float currentDamage)
         {
             //Get the pos of where the bullet hit
             Vector3 origin = pos;
@@ -179,24 +174,33 @@ namespace EggsSkills.EntityStates
             };
             //Play the effect
             EffectManager.SpawnEffect(tracerEffect, data, true);
-            //This used to be takedamage but it was unreliable lol, just explode them point blank no radius
-            new BlastAttack
+
+            DamageInfo damageInfo = new DamageInfo()
             {
-                radius = 0.1f,
-                baseDamage = damage,
-                procCoefficient = procCoef,
+                attacker = base.gameObject,
+                inflictor = base.gameObject,
+                crit = isCrit,
+                damage = currentDamage,
                 position = box.transform.position,
-                attacker = gameObject,
-                teamIndex = base.teamComponent.teamIndex,
-                baseForce = 0F,
-                bonusForce = Vector3.zero,
-                crit = base.RollCrit(),
-                falloffModel = BlastAttack.FalloffModel.None,
-                losType = BlastAttack.LoSType.None,
-                inflictor = base.gameObject
-            }.Fire();
-            //Continue to attempt richocet
-            HandleRichochet(box.transform.position);
+                procCoefficient = procCoef,
+                force = Vector3.zero,
+                damageType = DamageTypeCombo.GenericPrimary
+            };
+            box.healthComponent.TakeDamage(damageInfo);
+            //Apply onhits
+            GlobalEventManager.instance.OnHitEnemy(damageInfo, box.healthComponent.body.gameObject);
+            GlobalEventManager.instance.OnHitAll(damageInfo, box.healthComponent.body.gameObject);
+
+            //Continue to attempt ricochet
+            if (remainingBounces > 0)
+            {
+                if (dynamite)
+                {
+                    HandleRichochet(box.transform.position, remainingBounces, currentDamage);
+                    HandleRichochet(box.transform.position, remainingBounces, currentDamage);
+                }
+                else HandleRichochet(box.transform.position, remainingBounces, currentDamage, richochetMod);
+            }
         }
     }
 }

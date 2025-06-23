@@ -82,7 +82,7 @@ namespace EggsSkills.Skills.Engi_Skills.MicroMissiles
                 }
             }
             //Fire projectile
-            ProjectileManager.instance.FireProjectile(Resources.Projectiles.micromissileMarkerPrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, base.damageStat * damageCoef * spp_damageMult, 50f, base.RollCrit());
+            ProjectileManager.instance.FireProjectile(Resources.Projectiles.micromissileMarkerPrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, base.damageStat * damageCoef * spp_damageMult, 50f, base.RollCrit(), damageType: DamageTypeCombo.GenericPrimary);
             base.AddRecoil(-baseRecoil, baseRecoil, -baseRecoil, baseRecoil);
             base.characterBody.AddSpreadBloom(baseRecoil * 2f);
         }

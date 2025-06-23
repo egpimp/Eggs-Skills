@@ -97,13 +97,11 @@ namespace EggsSkills.EntityStates
                         position = transform.position,
                         radius = baseRadius,
                         baseDamage = damageCoefficientPerHit * hitCount * base.damageStat,
-                        damageType = DamageType.AOE,
+                        damageType = DamageType.AOE | DamageTypeCombo.GenericSpecial,
                         crit = base.RollCrit(),
                         procCoefficient = procCoef,
                         baseForce = 1000f,
                         teamIndex = teamComponent.teamIndex
-                        
-
                     }.Fire();
                 }
                 //Play animation

@@ -122,7 +122,7 @@ namespace EggsSkills
                 dir = test.aimDirection;
             }
 
-            if (NetworkServer.active) ProjectileManager.instance.FireProjectile(Resources.Projectiles.micromissilePrefab, origin, Quaternion.LookRotation(dir), owner, damage.damage / MicroMissileEntity.damageCoef, 0f, damage.crit, target:gameObject) ;
+            if (NetworkServer.active) ProjectileManager.instance.FireProjectile(Resources.Projectiles.micromissilePrefab, origin, Quaternion.LookRotation(dir), owner, damage.damage / MicroMissileEntity.damageCoef, 0f, damage.crit, target:gameObject, damageType: DamageTypeCombo.GenericPrimary) ;
         }
     }
 }

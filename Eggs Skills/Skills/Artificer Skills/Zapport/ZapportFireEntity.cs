@@ -80,7 +80,7 @@ namespace EggsSkills.EntityStates
                     crit = base.RollCrit(),
                     procCoefficient = procCoef,
                     falloffModel = BlastAttack.FalloffModel.None,
-                    damageType = DamageType.Stun1s,
+                    damageType = DamageType.Stun1s | DamageTypeCombo.GenericUtility,
                 }.Fire();
             }
         }

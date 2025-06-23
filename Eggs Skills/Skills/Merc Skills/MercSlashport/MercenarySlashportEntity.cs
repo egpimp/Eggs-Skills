@@ -87,7 +87,7 @@ namespace EggsSkills.EntityStates
                             crit = false,
                             procCoefficient = 0f,
                             falloffModel = BlastAttack.FalloffModel.None,
-                            damageType = DamageType.Stun1s
+                            damageType = DamageType.Stun1s | DamageTypeCombo.GenericSpecial
                         }.Fire();
                     }
                     //Expose them
@@ -121,7 +121,7 @@ namespace EggsSkills.EntityStates
                         crit = base.RollCrit(),
                         procCoefficient = procCoefficient + spp_procbonus,
                         falloffModel = BlastAttack.FalloffModel.None,
-                        damageType = DamageType.BonusToLowHealth,
+                        damageType = DamageType.BonusToLowHealth | DamageTypeCombo.GenericSpecial,
                     }.Fire();
                 }
                 //Fire off the swing fx

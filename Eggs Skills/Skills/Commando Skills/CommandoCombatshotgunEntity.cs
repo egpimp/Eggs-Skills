@@ -113,7 +113,7 @@ namespace EggsSkills.EntityStates
                     HitEffectNormal = false,
                     smartCollision = true,
                     maxDistance = maxDist,
-                    damageType = DamageType.Generic,
+                    damageType = DamageTypeCombo.GenericPrimary,
                 }.Fire();
             }
             //Execute muzzle flash

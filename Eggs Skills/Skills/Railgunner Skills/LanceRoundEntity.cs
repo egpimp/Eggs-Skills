@@ -89,7 +89,8 @@ namespace EggsSkills.EntityStates
                     hitEffectPrefab = hitspark,
                     falloffModel = BulletAttack.FalloffModel.None,
                     stopperMask = wallPen ? LayerIndex.noCollision.mask : LayerIndex.world.mask,
-                    radius = damageCoefficient / 5f
+                    radius = damageCoefficient / 5f,
+                    damageType = DamageTypeCombo.GenericPrimary
                 }.Fire();
             }
             EffectManager.SimpleMuzzleFlash(muzzleFlash, base.gameObject, muzzleName, true);

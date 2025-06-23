@@ -55,9 +55,9 @@ namespace EggsSkills.Achievements
                 if (base.isUserAlive && base.meetsBodyRequirement)
                 {
                     //Make sure attacker is player
-                    if (damageInfo.attacker.GetComponent<CharacterBody>().master.netId != null && damageInfo.attacker.GetComponent<CharacterBody>().master.netId == base.localUser.cachedMasterController.master.netId)
+                    if (damageInfo.attacker.GetComponent<CharacterBody>().master && damageInfo.attacker.GetComponent<CharacterBody>().master.netId != null && damageInfo.attacker.GetComponent<CharacterBody>().master.netId == base.localUser.cachedMasterController.master.netId)
                     {
-                        if (self)
+                        if (self && self.body)
                         {
                             //Make sure enemy has buff and isn't in the list
                             if (self.body.HasBuff(RoR2Content.Buffs.MercExpose) && !enemyList.Contains(self.body))

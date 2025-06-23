@@ -90,7 +90,7 @@ namespace EggsSkills.EntityStates.TeslaMine.MineStates.MainStates
                     crit = projectileDamage.crit,
                     radius = radius,
                     position = base.transform.position,
-                    damageType = DamageType.Stun1s
+                    damageType = DamageType.Stun1s | DamageTypeCombo.GenericSecondary
                 }.Fire();
             }
             //Setup fx data

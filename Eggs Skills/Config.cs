@@ -58,7 +58,7 @@ namespace EggsSkills.Config
 
         //How far are enemies stunned by the slash
         internal static ConfigEntry<float> MercSlashStunrange { get; private set; }
-        internal const float defaultMercSlashStunrange = 16f;
+        internal const float defaultMercSlashStunrange = 24f;
 
         //Pull distance
         internal static ConfigEntry<float> TreebotPullRange { get; private set; }

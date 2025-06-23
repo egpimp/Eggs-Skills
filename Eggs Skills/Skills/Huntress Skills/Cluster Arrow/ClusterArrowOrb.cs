@@ -60,7 +60,7 @@ namespace EggsSkills.Orbs
                 //Then their position
                 Vector3 pos = transform.position;
                 //Fire the bomblet
-                ProjectileManager.instance.FireProjectile(Resources.Projectiles.bombletPrefab, pos, angle, base.attacker, base.damageValue * bombletDamageCoef * spp_orbDamageMult, 50f, base.isCrit);
+                ProjectileManager.instance.FireProjectile(Resources.Projectiles.bombletPrefab, pos, angle, base.attacker, base.damageValue * bombletDamageCoef * spp_orbDamageMult, 50f, base.isCrit, damageType: DamageType.AOE | DamageTypeCombo.GenericSecondary);
             }
         }
         private void Explode()
@@ -79,6 +79,7 @@ namespace EggsSkills.Orbs
                 falloffModel = BlastAttack.FalloffModel.SweetSpot,
                 crit = isCrit,
                 losType = BlastAttack.LoSType.None,
+                damageType = DamageType.AOE | DamageTypeCombo.GenericSecondary
             }.Fire();
             //Setup fx info
             EffectData effectData = new EffectData

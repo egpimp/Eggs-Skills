@@ -162,7 +162,7 @@ namespace EggsSkills.EntityStates
                         inflictor = gameObject,
                         crit = isCrit,
                         damage = damageStat * damageCoefficient,
-                        damageType = DamageType.Stun1s,
+                        damageType = DamageType.Stun1s | DamageType.AOE | DamageTypeCombo.GenericSpecial,
                         force = appliedForce,
                         procCoefficient = procCoef,
                         position = hurtBox.transform.position

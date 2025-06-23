@@ -67,7 +67,7 @@ namespace EggsSkills.EntityStates
                     teamIndex = base.teamComponent.teamIndex,
                     procCoefficient = procCoefficient,
                     falloffModel = BlastAttack.FalloffModel.None,
-                    damageType = DamageType.AOE
+                    damageType = DamageType.AOE | DamageTypeCombo.GenericSpecial
                 };
                 atk.Fire();
             }

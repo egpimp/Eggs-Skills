@@ -127,7 +127,7 @@ namespace EggsSkills.EntityStates
         private void Fire()
         {
             //Network check, then fire the projectile
-            ProjectileManager.instance.FireProjectile(Resources.Projectiles.nanoBeaconPrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, base.damageStat, 50f, base.RollCrit());
+            ProjectileManager.instance.FireProjectile(Resources.Projectiles.nanoBeaconPrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, base.damageStat, 50f, base.RollCrit(), damageType: DamageTypeCombo.GenericSecondary);
             //Handle the fire animations
             base.PlayAnimation("Gesture, Additive", "FireBomb", "FireBomb.playbackRate", duration);
             base.PlayCrossfade("Stance, Override", "Empty", 0.1f);
